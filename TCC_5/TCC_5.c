@@ -97,7 +97,11 @@ bit      ligar,                           //bit de ligar/desligar a contagem
 
 char     dia[]        = "dia",            //variável de exibição "dia"
          hora[]       = "h  ";            //variável de exibição "h"
-
+         
+         
+//================================================================================
+//                            FUNÇÃO DE INTERRUPÇÃO
+//================================================================================
 void interrupt()                          //interrupção
 {
      if(TMR1IF_bit)                       //overflow em 100ms
@@ -120,7 +124,7 @@ void interrupt()                          //interrupção
       temp++;                              //incrementa temp
       temp2++;                             //incrementa temp2
 
-     }                     //end if TMR0IF
+     }                                     //end if TMR0IF
 
 
 
@@ -129,7 +133,7 @@ void interrupt()                          //interrupção
      timebase2();                          //executa timebase2
 
 
-}                          //end interrupt()
+}                                          //end interrupt()
 
 //======================================================================================
 //                             FUNÇÃO PRINCIPAL
@@ -430,320 +434,448 @@ void disp()
 //==================================================================================
 void num_un()
 {
- char dig2,dig1;
- if(option==0)
+ char dig2,dig1;                                  //cria variáveis dígito 2 e dígito 1
+ if(option==0)                                    //se option for 0 (dispenser n° 1 selecionado)
  {
-  dig2 = num/10;
-  dig1 = num%10;
+  dig2 = num/10;                                  //dígito 2 é igual a num dividido por 10
+  dig1 = num%10;                                  //digito 1 é igual a sobra da divisão de num por 10
 
-  LCD_Chr(2,2,dig2+0x30);
-  LCD_Chr_Cp (dig1+0x30);
+  LCD_Chr(2,2,dig2+0x30);                         //soma digito 2 com 30 hexa para exibição no display
+  LCD_Chr_Cp (dig1+0x30);                         //soma digito 1 com 30 hexa para exibição no display
 
-  if(!un) LCD_Out(2,5,hora);
+  if(!un) LCD_Out(2,5,hora);                      //se un for zero, exibe "hora"
 
-  if(un) LCD_Out(2,5,dia);
- }
- if(option==1)
+  if(un) LCD_Out(2,5,dia);                        //se un for um, exibe "dia"
+  
+ }                                                //end if option==0
+ 
+
+ if(option==1)                                    //se option for 1 (dispenser n°2 selecionado)
  {
-  dig2 = num2/10;
-  dig1 = num2%10;
+  dig2 = num2/10;                                 //digito 2 é igual a num2 dividido por 10
+  dig1 = num2%10;                                 //digito 1 é igual a sobra da divisão de num2 por 10
 
-  LCD_Chr(2,2,dig2+0x30);
-  LCD_Chr_Cp (dig1+0x30);
+  LCD_Chr(2,2,dig2+0x30);                         //soma digito 2 com 30 hexa para exibição no display
+  LCD_Chr_Cp (dig1+0x30);                         //soma digito 1 com 30 hexa para exibição no display
 
-  if(!un2) LCD_Out(2,5,hora);
+  if(!un2) LCD_Out(2,5,hora);                     //se un2 for zero, exibe "hora"
 
-  if(un2) LCD_Out(2,5,dia);
- }
-}                                   //end num_un()
+  if(un2) LCD_Out(2,5,dia);                       //se un2 for um, exibe "dia"
+  
+ }                                                //end if option==1
+ 
+}                                                 //end num_un()
 
+
+//=================================================================================
+//                        FUNÇÃO DE CONTROLE DOS LEDS
+//=================================================================================
 void piscaLED()
 {
 
-  if(ligar && !toque && num!=0)
-  {
-   if(temp_led>=10)                //1s      / LED Indicação disp1
+  if(ligar && !toque && num!=0)                   //se ligar for um(ligado), toque for zero e num diferente de zero...
+  {                                               //ou seja, se o dispenser n°1 estiver ligado...
+   if(temp_led>=10)                               //conta 1 segundo
    {
-            temp_led = 0x00;
-            LED  = ~LED;
-   }
-  }
-  else
+            temp_led = 0x00;                      //zera temp_led
+            LED  = ~LED;                          //inverte LED de indicação do dispenser n°1
+   }                                              //end if temp_led>=10
+
+  }                                               //end if ligar && !toque && num!=0
+
+  else                                            //senão...
   {
-   if(ligar && toque)
-   {
-    if(temp_led>=2)                //200ms
+   if(ligar && toque)                             //se ligar for 1 e toque for 1
+   {                                              //ou seja, se o tempo do contador n° 1 acabou...
+    if(temp_led>=2)                               //conta 200ms
     {
-     temp_led=0x00;
-     LED = ~LED;
-    }
-   }
-   else LED = 0x00;
-  }
+     temp_led=0x00;                               //zera temp_led
+     LED = ~LED;                                  //inverte LED de indicação do dispenser n°1
+                                                  //(pisca o LED a cada 200 milisegundos
+    }                                             //end if temp_led>=2
+
+   }                                              //end if ligar && toque
+   else LED = 0x00;                               //senão, LED do dispenser n°1 desligado
+   
+  }                                               //end else
 
 
 
- if(temp_led2 ==5)                //0,5s  / LED Indicação on
- {
-  temp_led2=0x00;
-  LED2 = ~LED2;
- }
+ if(temp_led2 ==5)                                //conta 500ms
+ {                                                //para o LED de indicação geral
+  temp_led2=0x00;                                 //zera temp_led2
+  LED2 = ~LED2;                                   //inverte estado do LED de indicação geral
+  
+ }                                                //end if temp_led==5
  
- if(ligar && !toque2 && num2!=0)
- {
-  if(temp_led3>=10)               //1s / LED Indicação disp2
+ if(ligar && !toque2 && num2!=0)                  //se ligar for 1, toque 2 for 0 e num2 diferente de 0...
+ {                                                //ou seja, se o dispenser n°2 for ligado...
+  if(temp_led3>=10)                               //conta 1 segundo
   {
-   temp_led3 = 0x00;
-   LED3 = ~LED3;
-  }
- }
- else
+   temp_led3 = 0x00;                              //zera temp_led3
+   LED3 = ~LED3;                                  //inverte estado do LED de indicação do dispenser n°2
+   
+  }                                               //end if temp_led3>=10
+  
+ }                                                //end if ligar && !toque2 && num2!=0
+ 
+ else                                             //senão...
  {
-  if(ligar && toque2)
-  {
-   if(temp_led3>=2)                //200ms
+  if(ligar && toque2)                             //se ligar e toque2 for 1
+  {                                               //ou seja, o contador do dispenser n°2 acabou
+   if(temp_led3>=2)                               //conta 200 milisegundos
    {
-    temp_led3=0x00;
-    LED3 = ~LED3;
-   }
-  }
-  else LED3 = 0x00;
- }
+    temp_led3=0x00;                               //zera temp_led3
+    LED3 = ~LED3;                                 //inverte estado do LED de indicação do dispenser n°2
+    
+   }                                              //end if temp_led>=2
+   
+  }                                               //end if ligar && toque2
+  
+  else LED3 = 0x00;                               //senão, LED de indicação do dispenser n°2 desligado
+  
+ }                                                //end else
  
-}                                   //end piscaLED()
+}                                                 //end piscaLED()
 
+
+//================================================================================
+//                      FUNÇÃO DE EXECUÇÃO DO CONTADOR
+//                             -DISPENSER N°1-
+//================================================================================
 void timebase()
 {
-  if(!ligar)
-  {
-   temp_ligado = 0x00;
+  if(!ligar)                                      //se ligar for 0
+  {                                               //ou seja, se contador desligado...
+   temp_ligado = 0x00;                            //zera temp_ligado
   }
-  if(ligar && num!=0)
-  {
-   if(temp==10)
+  if(ligar && num!=0)                             //se ligar for 1 e num diferente de 0...
+  {                                               //ativa o contador
+   if(temp==10)                                   //conta 1 segundo
    {
-    temp = 0x00;
-    temp_ligado++;
-   }
-   if(temp_ligado==mult)
+    temp = 0x00;                                  //zera temp
+    temp_ligado++;                                //incrementa temp_ligado a cada 1 segundo
+    
+   }                                              //end if temp==10
+   
+   if(temp_ligado==mult)                          //compara a igualdade de temp_ligado com mult
+   {                                              //o contador atingiu o tempo programado...
+    toque = 0x01;                                 //liga o bit toque
+    atv_mot = 0x01;                               //liga o bit de ativação do motor
+    abre_mot();                                   //define os bits de controle do motor para abri-lo
+    
+   }                                              //end if temp_ligado==mult
+   
+   if(atv_mot)                                    //se ativação do motor for ligada...
    {
-    toque = 0x01;
-    atv_mot = 0x01;
-    abre_mot();
-   }
-   if(atv_mot)
-   {
-    read_motbits();
+    read_motbits();                               //executa a leitura dos bits de controle dos motores
 
-   }
-   else
+   }                                              //end if atv_mot
+   
+   else                                           //senão...
    {
-    alarme();
+    alarme();                                     //executa o alarme
    }
-  }                                 //end if ligar
+  }                                               //end if ligar
   
-}                                   //end timebase()
+}                                                 //end timebase()
 
+
+//================================================================================
+//                     FUNÇÃO DE EXECUÇÃO DO CONTADOR
+//                             -DISPENSER N°2-
+//================================================================================
 void timebase2()
 {
-  if(!ligar)
-  {
-   temp_ligado2 = 0x00;
+  if(!ligar)                                      //se ligar for 0
+  {                                               //contadores desligados...
+   temp_ligado2 = 0x00;                           //zera temp_ligado2
   }
-  if(ligar && num2!=0)
-  {
-   if(temp2==10)
-   {
-    temp2 = 0x00;
-    temp_ligado2++;
-   }
-   if(temp_ligado2==mult2)
-   {
-    toque2 = 0x01;
-    atv_mot2 = 0x01;
-    abre_mot2();
-   }
-   if(atv_mot2)
-   {
-    read_motbits();
-   }
-   else
-   {
-    alarme();
-   }
-  }                                 //end if ligar
   
-}                                   //end timebase2()
+  if(ligar && num2!=0)                            //se ligar for 1 e num2 diferente de 0
+  {                                               //contador do dispenser n°2 ligado
+   if(temp2==10)                                  //conta 1 segundo
+   {
+    temp2 = 0x00;                                 //zera temp2
+    temp_ligado2++;                               //incrementa temp_ligado2 a cada 1 segundo
+    
+   }                                              //end if temp2==10
+   
+   if(temp_ligado2==mult2)                        //compara igualdade entre temp_ligado2 e mult2
+   {                                              //acabou o tempo do contador do dispenser n°2...
+    toque2 = 0x01;                                //liga o bit toque2
+    atv_mot2 = 0x01;                              //liga o bit de aativação do motor 2
+    abre_mot2();                                  //define os bits de controle do motor 2 para abrir
+    
+   }                                              //end if temp_ligado2==mult2
+   
+   if(atv_mot2)                                   //se ativação do motor 2 ligada...
+   {
+    read_motbits();                               //executa a leitura dos bits de controle dos motores
+    
+   }                                              //end if atv_mot2
+
+   else                                           //senão...
+   {
+    alarme();                                     //aciona o alarme
+    
+   }                                              //end else
+   
+  }                                               //end if ligar && num2!=0
+  
+}                                                 //end timebase2()
 
 
-
+//================================================================================
+//                      FUNÇÃO DE EXECUÇÃO DO ALARME
+//================================================================================
 void alarme()
 {
- if(toque || toque2)
- {
-   if(vezes <10)
+ if(toque || toque2)                              //se toque ou toque2 for 1
+ {                                                //algum dos contadores acabaram...
+   if(vezes <10)                                  //se vezes for menor que 10
+   {                                              //(vezes que o SOM tocará)
+    toca_som();                                   //executa a toca do SOM
+    
+   }                                              //end if toque || toque2
+   
+   else                                           //senão...
    {
-    toca_som();
-   }
-   else
-   {
-    if(toque)
+    if(toque)                                     //se toque for 1
     {
-     toque=0x00;
-     temp_ligado=0x00;
-    }
-    if(toque2)
+     toque=0x00;                                  //limpa o bit toque
+     temp_ligado=0x00;                            //zera temp_ligado para recomeçar a contagem
+     
+    }                                             //end if toque
+    
+    if(toque2)                                    //se toque2 for 1
     {
-     toque2=0x00;
-     temp_ligado2=0x00;
-    }
-     vezes=0x00;
-     SOM = 0x00;
-   }
- }
-}                                   //end alarme()
+     toque2=0x00;                                 //limpa o bit toque 2
+     temp_ligado2=0x00;                           //zera temp_ligado2 para recomeçar a contagem
+     
+    }                                             //end if toque2
+    
+     vezes=0x00;                                  //zera vezes
+     SOM = 0x00;                                  //desliga o som
+     
+   }                                              //end else
+   
+ }                                                //end if toque || toque2
+ 
+}                                                 //end alarme()
 
 
-
+//=================================================================================
+//                      FUNÇÃO DE ACIONAMENTO DO BUZZER
+//=================================================================================
 void toca_som()
 {
- if(temp_som>3) temp_som=0x00;
-    if(temp_som==3)
+ if(temp_som>3) temp_som=0x00;                    //se temp_som for maior que 3, zera temp_som
+    if(temp_som==3)                               //conta 300 milisegundos...
     {
-     temp_som = 0x00;
-     SOM = ~SOM;
-     vezes++;
-     if(!ligar)
+     temp_som = 0x00;                             //zera temp_som
+     SOM = ~SOM;                                  //inverte o estado do buzzer
+     vezes++;                                     //incrementa vezes
+     
+     if(!ligar)                                   //se ligar for 0 (desligado)
      {
-      vezes = 0x00;
-      SOM   = 0x00;
-     }
-    }
-}
+      vezes = 0x00;                               //zera vezes
+      SOM   = 0x00;                               //desliga o buzzer
+      
+     }                                            //end if !ligar
+     
+    }                                             //end if temp_som==3
+    
+}                                                 //end toca_som()
 
+
+//================================================================================
+//                          FUNÇÃO DE CONFIGURAÇÃO DOS
+//                    BITS DE CONTROLE DO MOTOR 1 PARA ABRIR
+//================================================================================
 void abre_mot()
 {
- open_bit  = 0x01;
- close_bit = 0x00;
- x_mot     = 0x00;
-}                                         //end abre_mot()
+ open_bit  = 0x01;                                //seta bit de abertura
+ close_bit = 0x00;                                //limpa bit de fechamento
+ x_mot     = 0x00;                                //zera x_mot
+ 
+}                                                 //end abre_mot()
 
+
+//================================================================================
+//                          FUNÇÃO DE CONFIGURAÇÃO DOS
+//                    BITS DE CONTROLE DO MOTOR 2 PARA ABRIR
+//================================================================================
 void abre_mot2()
 {
- open_bit2  = 0x01;
- close_bit2 = 0x00;
- x_mot2     = 0x00;
-}                                         //end abre_mot2()
+ open_bit2  = 0x01;                               //seta bit de abertura
+ close_bit2 = 0x00;                               //limpa bit de fechamento
+ x_mot2     = 0x00;                               //zera x_mot
+ 
+}                                                 //end abre_mot2()
 
+
+//================================================================================
+//                       FUNÇÃO DE ABERTURA DO MOTOR 1
+//================================================================================
 void mot_aberto()
 {
- if(x_mot<10)
+ if(x_mot<10)                                     //se x_mot for menor que 10...
   {
-    SM=0;
-    delay_us(18000);
-    SM=1;
-    delay_us(2000);
-    SM=0;
-    x_mot ++;
-  }
-  if(x_mot == 10)
+    SM=0;                                         //  ||
+    delay_us(18000);                              //  ||
+    SM=1;                                         //  ||
+    delay_us(2000);                               //  \/
+    SM=0;                                         // liga motor 1 no sentido horário
+    x_mot ++;                                     //incrementa x_mot
+    
+  }                                               //end if x_mot<10
+  
+  if(x_mot == 10)                                 //se x_mot for 10...
    {
-    fecha_mot();
-   }
+    fecha_mot();                                  //executa a configuração dos bits de controle do motor 1 para fechar
+    
+   }                                              //end if x_mot==10
+
+}                                                 //end mot_aberto()
 
 
-}                                         //end mot_aberto()
-
+//================================================================================
+//                       FUNÇÃO DE ABERTURA DO MOTOR 2
+//================================================================================
 void mot_aberto2()
 {
- if(x_mot2<10)
+ if(x_mot2<10)                                    //se x_mot2 for menor que 10...
   {
-    SM2=0;
-    delay_us(18000);
-    SM2=1;
-    delay_us(2000);
-    SM2=0;
-    x_mot2 ++;
-  }
-  if(x_mot2 == 10)
+    SM2=0;                                        //  ||
+    delay_us(18000);                              //  ||
+    SM2=1;                                        //  ||
+    delay_us(2000);                               //  \/
+    SM2=0;                                        //liga motor 2 no sentido horário
+    x_mot2 ++;                                    //incrementa x_mot2
+    
+  }                                               //end if x_mot2<10
+  
+  if(x_mot2 == 10)                                //se x_mot2 for 10...
    {
-    fecha_mot2();
-   }
-}                                         //end mot_aberto2()
+    fecha_mot2();                                 //executa a configuração dos bits de controle do motor 2 para fechar
+    
+   }                                              //end if x_mot2==10
+   
+}                                                 //end mot_aberto2()
 
 
+//================================================================================
+//                          FUNÇÃO DE CONFIGURAÇÃO DOS
+//                    BITS DE CONTROLE DO MOTOR 1 PARA FECHAR
+//================================================================================
 void fecha_mot()
 {
- open_bit  = 0x00;
- close_bit = 0x01;
- x_mot     = 0x00;
-}                                         //end fecha_mot()
+ open_bit  = 0x00;                                //limpa o bit de abertura
+ close_bit = 0x01;                                //seta o bit de fechamento
+ x_mot     = 0x00;                                //zera x_mot
+ 
+}                                                 //end fecha_mot()
 
+
+//================================================================================
+//                          FUNÇÃO DE CONFIGURAÇÃO DOS
+//                    BITS DE CONTROLE DO MOTOR 2 PARA FECHAR
+//================================================================================
 void fecha_mot2()
 {
- open_bit2  = 0x00;
- close_bit2 = 0x01;
- x_mot2     = 0x00;
-}                                         //end fecha_mot2()
+ open_bit2  = 0x00;                               //limpa o bit de abertura
+ close_bit2 = 0x01;                               //seta o bit de fechamento
+ x_mot2     = 0x00;                               //zera x_mot
+ 
+}                                                 //end fecha_mot2()
 
+
+//================================================================================
+//                       FUNÇÃO DE FECHAMENTO DO MOTOR 1
+//================================================================================
 void mot_fechado()
 {
- if(x_mot<10)
+ if(x_mot<10)                                     //se x_mot for menor que 10
   {
-    SM=0;
-    delay_us(18500);
-    SM=1;
-    delay_us(1500);
-    SM=0;
-    x_mot++;
-  }
-  if(x_mot==10)
+    SM=0;                                         //  ||
+    delay_us(18500);                              //  ||
+    SM=1;                                         //  ||
+    delay_us(1500);                               //  \/
+    SM=0;                                         //leva o motor para a posição inicial
+    x_mot++;                                      //incrementa x_mot
+    
+  }                                               //end if x_mot<10
+  
+  if(x_mot==10)                                   //se x_mot for 10
     {
-     close_bit = 0x00;
-    }
+     close_bit = 0x00;                            //limpa o bit de fechamento
+     
+    }                                             //end if x_mot==10
 
-}                                            //end mot_fechado
+}                                                 //end mot_fechado
 
+
+//================================================================================
+//                       FUNÇÃO DE FECHAMENTO DO MOTOR 2
+//================================================================================
 void mot_fechado2()
 {
-  if(x_mot2<10)
+  if(x_mot2<10)                                   //se x_mot2 for menor que 10
   {
-    SM2=0;
-    delay_us(18500);
-    SM2=1;
-    delay_us(1500);
-    SM2=0;
-    x_mot2++;
-  }
-  if(x_mot2==10)
+    SM2=0;                                        //  ||
+    delay_us(18500);                              //  ||
+    SM2=1;                                        //  ||
+    delay_us(1500);                               //  \/
+    SM2=0;                                        //leva o motor 2 para a posição inicial
+    x_mot2++;                                     //incrementa x_mot2
+    
+  }                                               //end if x_mot2<10
+  
+  if(x_mot2==10)                                  //se x_mot2 for 10
     {
-     close_bit2 = 0x00;
-    }
-}                                            //end mot_fechado2()
+     close_bit2 = 0x00;                           //limpa o bit de fechamento
+     
+    }                                             //end if x_mot2==10
+    
+}                                                 //end mot_fechado2()
 
+
+//================================================================================
+//                         FUNÇÃO DE LEITURA DOS BITS
+//                          DE CONTROLE DOS MOTORES
+//================================================================================
 void read_motbits()
 {
-   if(!open_bit && !close_bit) atv_mot = 0x00;
+   if(!open_bit && !close_bit) atv_mot = 0x00;    //se os bits de abertura e fechamento do motor 1 forem 0,
+                                                  //desliga a ativação do motor 1
 
-   if(open_bit && !close_bit)
+   if(open_bit && !close_bit)                     //se o bit de abertura for 1 e o de fechamento for 0...
    {
-    mot_aberto();
-   }
+    mot_aberto();                                 //executa a abertura do motor 1
+    
+   }                                              //end if open_bit && !close_bit
 
-   if(!open_bit && close_bit)
+   if(!open_bit && close_bit)                     //se o bit de abertura for 0 e o de fechamento for 1...
    {
-    mot_fechado();
-   }
+    mot_fechado();                                //executa o fechamento do motor 1
+    
+   }                                              //end if !open_bit && close_bit
    
-   if(!open_bit2 && !close_bit2) atv_mot2 = 0x00;
+   
+   if(!open_bit2 && !close_bit2) atv_mot2 = 0x00; //se os bits de abertura e fechamento do motor 2 forem 0,
+                                                  //desliga a ativação do motor 2
 
-   if(open_bit2 && !close_bit2)
+   if(open_bit2 && !close_bit2)                   //se o bit de abertura for 1 e o de fechamento for 0...
    {
-    mot_aberto2();
-   }
+    mot_aberto2();                                //executa a abertura do motor 2
+    
+   }                                              //end if open_bit2 && !close_bit2
 
-   if(!open_bit2 && close_bit2)
+   if(!open_bit2 && close_bit2)                   //se o bit de abertura for 0 e o de fechamento for 1...
    {
-    mot_fechado2();
-   }
-}                                              //end read_motbits()
+    mot_fechado2();                               //executa o fechamento do motor 2
+    
+   }                                              //end if !open_bit2 && close_bit2
+   
+}                                                 //end read_motbits()
