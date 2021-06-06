@@ -33,101 +33,107 @@ sbit BOTAO3 at PORTC.b2;
 sbit BOTAO4 at PORTC.b4;
 sbit BOTAO5 at PORTC.b5;
 
+//---------------------------
 //----------Funções----------
-void ler_bot();
-void disp();
-void num_un();
-void alarme();
-void piscaLED();
-void timebase();
-void timebase2();
-void toca_som();
-void abre_mot();
-void abre_mot2();
-void fecha_mot();
-void fecha_mot2();
-void mot_aberto();
-void mot_aberto2();
-void mot_fechado();
-void mot_fechado2();
-void read_motbits();
+//---------------------------
+void ler_bot();                           //ler os bits dos botões
+void disp();                              //controla o que é exibido no display
+void num_un();                            //define as váriaveis de exibição dos numeros para o display
+void alarme();                            //alarme de aviso para quando acaba a contagem
+void piscaLED();                          //controla os LEDs do circuito
+void timebase();                          //contagem do dispenser n°1
+void timebase2();                         //contagem do dispenser n°2
+void toca_som();                          //controla o buzzer
+void abre_mot();                          //define os bits de controle do motor n°1 para abertura
+void abre_mot2();                         //define os bits de controle do motor n°2 para abertura
+void fecha_mot();                         //define os bits de controle do motor n°1 para fechamento
+void fecha_mot2();                        //define os bits de controle do motor n°2 para fechamento
+void mot_aberto();                        //abre o motor n°1
+void mot_aberto2();                       //abre o motor n°2
+void mot_fechado();                       //fecha o motor n°1
+void mot_fechado2();                      //fecha o motor n°2
+void read_motbits();                      //ler os bits dos motores
 
-
+//--------------------------
 //-------Variáveis----------
-unsigned temp2        = 0x00,
-         temp         = 0x00,
-         temp_ligado  = 0x00,
-         temp_ligado2 = 0x00,
-         temp_led     = 0x00,
-         temp_led2    = 0x00,
-         temp_led3    = 0x00,
-         temp_som     = 0x00,
-         temp_disp    = 0x00,
-         x_mot        = 0x00,
-         x_mot2       = 0x00,
-         of1          = 0x00,
-         prog         = 0x00,
-         num,      // = EEPROM_Read(0x01)
-         num2,     // = EEPROM_Read(0x03)
-         mult         = 0x00,
-         mult2        = 0x00,
-         vezes        = 0x00,
-         option       = 0x00;
+//--------------------------
+unsigned temp2        = 0x00,             //variável de interrupção do dispenser n°2
+         temp         = 0x00,             //variável de interrupção do dispenser n°1
+         temp_ligado  = 0x00,             //variável de contagem ligada do dispenser n°1
+         temp_ligado2 = 0x00,             //variável de contagem ligada do dispenser n°2
+         temp_led     = 0x00,             //variável de temporização do LED 1 (indicação do dispenser n°1)
+         temp_led2    = 0x00,             //variável de temporização do LED 2 (indicação on/off do dispositivo)
+         temp_led3    = 0x00,             //variável de temporização do LED 3 (indicação do dispenser n°2)
+         temp_som     = 0x00,             //variável de temporização do SOM
+         temp_disp    = 0x00,             //variável de temporização do display
+         x_mot        = 0x00,             //variável de controle de vezes de repetição da função do motor n°1
+         x_mot2       = 0x00,             //variável de controle de vezes de repetição da função do motor n°2
+         prog         = 0x00,             //variável de controle do modo de programação
+         num,      // = EEPROM_Read(0x01)   número programado do dispenser n°1
+         num2,     // = EEPROM_Read(0x03)   número programado do dispenser n°2
+         mult         = 0x00,             //variável de comparação com o temp_ligado (dispenser n°1)
+         mult2        = 0x00,             //variável de comparação com o temp_ligado2 (dispenser n°2)
+         vezes        = 0x00,             //variável de vezes que o SOM toca
+         option       = 0x00;             //variável que define qual dispenser está selecionado
 
-bit      ligar,
-         un,       // = EEPROM_Read(0x02)
-         un2,      // = EEPROM_Read(0x04)
-         display,
-         display2,
-         toque,
-         toque2,
-         open_bit,
-         open_bit2,
-         close_bit,
-         close_bit2,
-         atv_mot,
-         atv_mot2,
-         b1_flag,
-         b2_flag,
-         b3_flag,
-         b4_flag,
-         b5_flag;
+bit      ligar,                           //bit de ligar/desligar a contagem
+         un,       // = EEPROM_Read(0x02)   bit que define a unidade (dia/hora) do dispenser n°1
+         un2,      // = EEPROM_Read(0x04)   bit que define a unidade (dia/hora) do dispenser n°2
+         display,                         //bit high que configura o display
+         display2,                        //bit low que configura o display
+         toque,                           //bit que liga o alarme do dispenser n°1
+         toque2,                          //bit que liga o alarme do dispenser n°2
+         open_bit,                        //bit de controle de abertura do motor n°1
+         open_bit2,                       //bit de controle de abertura do motor n°2
+         close_bit,                       //bit de controle de fechamento do motor n°1
+         close_bit2,                      //bit de controle de fechamento do motor n°2
+         atv_mot,                         //bit de ativação do motor n°1
+         atv_mot2,                        //bit de ativação do motor n°2
+         b1_flag,                         //flag do botão 1
+         b2_flag,                         //flag do botão 2
+         b3_flag,                         //flag do botão 3
+         b4_flag,                         //flag do botão 4
+         b5_flag;                         //flag do botão 5
 
-char     dia[]        = "dia",
-         hora[]       = "h  ";
+char     dia[]        = "dia",            //variável de exibição "dia"
+         hora[]       = "h  ";            //variável de exibição "h"
 
-void interrupt()
+void interrupt()                          //interrupção
 {
-     if(TMR1IF_bit)                       //100ms overflow
+     if(TMR1IF_bit)                       //overflow em 100ms
      {
-      TMR1IF_bit  =  0x00;
+      TMR1IF_bit  =  0x00;                //zera flag do timer1
       TMR1H       =  0x3C;
-      TMR1L       =  0xB0;
-      temp_led++;
-      temp_som++;
-      temp_led2++;
-      temp_led3++;
-      temp_disp++;
+      TMR1L       =  0xB0;                //seta timer1 em 15536
+      temp_led++;                         //incrementa temp_led
+      temp_som++;                         //incrementa temp_som
+      temp_led2++;                        //incrementa temp_led2
+      temp_led3++;                        //incrementa temp_led3
+      temp_disp++;                        //incrementa temp_disp
      }
 
-     if(TMR0IF_bit)                        //100ms overflow
+     if(TMR0IF_bit)                        //overflow em 100ms overflow
      {
-      TMR0IF_bit =  0x00;
+      TMR0IF_bit =  0x00;                  //zera flag do timer0
       TMR0H      =  0x3C;
-      TMR0L      =  0xB0;
-      temp++;
-      temp2++;
+      TMR0L      =  0xB0;                  //seta timer0 em 15536
+      temp++;                              //incrementa temp
+      temp2++;                             //incrementa temp2
 
      }                     //end if TMR0IF
 
 
 
-     piscaLED();
-     timebase();
-     timebase2();
+     piscaLED();                           //executa piscaLED
+     timebase();                           //executa timebase
+     timebase2();                          //executa timebase2
 
 
 }                          //end interrupt()
+
+//======================================================================================
+//                             FUNÇÃO PRINCIPAL
+//======================================================================================
 
 void main (void)
 {
@@ -148,7 +154,7 @@ void main (void)
         INTCON.TMR0IE =   0x01;                   //Ativa interrupção por overflow
 
         TMR0IF_bit    =   0x00;                   //zera a flag do timer0
-        TMR1IF_bit    =   0x00;
+        TMR1IF_bit    =   0x00;                   //zera a flag do timer1
 
 
         INTCON2.RBPU  =   0x01;                   //Desliga os resistores de pull-ups do portB
@@ -156,260 +162,272 @@ void main (void)
         T1CON         =   0xA1;                   //TMR1 16 bits, prescaler 1:4
 
 
-        ligar         =   0x00;
-        b1_flag       =   0x00;
-        b2_flag       =   0x00;
-        b3_flag       =   0x00;
-        b4_flag       =   0x00;
-        b5_flag       =   0x00;
-        display       =   0x00;
-        toque         =   0x00;
-        toque2        =   0x00;
-        open_bit      =   0x00;
-        open_bit2     =   0x00;
-        close_bit     =   0x00;
-        close_bit2     =  0x00;
-        atv_mot       =   0x00;
-        atv_mot2      =   0x00;
+        ligar         =   0x00;                   //     |
+        b1_flag       =   0x00;                   //     |
+        b2_flag       =   0x00;                   //     |
+        b3_flag       =   0x00;                   //     |
+        b4_flag       =   0x00;                   //     |
+        b5_flag       =   0x00;                   //     |
+        display       =   0x00;                   //     |
+        toque         =   0x00;                   //     |
+        toque2        =   0x00;                   //     |
+        open_bit      =   0x00;                   //     |
+        open_bit2     =   0x00;                   //     |
+        close_bit     =   0x00;                   //     |
+        close_bit2     =  0x00;                   //     |
+        atv_mot       =   0x00;                   //     |
+        atv_mot2      =   0x00;                   //    \ /
+                                                  //     V
+        SM            =   0x00;                   //zerando todos os bits
 
-        SM            =   0x00;
+        num           =   EEPROM_Read(0x01);      //lê os dados da EEPROM para variável num
+        un            =   EEPROM_Read(0x03);      //lê os dados da EEPROM para variável un
+        num2          =   EEPROM_Read(0x02);      //lê os dados da EEPROM para variável num2
+        un2           =   EEPROM_Read(0x04);      //lê os dados da EEPROM para variável un2
 
-        num           =   EEPROM_Read(0x01);
-        un            =   EEPROM_Read(0x03);
-        num2          =   EEPROM_Read(0x02);
-        un2           =   EEPROM_Read(0x04);
+        TRISA = 0x00;                             //seta todos os bits do TRISA como saída
+        TRISC = 0x3F;                             //seta os bits 0,1,2,3,5 como entrada
+        TRISB = 0x00;                             //seta todos os bits do TRISB como saída
 
-        TRISA = 0x00;
-        TRISC = 0x3F;
-        TRISB = 0x00;
+        LCD_Init();                               //inicia o LCD
+        LCD_Cmd(_LCD_CLEAR);                      //limpa o LCD
+        LCD_Cmd(_LCD_CURSOR_OFF);                 //desliga cursor do LCD
 
-        LCD_Init();
-        LCD_Cmd(_LCD_CLEAR);
-        LCD_Cmd(_LCD_CURSOR_OFF);
-
- while(1)
+ while(1)                                         //loop infinito
  {
-   ler_bot();
+   ler_bot();                                     //executa ler_bot
 
-   disp();
- }                                          //end while
+   disp();                                        //executa disp
+ }                                                //end while
 
-}                                           //end main
+}                                                 //end main
 
+//===============================================================================
+//                              FUNÇÃO LER BOTÕES
+//===============================================================================
 void ler_bot()
 {
   //____b1___
-  if(!BOTAO1) b1_flag=0x01;
+  if(!BOTAO1) b1_flag=0x01;                       //se botão1 for pressionado, flag do botão1 = 1
 
-  if(BOTAO1 && b1_flag)
+  if(BOTAO1 && b1_flag)                           //se botão1 estiver solto e flag do botão1 = 1
   {
-   LCD_Cmd(_LCD_CLEAR);
-   b1_flag = 0x00;
-   if(!ligar)
+   LCD_Cmd(_LCD_CLEAR);                           //limpa o LCD
+   b1_flag = 0x00;                                //lmpa a flag do botão1
+   if(!ligar)                                     //se bit ligar = 0
    {
-    prog++;
-    if(prog==3)
+    prog++;                                       //incrementa prog, muda a programação
+    if(prog==3)                                   //se prog = 3
     {
-     prog=0x00;
-     EEPROM_Write(0x01,num);
-     delay_ms(10);
-     EEPROM_Write(0x03,un);
-     delay_ms(10);
-     EEPROM_Write(0x02,num2);
-     delay_ms(10);
-     EEPROM_Write(0x04,un2);
-     delay_ms(10);
-     display=0x01;
-    }
-   }
-  }
+     prog=0x00;                                   //zera a variável prog
+     EEPROM_Write(0x01,num);                      //grava num na EEPROM
+     delay_ms(10);                                //espera 10 micro segundos
+     EEPROM_Write(0x03,un);                       //grava un na EEPROM
+     delay_ms(10);                                //espera 10 micro segundos
+     EEPROM_Write(0x02,num2);                     //grava num2 na EEPROM
+     delay_ms(10);                                //espera 10 micro segundos
+     EEPROM_Write(0x04,un2);                      //grava un2 na EEPROM
+     delay_ms(10);                                //espera 10 micro segundos
+     display=0x01;                                //bit display em 1
+    
+    }                                             //end if prog = 3
+   
+   }                                              //end if !ligar
+  
+  }                                               //end if BOTAO1 && b1_flag
 
 
 
   //___b2___
-  if(!BOTAO2) b2_flag=0x01;
+  if(!BOTAO2) b2_flag=0x01;                       //se botão2 for pressionado, flag do botão2 = 1
 
-  if(BOTAO2 && b2_flag)
+  if(BOTAO2 && b2_flag)                           //se botão2 for solto e flag do botão2 for 1
   {
-    LCD_Cmd(_LCD_CLEAR);
-    b2_flag    =  0x00;
-   if(option==0)                     //depósito de remédio 1
+    LCD_Cmd(_LCD_CLEAR);                          //limpa LCD
+    b2_flag    =  0x00;                           //limpa flag do botão
+   if(option==0)                                  //dispenser n°1
    {
-    if(prog==1)                      //programação do numero
+    if(prog==1)                                   //programação de numero
     {
-     num++;
+     num++;                                       //incrementa num
     }
-    if (prog==2)                    //programação de unidade(hora/dia)
+    if (prog==2)                                  //programação de unidade(hora/dia)
     {
-      un = ~un;
-    }                               //end if prog==2
-   }
+      un = ~un;                                   //inverte un
+    }                                             //end if prog==2
+   }                                              //end if option==0
    
-   if(option==1)                    //depósito de remédio 2
+   if(option==1)                                  //dispenser n°2
    {
-    if(prog==1)                      //programação do numero
+    if(prog==1)                                   //programação do numero
     {
-     num2++;
+     num2++;                                      //incrementa num2
     }
-    if (prog==2)                    //programação de unidade(hora/dia)
+    if (prog==2)                                  //programação de unidade(hora/dia)
     {
-      un2 = ~un2;
+      un2 = ~un2;                                 //inverte un2
     }
-   }
-  }                                 //end if BOTAO2 e b2_flag
+   }                                              //end if option==1
+  }                                               //end if BOTAO2 e b2_flag
 
   //___b3___
-  if(!BOTAO3) b3_flag=0x01;
+  if(!BOTAO3) b3_flag=0x01;                       //se botão3 for pressionado, flag do botão3 = 1
 
-  if(BOTAO3 && b3_flag)
+  if(BOTAO3 && b3_flag)                           //se botão3 for solto e flag do botão3 for 1
   {
-   LCD_Cmd(_LCD_CLEAR);
-   b3_flag     =  0x00;
-   if(option==0)                     //depósito de remédio 1
+   LCD_Cmd(_LCD_CLEAR);                           //limpa LCD
+   b3_flag     =  0x00;                           //limpa flag do botão3
+   if(option==0)                                  //depósito de remédio 1
    {
-    if(prog==1)                      //programação do numero
+    if(prog==1)                                   //programação do numero
     {
-     num--;
+     num--;                                       //decrementa num
 
     }
-    if (prog==2)                    //ptogramação de unidade(hora/dia)
+    if (prog==2)                                  //programação de unidade(hora/dia)
     {
-     un = ~un;
+     un = ~un;                                    //inverte un
     }
-   }
+   }                                              //end if option==0
    
-   if(option==1)                     //depósito de remédio 2
+   if(option==1)                                  //depósito de remédio 2
    {
-    if(prog==1)                      //programação do numero
+    if(prog==1)                                   //programação do número
     {
-     num2--;
+     num2--;                                      //decrementa num2
 
     }
-    if (prog==2)                    //ptogramação de unidade(hora/dia)
+    if (prog==2)                                  //programação de unidade(hora/dia)
     {
-     un2 = ~un2;
+     un2 = ~un2;                                  //inverte un2
     }
-   }
-  }
+   }                                              //end if option==1
+  }                                               //end if botão3 e b3_flag
 
   //___b4___
-  if(!BOTAO4) b4_flag=0x01;
+  if(!BOTAO4) b4_flag=0x01;                       //se botão4 for pressionado, flag do botão4 = 1
 
-  if(BOTAO4 && b4_flag)
+  if(BOTAO4 && b4_flag)                           //se botão4 for solto e flag do botão4 for 1
   {
-    LCD_Cmd(_LCD_CLEAR);
-    b4_flag    =  0x00;
-   if(num!=0 || num2!=0)
+    LCD_Cmd(_LCD_CLEAR);                          //limpa LCD
+    b4_flag    =  0x00;                           //limpa flag do botão4
+   if(num!=0 || num2!=0)                          //se num ou num2 for diferente 0
    {
-    if(prog==0)
+    if(prog==0)                                   //se prog = 0
     {
-     if(!ligar)
+     if(!ligar)                                   //se bit de ligar = 0 (desligado)
      {
-      temp=0x00;
-      temp2=0x00;
-     }
-     ligar = ~ligar;
-     if(!ligar) display2 = 0x01;
-    }
-   }
-  }
+      temp=0x00;                                  //zera temp
+      temp2=0x00;                                 //zera temp2
+     }                                            //end if !ligar
+     ligar = ~ligar;                              //inverte ligar
+     if(!ligar) display2 = 0x01;                  //se ligar for 0, bit display2 = 1
+    }                                             //end if prog==0
+   }                                              //end if num!=0 || num2!=0
+  }                                               //end if BOTAO4 && b4_flag
 
-  if(!un)
+  if(!un)                                         //se un = 0
   {
-   mult = num * 1;
+   mult = num * 1;                                //mult é num * 3600 (hora)
   }
-  if(un)
+  if(un)                                          //se un = 1
   {
-   mult = num * 5;
+   mult = num * 5;                                //mult é num * 86400 (dia)
   }
   
-  if(!un2)
+  if(!un2)                                        //se un2 = 0
   {
-   mult2 = num2 * 1;
+   mult2 = num2 * 1;                              //mult2 é num2 * 3600 (hora)
   }
-  if(un2)
+  if(un2)                                         //se un2 = 1
   {
-   mult2 = num2 * 5;
+   mult2 = num2 * 5;                              //mult2 é num2 * 86400 (dia)
   }
 
-  //___b5___                        botao para trocar de contador
-  if(!BOTAO5) b5_flag = 0x01;
+  //___b5___                                        botao para trocar de contador
+  if(!BOTAO5) b5_flag = 0x01;                     //se botão5 for pressionado, flag do botão5 = 1
   
-  if(BOTAO5 && b5_flag)
+  if(BOTAO5 && b5_flag)                           //se botão5 for solto e flag do botão5 for 1
   {
-   LCD_Cmd(_LCD_CLEAR);
-   b5_flag = 0x00;
-   if(prog != 0)
+   LCD_Cmd(_LCD_CLEAR);                           //limpa LCD
+   b5_flag = 0x00;                                //limpa flag do botão5
+   if(prog != 0)                                  //se prog for diferente de 0
    {
-    option++;
-    if(option == 2) option=0x00;
+    option++;                                     //incrementa option
+    if(option == 2) option=0x00;                  //se option for 2, option = 0
    }
-  }
+  }                                               //end if BOTAO5 && b5_flag
 
-}                                   //end ler_bot()
+}                                                 //end ler_bot()
 
+//================================================================================
+//                      FUNÇÃO DE EXIBIÇÃO DO DISPLAY
+//================================================================================
 void disp()
 {
-  if(!ligar && prog==0)
+  if(!ligar && prog==0)                           //se ligar for 0 e prog for 0
   {
-   if(!display && !display2)
+   if(!display && !display2)                      //se os bits diplay e display2 forem 0
    {
-     LCD_Out(1,1,"  DISPENSER DE  ");
-     LCD_Out(2,1,"    REMEDIOS    ");
+     LCD_Out(1,1,"  DISPENSER DE  ");             //exibe "DISPENSER DE"
+     LCD_Out(2,1,"    REMEDIOS    ");             //      "  REMEDIOS  "
     }
-   else
+   else                                           //senão
    {
-    if(display && !display2)
+    if(display && !display2)                      //se bits display for 1 e display2 for 0
     {
-     display=0x00;
-     LCD_Out(1,1,"ETEC LAURO GOMES");
-     LCD_Out(2,1,"  3A MECA 2021  ");
-     delay_ms(1000);
+     display=0x00;                                //limpa bit display
+     LCD_Out(1,1,"ETEC LAURO GOMES");             //exibe "ETEC LAURO GOMES"
+     LCD_Out(2,1,"  3A MECA 2021  ");             //      "  3A MECA 2021  "
+     delay_ms(1000);                              //espera 1 segundo
     }
-    if(!display && display2)
+    if(!display && display2)                      //se os bits display for 0 e display2 for 1
     {
-     display2=0x00;
-     LCD_Out(1,1,"     PARANDO    ");
-     LCD_Out(2,1,"     CONTAGEM   ");
-     delay_ms(1000);
+     display2=0x00;                               //limpa bit display2
+     LCD_Out(1,1,"     PARANDO    ");             //exibe "     PARANDO    "
+     LCD_Out(2,1,"     CONTAGEM   ");             //      "     CONTAGEM   "
+     delay_ms(1000);                              //espera 1 segundo
     }
-   }
+   }                                              //end else
+  }                                               //end if !ligar && prog==0
+
+  if(prog==1)                                     //programação de numeros
+  {
+   LCD_Out(1,1,"PROGRAME NUMERO:");               //exibe "PROGRAME NUMERO:
+   num_un();                                      //executa num_un
+   if(option==0) LCD_Chr(2,14,'1');               //se option for 0, exibe "1"
+   if(option==1) LCD_Chr(2,14,'2');               //se option for 1, exibe "2"
   }
 
-  if(prog==1)                       //programação de numeros
+  if(prog==2)                                     //se prog for 2
   {
-   LCD_Out(1,1,"PROGRAME NUMERO:");
-   num_un();
-   if(option==0) LCD_Chr(2,14,'1');
-   if(option==1) LCD_Chr(2,14,'2');
+   LCD_Out(1,1,"PROGRAME Un.:");                  //exibe "PROGRAME Un.:"
+   num_un();                                      //executa num_un
+   if(option==0) LCD_Chr(2,14,'1');               //se option for 0, exibe "1"
+   if(option==1) LCD_Chr(2,14,'2');               //se option for 1, exibe "2"
   }
 
-  if(prog==2)
+  if(ligar)                                       //se ligar for 1 (ligado)
   {
-   LCD_Out(1,1,"PROGRAME Un.:");
-   num_un();
-   if(option==0) LCD_Chr(2,14,'1');
-   if(option==1) LCD_Chr(2,14,'2');
-  }
-
-  if(ligar)
-  {
-   LCD_Out(1,1,"CONTANDO:   DISP");
-   if(temp_disp>20) temp_disp=0x00;
-   if(temp_disp == 20)
+   LCD_Out(1,1,"CONTANDO:   DISP");               //exibe "CONTANDO:   DISP";
+   if(temp_disp>20) temp_disp=0x00;               //se temp_disp for maior que 20, zera temp_disp
+   if(temp_disp == 20)                            //se temp_disp for 20 (2 segundos)
    {
-    temp_disp=0x00;
-    option++;
-    if(option == 2) option=0x00;
-
-    if(option==0) LCD_Chr(2,14,'1');
-    if(option==1) LCD_Chr(2,14,'2');
+    temp_disp=0x00;                               //zera temp_disp
+    option++;                                     //incrementa option
+    if(option == 2) option=0x00;                  //se option for 2, option = 0
+    if(option==0) LCD_Chr(2,14,'1');              //se option for 0, exibe "1"
+    if(option==1) LCD_Chr(2,14,'2');              //se option for 1, exibe "2"
    }
-   num_un();
+   num_un();                                      //executa num_un
   }
 
-}                                   //end disp()
+}                                                 //end disp()
 
+//==================================================================================
+//                           FUNÇÃO NÚMERO E UNIDADE
+//                                 FORMATAÇÃO
+//==================================================================================
 void num_un()
 {
  char dig2,dig1;
