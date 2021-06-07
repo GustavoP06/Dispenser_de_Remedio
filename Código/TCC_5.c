@@ -5,10 +5,12 @@ sbit LED  at PORTA.b0;
 sbit SOM  at PORTA.b2;
 sbit LED2 at PORTA.b3;
 sbit LED3 at PORTB.b0;
+sbit LED4 at PORTB.b1;
 
 //BITS SERVO MOTOR
 sbit SM  at PORTA.b1;
 sbit SM2 at PORTA.b4;
+sbit SM3 at PORTA.b5;
 
 //BITS DO LCD
 sbit LCD_RS at PORTD.b2;
@@ -43,15 +45,20 @@ void alarme();                            //alarme de aviso para quando acaba a 
 void piscaLED();                          //controla os LEDs do circuito
 void timebase();                          //contagem do dispenser n°1
 void timebase2();                         //contagem do dispenser n°2
+void timebase3();                         //contagem do dispenser n°3
 void toca_som();                          //controla o buzzer
 void abre_mot();                          //define os bits de controle do motor n°1 para abertura
 void abre_mot2();                         //define os bits de controle do motor n°2 para abertura
+void abre_mot3();                         //define os bits de controle do motor n°3 para abertura
 void fecha_mot();                         //define os bits de controle do motor n°1 para fechamento
 void fecha_mot2();                        //define os bits de controle do motor n°2 para fechamento
+void fecha_mot3();                        //define os bits de controle do motor n°3 para fechamento
 void mot_aberto();                        //abre o motor n°1
 void mot_aberto2();                       //abre o motor n°2
+void mot_aberto3();                       //abre o motor n°3
 void mot_fechado();                       //fecha o motor n°1
 void mot_fechado2();                      //fecha o motor n°2
+void mot_fechado3();                      //fecha o motor n°3
 void read_motbits();                      //ler os bits dos motores
 
 //--------------------------
@@ -59,36 +66,47 @@ void read_motbits();                      //ler os bits dos motores
 //--------------------------
 unsigned temp2        = 0x00,             //variável de interrupção do dispenser n°2
          temp         = 0x00,             //variável de interrupção do dispenser n°1
+         temp3        = 0x00,             //variável de interrupção do dispenser n°3
          temp_ligado  = 0x00,             //variável de contagem ligada do dispenser n°1
          temp_ligado2 = 0x00,             //variável de contagem ligada do dispenser n°2
+         temp_ligado3 = 0x00,             //variável de contagem ligada do dispenser n°3
          temp_led     = 0x00,             //variável de temporização do LED 1 (indicação do dispenser n°1)
          temp_led2    = 0x00,             //variável de temporização do LED 2 (indicação on/off do dispositivo)
          temp_led3    = 0x00,             //variável de temporização do LED 3 (indicação do dispenser n°2)
+         temp_led4    = 0x00,             //variável de temporização do LED 4 (indicação do dispenser n°3)
          temp_som     = 0x00,             //variável de temporização do SOM
          temp_disp    = 0x00,             //variável de temporização do display
          x_mot        = 0x00,             //variável de controle de vezes de repetição da função do motor n°1
          x_mot2       = 0x00,             //variável de controle de vezes de repetição da função do motor n°2
+         x_mot3       = 0x00,             //variável de controle de vezes de repetição da função do motor n°3
          prog         = 0x00,             //variável de controle do modo de programação
          num,      // = EEPROM_Read(0x01)   número programado do dispenser n°1
-         num2,     // = EEPROM_Read(0x03)   número programado do dispenser n°2
+         num2,     // = EEPROM_Read(0x02)   número programado do dispenser n°2
+         num3,     // = EEPROM_Read(0x05)   número programado do dispenser n°3
          mult         = 0x00,             //variável de comparação com o temp_ligado (dispenser n°1)
          mult2        = 0x00,             //variável de comparação com o temp_ligado2 (dispenser n°2)
+         mult3        = 0x00,             //variável de comparação com o temp_ligado3 (dispenser n°3)
          vezes        = 0x00,             //variável de vezes que o SOM toca
          option       = 0x00;             //variável que define qual dispenser está selecionado
 
 bit      ligar,                           //bit de ligar/desligar a contagem
-         un,       // = EEPROM_Read(0x02)   bit que define a unidade (dia/hora) do dispenser n°1
+         un,       // = EEPROM_Read(0x03)   bit que define a unidade (dia/hora) do dispenser n°1
          un2,      // = EEPROM_Read(0x04)   bit que define a unidade (dia/hora) do dispenser n°2
+         un3,      // = EEPROM_Read(0x06)   bit que define a unidade (dia/hora) do dispenser n°3
          display,                         //bit high que configura o display
          display2,                        //bit low que configura o display
          toque,                           //bit que liga o alarme do dispenser n°1
          toque2,                          //bit que liga o alarme do dispenser n°2
+         toque3,                          //bit que liga o alarme do dispenser n°3
          open_bit,                        //bit de controle de abertura do motor n°1
          open_bit2,                       //bit de controle de abertura do motor n°2
+         open_bit3,                       //bit de controle de abertura do motor n°3
          close_bit,                       //bit de controle de fechamento do motor n°1
          close_bit2,                      //bit de controle de fechamento do motor n°2
+         close_bit3,                      //bit de controle de fechamento do motor n°3
          atv_mot,                         //bit de ativação do motor n°1
          atv_mot2,                        //bit de ativação do motor n°2
+         atv_mot3,                        //bit de ativação do motor n°3
          b1_flag,                         //flag do botão 1
          b2_flag,                         //flag do botão 2
          b3_flag,                         //flag do botão 3
@@ -110,10 +128,11 @@ void interrupt()                          //interrupção
       TMR1H       =  0x3C;
       TMR1L       =  0xB0;                //seta timer1 em 15536
       temp_led++;                         //incrementa temp_led
-      temp_som++;                         //incrementa temp_som
       temp_led2++;                        //incrementa temp_led2
       temp_led3++;                        //incrementa temp_led3
+      temp_led4++;                        //incrementa temp_led4
       temp_disp++;                        //incrementa temp_disp
+      temp_som++;                         //incrementa temp_som
      }
 
      if(TMR0IF_bit)                        //overflow em 100ms overflow
@@ -123,6 +142,7 @@ void interrupt()                          //interrupção
       TMR0L      =  0xB0;                  //seta timer0 em 15536
       temp++;                              //incrementa temp
       temp2++;                             //incrementa temp2
+      temp3++;                             //incrementa temp3
 
      }                                     //end if TMR0IF
 
@@ -131,6 +151,7 @@ void interrupt()                          //interrupção
      piscaLED();                           //executa piscaLED
      timebase();                           //executa timebase
      timebase2();                          //executa timebase2
+     timebase3();
 
 
 }                                          //end interrupt()
@@ -175,12 +196,16 @@ void main (void)
         display       =   0x00;                   //     |
         toque         =   0x00;                   //     |
         toque2        =   0x00;                   //     |
+        toque3        =   0x00;                   //     |
         open_bit      =   0x00;                   //     |
         open_bit2     =   0x00;                   //     |
+        open_bit3     =   0x00;                   //     |
         close_bit     =   0x00;                   //     |
-        close_bit2     =  0x00;                   //     |
+        close_bit2    =   0x00;                   //     |
+        close_bit3    =   0x00;                   //     |
         atv_mot       =   0x00;                   //     |
-        atv_mot2      =   0x00;                   //    \ /
+        atv_mot2      =   0x00;                   //     |
+        atv_mot3      =   0x00;                   //    \ /
                                                   //     V
         SM            =   0x00;                   //zerando todos os bits
 
@@ -188,6 +213,8 @@ void main (void)
         un            =   EEPROM_Read(0x03);      //lê os dados da EEPROM para variável un
         num2          =   EEPROM_Read(0x02);      //lê os dados da EEPROM para variável num2
         un2           =   EEPROM_Read(0x04);      //lê os dados da EEPROM para variável un2
+        num3          =   EEPROM_Read(0x05);      //lê os dados da EEPROM para variável num3
+        un3           =   EEPROM_Read(0x06);      //lê os dados da EEPROM para variável un3
 
         TRISA = 0x00;                             //seta todos os bits do TRISA como saída
         TRISC = 0x3F;                             //seta os bits 0,1,2,3,5 como entrada
@@ -232,6 +259,10 @@ void ler_bot()
      delay_ms(10);                                //espera 10 micro segundos
      EEPROM_Write(0x04,un2);                      //grava un2 na EEPROM
      delay_ms(10);                                //espera 10 micro segundos
+     EEPROM_Write(0x05,num3);                     //grava num3 na EEPROM
+     delay_ms(10);                                //espera 10 micro segundos
+     EEPROM_Write(0x06,un3);                      //grava un3 na EEPROM
+     delay_ms(10);                                //espera 10 micro segundos
      display=0x01;                                //bit display em 1
     
     }                                             //end if prog = 3
@@ -272,6 +303,19 @@ void ler_bot()
       un2 = ~un2;                                 //inverte un2
     }
    }                                              //end if option==1
+   
+   if(option==2)                                  //dispenser n°3
+   {
+    if(prog==1)                                   //programação do numero
+    {
+     num3++;                                      //incrementa num3
+    }
+    if (prog==2)                                  //programação de unidade(hora/dia)
+    {
+      un3 = ~un3;                                 //inverte un3
+    }
+   }                                              //end if option==2
+   
   }                                               //end if BOTAO2 e b2_flag
 
   //___b3___
@@ -281,7 +325,7 @@ void ler_bot()
   {
    LCD_Cmd(_LCD_CLEAR);                           //limpa LCD
    b3_flag     =  0x00;                           //limpa flag do botão3
-   if(option==0)                                  //depósito de remédio 1
+   if(option==0)                                  //dispenser n°1
    {
     if(prog==1)                                   //programação do numero
     {
@@ -294,7 +338,7 @@ void ler_bot()
     }
    }                                              //end if option==0
    
-   if(option==1)                                  //depósito de remédio 2
+   if(option==1)                                  //dispenser n°2
    {
     if(prog==1)                                   //programação do número
     {
@@ -306,6 +350,20 @@ void ler_bot()
      un2 = ~un2;                                  //inverte un2
     }
    }                                              //end if option==1
+   
+   if(option==2)                                  //dispenser n°3
+   {
+    if(prog==1)                                   //programação do número
+    {
+     num3--;                                      //decrementa num3
+
+    }
+    if (prog==2)                                  //programação de unidade(hora/dia)
+    {
+     un3 = ~un3;                                  //inverte un3
+    }
+   }                                              //end if option==2
+   
   }                                               //end if botão3 e b3_flag
 
   //___b4___
@@ -315,19 +373,24 @@ void ler_bot()
   {
     LCD_Cmd(_LCD_CLEAR);                          //limpa LCD
     b4_flag    =  0x00;                           //limpa flag do botão4
-   if(num!=0 || num2!=0)                          //se num ou num2 for diferente 0
+   if(num!=0 || num2!=0 || num3)                  //se num, num2 ou num3 for diferente 0
    {
     if(prog==0)                                   //se prog = 0
     {
      if(!ligar)                                   //se bit de ligar = 0 (desligado)
      {
-      temp=0x00;                                  //zera temp
+      temp =0x00;                                 //zera temp
       temp2=0x00;                                 //zera temp2
+      temp3=0x00;                                 //zera temp3
+      
      }                                            //end if !ligar
      ligar = ~ligar;                              //inverte ligar
      if(!ligar) display2 = 0x01;                  //se ligar for 0, bit display2 = 1
+     
     }                                             //end if prog==0
+    
    }                                              //end if num!=0 || num2!=0
+   
   }                                               //end if BOTAO4 && b4_flag
 
   if(!un)                                         //se un = 0
@@ -347,6 +410,15 @@ void ler_bot()
   {
    mult2 = num2 * 5;                              //mult2 é num2 * 86400 (dia)
   }
+  
+  if(!un3)                                        //se un3 = 0
+  {
+   mult3 = num3 * 1;                              //mult3 é num3 * 3600 (hora)
+  }
+  if(un3)                                         //se un3 = 1
+  {
+   mult3 = num3 * 5;                              //mult3 é num3 * 86400 (dia)
+  }
 
   //___b5___                                        botao para trocar de contador
   if(!BOTAO5) b5_flag = 0x01;                     //se botão5 for pressionado, flag do botão5 = 1
@@ -358,7 +430,7 @@ void ler_bot()
    if(prog != 0)                                  //se prog for diferente de 0
    {
     option++;                                     //incrementa option
-    if(option == 2) option=0x00;                  //se option for 2, option = 0
+    if(option == 3) option=0x00;                  //se option for 3, option = 0
    }
   }                                               //end if BOTAO5 && b5_flag
 
@@ -401,6 +473,7 @@ void disp()
    num_un();                                      //executa num_un
    if(option==0) LCD_Chr(2,14,'1');               //se option for 0, exibe "1"
    if(option==1) LCD_Chr(2,14,'2');               //se option for 1, exibe "2"
+   if(option==2) LCD_Chr(2,14,'3');              //se option for 2, exibe "3"
   }
 
   if(prog==2)                                     //se prog for 2
@@ -409,6 +482,7 @@ void disp()
    num_un();                                      //executa num_un
    if(option==0) LCD_Chr(2,14,'1');               //se option for 0, exibe "1"
    if(option==1) LCD_Chr(2,14,'2');               //se option for 1, exibe "2"
+   if(option==2) LCD_Chr(2,14,'3');              //se option for 2, exibe "3"
   }
 
   if(ligar)                                       //se ligar for 1 (ligado)
@@ -419,9 +493,10 @@ void disp()
    {
     temp_disp=0x00;                               //zera temp_disp
     option++;                                     //incrementa option
-    if(option == 2) option=0x00;                  //se option for 2, option = 0
+    if(option == 3) option=0x00;                  //se option for 3, option = 0
     if(option==0) LCD_Chr(2,14,'1');              //se option for 0, exibe "1"
     if(option==1) LCD_Chr(2,14,'2');              //se option for 1, exibe "2"
+    if(option==2) LCD_Chr(2,14,'3');              //se option for 2, exibe "3"
    }
    num_un();                                      //executa num_un
   }
@@ -463,6 +538,20 @@ void num_un()
   if(un2) LCD_Out(2,5,dia);                       //se un2 for um, exibe "dia"
   
  }                                                //end if option==1
+ 
+ if(option==2)                                    //se option for 1 (dispenser n°2 selecionado)
+ {
+  dig2 = num3/10;                                 //digito 2 é igual a num3 dividido por 10
+  dig1 = num3%10;                                 //digito 1 é igual a sobra da divisão de num3 por 10
+
+  LCD_Chr(2,2,dig2+0x30);                         //soma digito 2 com 30 hexa para exibição no display
+  LCD_Chr_Cp (dig1+0x30);                         //soma digito 1 com 30 hexa para exibição no display
+
+  if(!un3) LCD_Out(2,5,hora);                     //se un3 for zero, exibe "hora"
+
+  if(un3) LCD_Out(2,5,dia);                       //se un3 for um, exibe "dia"
+
+ }                                                //end if option==2
  
 }                                                 //end num_un()
 
@@ -528,12 +617,40 @@ void piscaLED()
     temp_led3=0x00;                               //zera temp_led3
     LED3 = ~LED3;                                 //inverte estado do LED de indicação do dispenser n°2
     
-   }                                              //end if temp_led>=2
+   }                                              //end if temp_led3>=2
    
   }                                               //end if ligar && toque2
   
   else LED3 = 0x00;                               //senão, LED de indicação do dispenser n°2 desligado
   
+ }                                                //end else
+ 
+ if(ligar && !toque3 && num3!=0)                  //se ligar for 1, toque3 for 0 e num3 diferente de 0...
+ {                                                //ou seja, se o dispenser n°3 for ligado...
+  if(temp_led4>=10)                               //conta 1 segundo
+  {
+   temp_led4 = 0x00;                              //zera temp_led4
+   LED4 = ~LED4;                                  //inverte estado do LED de indicação do dispenser n°3
+
+  }                                               //end if temp_led4>=10
+
+ }                                                //end if ligar && !toque3 && num3!=0
+
+ else                                             //senão...
+ {
+  if(ligar && toque3)                             //se ligar e toque3 for 1
+  {                                               //ou seja, o contador do dispenser n°3 acabou
+   if(temp_led4>=2)                               //conta 200 milisegundos
+   {
+    temp_led4=0x00;                               //zera temp_led4
+    LED4 = ~LED4;                                 //inverte estado do LED de indicação do dispenser n°3
+
+   }                                              //end if temp_led4>=2
+
+  }                                               //end if ligar && toque3
+
+  else LED4 = 0x00;                               //senão, LED de indicação do dispenser n°3 desligado
+
  }                                                //end else
  
 }                                                 //end piscaLED()
@@ -627,17 +744,62 @@ void timebase2()
 
 
 //================================================================================
+//                     FUNÇÃO DE EXECUÇÃO DO CONTADOR
+//                             -DISPENSER N°3-
+//================================================================================
+void timebase3()
+{
+  if(!ligar)                                      //se ligar for 0
+  {                                               //contadores desligados...
+   temp_ligado3 = 0x00;                           //zera temp_ligado3
+  }
+
+  if(ligar && num3!=0)                            //se ligar for 1 e num3 diferente de 0
+  {                                               //contador do dispenser n°3 ligado
+   if(temp3==10)                                  //conta 1 segundo
+   {
+    temp3 = 0x00;                                 //zera temp3
+    temp_ligado3++;                               //incrementa temp_ligado3 a cada 1 segundo
+
+   }                                              //end if temp3==10
+
+   if(temp_ligado3==mult3)                        //compara igualdade entre temp_ligado3 e mult3
+   {                                              //acabou o tempo do contador do dispenser n°3...
+    toque3 = 0x01;                                //liga o bit toque3
+    atv_mot3 = 0x01;                              //liga o bit de aativação do motor 3
+    abre_mot3();                                  //define os bits de controle do motor 3 para abrir
+
+   }                                              //end if temp_ligado3==mult3
+
+   if(atv_mot3)                                   //se ativação do motor 3 ligada...
+   {
+    read_motbits();                               //executa a leitura dos bits de controle dos motores
+
+   }                                              //end if atv_mot3
+
+   else                                           //senão...
+   {
+    alarme();                                     //aciona o alarme
+
+   }                                              //end else
+
+  }                                               //end if ligar && num3!=0
+
+}                                                 //end timebase3()
+
+
+//================================================================================
 //                      FUNÇÃO DE EXECUÇÃO DO ALARME
 //================================================================================
 void alarme()
 {
- if(toque || toque2)                              //se toque ou toque2 for 1
+ if(toque || toque2 || toque3)                    //se toque, toque2 ou toque3 for 1
  {                                                //algum dos contadores acabaram...
    if(vezes <10)                                  //se vezes for menor que 10
    {                                              //(vezes que o SOM tocará)
     toca_som();                                   //executa a toca do SOM
     
-   }                                              //end if toque || toque2
+   }                                              //end if vezes<10
    
    else                                           //senão...
    {
@@ -655,12 +817,19 @@ void alarme()
      
     }                                             //end if toque2
     
+    if(toque3)                                    //se toque2 for 1
+    {
+     toque3=0x00;                                 //limpa o bit toque3
+     temp_ligado3=0x00;                           //zera temp_ligado3 para recomeçar a contagem
+
+    }                                             //end if toque3
+    
      vezes=0x00;                                  //zera vezes
      SOM = 0x00;                                  //desliga o som
      
    }                                              //end else
    
- }                                                //end if toque || toque2
+ }                                                //end if toque || toque2 || toque3
  
 }                                                 //end alarme()
 
@@ -716,6 +885,19 @@ void abre_mot2()
 
 
 //================================================================================
+//                          FUNÇÃO DE CONFIGURAÇÃO DOS
+//                    BITS DE CONTROLE DO MOTOR 3 PARA ABRIR
+//================================================================================
+void abre_mot3()
+{
+ open_bit3  = 0x01;                               //seta bit de abertura
+ close_bit3 = 0x00;                               //limpa bit de fechamento
+ x_mot3     = 0x00;                               //zera x_mot
+
+}                                                 //end abre_mot3()
+
+
+//================================================================================
 //                       FUNÇÃO DE ABERTURA DO MOTOR 1
 //================================================================================
 void mot_aberto()
@@ -766,6 +948,31 @@ void mot_aberto2()
 
 
 //================================================================================
+//                       FUNÇÃO DE ABERTURA DO MOTOR 3
+//================================================================================
+void mot_aberto3()
+{
+ if(x_mot3<10)                                    //se x_mot3 for menor que 10...
+  {
+    SM3=0;                                        //  ||
+    delay_us(18000);                              //  ||
+    SM3=1;                                        //  ||
+    delay_us(2000);                               //  \/
+    SM3=0;                                        // liga motor 1 no sentido horário
+    x_mot3 ++;                                    //incrementa x_mot3
+
+  }                                               //end if x_mot3<10
+
+  if(x_mot3 == 10)                                //se x_mot3 for 10...
+   {
+    fecha_mot3();                                 //executa a configuração dos bits de controle do motor 3 para fechar
+
+   }                                              //end if x_mot3==10
+
+}                                                 //end mot_aberto3()
+
+
+//================================================================================
 //                          FUNÇÃO DE CONFIGURAÇÃO DOS
 //                    BITS DE CONTROLE DO MOTOR 1 PARA FECHAR
 //================================================================================
@@ -786,9 +993,22 @@ void fecha_mot2()
 {
  open_bit2  = 0x00;                               //limpa o bit de abertura
  close_bit2 = 0x01;                               //seta o bit de fechamento
- x_mot2     = 0x00;                               //zera x_mot
+ x_mot2     = 0x00;                               //zera x_mot2
  
 }                                                 //end fecha_mot2()
+
+
+//================================================================================
+//                          FUNÇÃO DE CONFIGURAÇÃO DOS
+//                    BITS DE CONTROLE DO MOTOR 3 PARA FECHAR
+//================================================================================
+void fecha_mot3()
+{
+ open_bit3  = 0x00;                               //limpa o bit de abertura
+ close_bit3 = 0x01;                               //seta o bit de fechamento
+ x_mot3     = 0x00;                               //zera x_mot3
+
+}                                                 //end fecha_mot3()
 
 
 //================================================================================
@@ -842,6 +1062,31 @@ void mot_fechado2()
 
 
 //================================================================================
+//                       FUNÇÃO DE FECHAMENTO DO MOTOR 3
+//================================================================================
+void mot_fechado3()
+{
+  if(x_mot3<10)                                   //se x_mot3 for menor que 10
+  {
+    SM3=0;                                        //  ||
+    delay_us(18500);                              //  ||
+    SM3=1;                                        //  ||
+    delay_us(1500);                               //  \/
+    SM3=0;                                        //leva o motor 3 para a posição inicial
+    x_mot3++;                                     //incrementa x_mot3
+
+  }                                               //end if x_mot2<10
+
+  if(x_mot3==10)                                  //se x_mot3 for 10
+    {
+     close_bit3 = 0x00;                           //limpa o bit de fechamento
+
+    }                                             //end if x_mot3==10
+
+}                                                 //end mot_fechado3()
+
+
+//================================================================================
 //                         FUNÇÃO DE LEITURA DOS BITS
 //                          DE CONTROLE DOS MOTORES
 //================================================================================
@@ -877,5 +1122,21 @@ void read_motbits()
     mot_fechado2();                               //executa o fechamento do motor 2
     
    }                                              //end if !open_bit2 && close_bit2
+   
+   
+   if(!open_bit3 && !close_bit3) atv_mot3 = 0x00; //se os bits de abertura e fechamento do motor 3 forem 0,
+                                                  //desliga a ativação do motor 3
+
+   if(open_bit3 && !close_bit3)                   //se o bit de abertura for 1 e o de fechamento for 0...
+   {
+    mot_aberto3();                                //executa a abertura do motor 3
+
+   }                                              //end if open_bit3 && !close_bit3
+
+   if(!open_bit3 && close_bit3)                   //se o bit de abertura for 0 e o de fechamento for 1...
+   {
+    mot_fechado3();                               //executa o fechamento do motor 3
+
+   }                                              //end if !open_bit3 && close_bit3
    
 }                                                 //end read_motbits()

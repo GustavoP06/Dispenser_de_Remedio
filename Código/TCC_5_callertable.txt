@@ -64,6 +64,9 @@ interrupt
 			mot_aberto2
 				fecha_mot2
 			mot_fechado2
+			mot_aberto3
+				fecha_mot3
+			mot_fechado3
 		alarme
 			toca_som
 	timebase2
@@ -75,5 +78,22 @@ interrupt
 			mot_aberto2
 				fecha_mot2
 			mot_fechado2
+			mot_aberto3
+				fecha_mot3
+			mot_fechado3
+		alarme
+			toca_som
+	timebase3
+		abre_mot3
+		read_motbits
+			mot_aberto
+				fecha_mot
+			mot_fechado
+			mot_aberto2
+				fecha_mot2
+			mot_fechado2
+			mot_aberto3
+				fecha_mot3
+			mot_fechado3
 		alarme
 			toca_som

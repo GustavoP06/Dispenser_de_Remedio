@@ -43,6 +43,7 @@ abdovf
 abdovf_bit
 abre_mot
 abre_mot2
+abre_mot3
 access
 ackdt
 ackdt_bit
@@ -118,6 +119,7 @@ an4
 an4_bit
 atv_mot
 atv_mot2
+atv_mot3
 b0
 b1
 b1_flag
@@ -245,6 +247,7 @@ clkcfg1
 clkcfg1_bit
 close_bit
 close_bit2
+close_bit3
 cm0
 cm0_bit
 cm1
@@ -473,6 +476,7 @@ f
 fast
 fecha_mot
 fecha_mot2
+fecha_mot3
 ferr
 ferr_bit
 fixsign32
@@ -721,6 +725,7 @@ lcd_rs_direction
 led
 led2
 led3
+led4
 ler_bot
 ligar
 longint2double
@@ -756,8 +761,10 @@ lvv3_bit
 main
 mot_aberto
 mot_aberto2
+mot_aberto3
 mot_fechado
 mot_fechado2
+mot_fechado3
 mul_16x16_s
 mul_16x16_u
 mul_32x32_fp
@@ -766,6 +773,7 @@ mul_32x32_u
 mul_8x8_s
 mult
 mult2
+mult3
 n
 n_bit
 not_a
@@ -801,13 +809,14 @@ nrm4032
 num
 num_un
 num2
+num3
 oerr
 oerr_bit
 oespp
 oespp_bit
-of1
 open_bit
 open_bit2
+open_bit3
 option
 osc2
 osc2_bit
@@ -1107,6 +1116,7 @@ setiov3224
 setjmp
 sm
 sm2
+sm3
 smp
 smp_bit
 sofie
@@ -1281,12 +1291,16 @@ temp_disp
 temp_led
 temp_led2
 temp_led3
+temp_led4
 temp_ligado
 temp_ligado2
+temp_ligado3
 temp_som
 temp2
+temp3
 timebase
 timebase2
+timebase3
 tmr0h
 tmr0ie
 tmr0ie_bit
@@ -1335,6 +1349,7 @@ to__bit
 toca_som
 toque
 toque2
+toque3
 tosh
 tosl
 tosu
@@ -1480,6 +1495,7 @@ uie
 uir
 un
 un2
+un3
 uoemon
 uoemon_bit
 upuen
@@ -1540,5 +1556,6 @@ wue
 wue_bit
 x_mot
 x_mot2
+x_mot3
 z
 z_bit

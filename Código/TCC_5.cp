@@ -1,4 +1,4 @@
-#line 1 "C:/Users/guga_/Documents/lição do Gustavo/2021 (3A)/TCC/codigos/TCC_5/TCC_5.c"
+#line 1 "C:/Users/guga_/Documents/GitHub/Dispenser_de_Remedio/Código/TCC_5.c"
 
 
 
@@ -6,10 +6,12 @@ sbit LED at PORTA.b0;
 sbit SOM at PORTA.b2;
 sbit LED2 at PORTA.b3;
 sbit LED3 at PORTB.b0;
+sbit LED4 at PORTB.b1;
 
 
 sbit SM at PORTA.b1;
 sbit SM2 at PORTA.b4;
+sbit SM3 at PORTA.b5;
 
 
 sbit LCD_RS at PORTD.b2;
@@ -35,6 +37,8 @@ sbit BOTAO4 at PORTC.b4;
 sbit BOTAO5 at PORTC.b5;
 
 
+
+
 void ler_bot();
 void disp();
 void num_un();
@@ -42,52 +46,68 @@ void alarme();
 void piscaLED();
 void timebase();
 void timebase2();
+void timebase3();
 void toca_som();
 void abre_mot();
 void abre_mot2();
+void abre_mot3();
 void fecha_mot();
 void fecha_mot2();
+void fecha_mot3();
 void mot_aberto();
 void mot_aberto2();
+void mot_aberto3();
 void mot_fechado();
 void mot_fechado2();
+void mot_fechado3();
 void read_motbits();
+
 
 
 
 unsigned temp2 = 0x00,
  temp = 0x00,
+ temp3 = 0x00,
  temp_ligado = 0x00,
  temp_ligado2 = 0x00,
+ temp_ligado3 = 0x00,
  temp_led = 0x00,
  temp_led2 = 0x00,
  temp_led3 = 0x00,
+ temp_led4 = 0x00,
  temp_som = 0x00,
  temp_disp = 0x00,
  x_mot = 0x00,
  x_mot2 = 0x00,
- of1 = 0x00,
+ x_mot3 = 0x00,
  prog = 0x00,
  num,
  num2,
+ num3,
  mult = 0x00,
  mult2 = 0x00,
+ mult3 = 0x00,
  vezes = 0x00,
  option = 0x00;
 
 bit ligar,
  un,
  un2,
+ un3,
  display,
  display2,
  toque,
  toque2,
+ toque3,
  open_bit,
  open_bit2,
+ open_bit3,
  close_bit,
  close_bit2,
+ close_bit3,
  atv_mot,
  atv_mot2,
+ atv_mot3,
  b1_flag,
  b2_flag,
  b3_flag,
@@ -97,6 +117,10 @@ bit ligar,
 char dia[] = "dia",
  hora[] = "h  ";
 
+
+
+
+
 void interrupt()
 {
  if(TMR1IF_bit)
@@ -105,10 +129,11 @@ void interrupt()
  TMR1H = 0x3C;
  TMR1L = 0xB0;
  temp_led++;
- temp_som++;
  temp_led2++;
  temp_led3++;
+ temp_led4++;
  temp_disp++;
+ temp_som++;
  }
 
  if(TMR0IF_bit)
@@ -118,6 +143,7 @@ void interrupt()
  TMR0L = 0xB0;
  temp++;
  temp2++;
+ temp3++;
 
  }
 
@@ -126,9 +152,14 @@ void interrupt()
  piscaLED();
  timebase();
  timebase2();
+ timebase3();
 
 
 }
+
+
+
+
 
 void main (void)
 {
@@ -166,12 +197,16 @@ void main (void)
  display = 0x00;
  toque = 0x00;
  toque2 = 0x00;
+ toque3 = 0x00;
  open_bit = 0x00;
  open_bit2 = 0x00;
+ open_bit3 = 0x00;
  close_bit = 0x00;
  close_bit2 = 0x00;
+ close_bit3 = 0x00;
  atv_mot = 0x00;
  atv_mot2 = 0x00;
+ atv_mot3 = 0x00;
 
  SM = 0x00;
 
@@ -179,6 +214,8 @@ void main (void)
  un = EEPROM_Read(0x03);
  num2 = EEPROM_Read(0x02);
  un2 = EEPROM_Read(0x04);
+ num3 = EEPROM_Read(0x05);
+ un3 = EEPROM_Read(0x06);
 
  TRISA = 0x00;
  TRISC = 0x3F;
@@ -196,6 +233,9 @@ void main (void)
  }
 
 }
+
+
+
 
 void ler_bot()
 {
@@ -220,9 +260,16 @@ void ler_bot()
  delay_ms(10);
  EEPROM_Write(0x04,un2);
  delay_ms(10);
+ EEPROM_Write(0x05,num3);
+ delay_ms(10);
+ EEPROM_Write(0x06,un3);
+ delay_ms(10);
  display=0x01;
+
  }
+
  }
+
  }
 
 
@@ -257,6 +304,19 @@ void ler_bot()
  un2 = ~un2;
  }
  }
+
+ if(option==2)
+ {
+ if(prog==1)
+ {
+ num3++;
+ }
+ if (prog==2)
+ {
+ un3 = ~un3;
+ }
+ }
+
  }
 
 
@@ -291,6 +351,20 @@ void ler_bot()
  un2 = ~un2;
  }
  }
+
+ if(option==2)
+ {
+ if(prog==1)
+ {
+ num3--;
+
+ }
+ if (prog==2)
+ {
+ un3 = ~un3;
+ }
+ }
+
  }
 
 
@@ -300,19 +374,24 @@ void ler_bot()
  {
  LCD_Cmd(_LCD_CLEAR);
  b4_flag = 0x00;
- if(num!=0 || num2!=0)
+ if(num!=0 || num2!=0 || num3)
  {
  if(prog==0)
  {
  if(!ligar)
  {
- temp=0x00;
+ temp =0x00;
  temp2=0x00;
+ temp3=0x00;
+
  }
  ligar = ~ligar;
  if(!ligar) display2 = 0x01;
+
  }
+
  }
+
  }
 
  if(!un)
@@ -333,6 +412,15 @@ void ler_bot()
  mult2 = num2 * 5;
  }
 
+ if(!un3)
+ {
+ mult3 = num3 * 1;
+ }
+ if(un3)
+ {
+ mult3 = num3 * 5;
+ }
+
 
  if(!BOTAO5) b5_flag = 0x01;
 
@@ -343,11 +431,14 @@ void ler_bot()
  if(prog != 0)
  {
  option++;
- if(option == 2) option=0x00;
+ if(option == 3) option=0x00;
  }
  }
 
 }
+
+
+
 
 void disp()
 {
@@ -383,6 +474,7 @@ void disp()
  num_un();
  if(option==0) LCD_Chr(2,14,'1');
  if(option==1) LCD_Chr(2,14,'2');
+ if(option==2) LCD_Chr(2,14,'3');
  }
 
  if(prog==2)
@@ -391,6 +483,7 @@ void disp()
  num_un();
  if(option==0) LCD_Chr(2,14,'1');
  if(option==1) LCD_Chr(2,14,'2');
+ if(option==2) LCD_Chr(2,14,'3');
  }
 
  if(ligar)
@@ -401,15 +494,19 @@ void disp()
  {
  temp_disp=0x00;
  option++;
- if(option == 2) option=0x00;
-
+ if(option == 3) option=0x00;
  if(option==0) LCD_Chr(2,14,'1');
  if(option==1) LCD_Chr(2,14,'2');
+ if(option==2) LCD_Chr(2,14,'3');
  }
  num_un();
  }
 
 }
+
+
+
+
 
 void num_un()
 {
@@ -425,7 +522,10 @@ void num_un()
  if(!un) LCD_Out(2,5,hora);
 
  if(un) LCD_Out(2,5,dia);
+
  }
+
+
  if(option==1)
  {
  dig2 = num2/10;
@@ -437,8 +537,28 @@ void num_un()
  if(!un2) LCD_Out(2,5,hora);
 
  if(un2) LCD_Out(2,5,dia);
+
  }
+
+ if(option==2)
+ {
+ dig2 = num3/10;
+ dig1 = num3%10;
+
+ LCD_Chr(2,2,dig2+0x30);
+ LCD_Chr_Cp (dig1+0x30);
+
+ if(!un3) LCD_Out(2,5,hora);
+
+ if(un3) LCD_Out(2,5,dia);
+
+ }
+
 }
+
+
+
+
 
 void piscaLED()
 {
@@ -450,7 +570,9 @@ void piscaLED()
  temp_led = 0x00;
  LED = ~LED;
  }
+
  }
+
  else
  {
  if(ligar && toque)
@@ -459,9 +581,12 @@ void piscaLED()
  {
  temp_led=0x00;
  LED = ~LED;
+
  }
+
  }
  else LED = 0x00;
+
  }
 
 
@@ -470,6 +595,7 @@ void piscaLED()
  {
  temp_led2=0x00;
  LED2 = ~LED2;
+
  }
 
  if(ligar && !toque2 && num2!=0)
@@ -478,8 +604,11 @@ void piscaLED()
  {
  temp_led3 = 0x00;
  LED3 = ~LED3;
+
  }
+
  }
+
  else
  {
  if(ligar && toque2)
@@ -488,12 +617,49 @@ void piscaLED()
  {
  temp_led3=0x00;
  LED3 = ~LED3;
+
  }
+
  }
+
  else LED3 = 0x00;
+
+ }
+
+ if(ligar && !toque3 && num3!=0)
+ {
+ if(temp_led4>=10)
+ {
+ temp_led4 = 0x00;
+ LED4 = ~LED4;
+
+ }
+
+ }
+
+ else
+ {
+ if(ligar && toque3)
+ {
+ if(temp_led4>=2)
+ {
+ temp_led4=0x00;
+ LED4 = ~LED4;
+
+ }
+
+ }
+
+ else LED4 = 0x00;
+
  }
 
 }
+
+
+
+
+
 
 void timebase()
 {
@@ -507,18 +673,23 @@ void timebase()
  {
  temp = 0x00;
  temp_ligado++;
+
  }
+
  if(temp_ligado==mult)
  {
  toque = 0x01;
  atv_mot = 0x01;
  abre_mot();
+
  }
+
  if(atv_mot)
  {
  read_motbits();
 
  }
+
  else
  {
  alarme();
@@ -526,6 +697,11 @@ void timebase()
  }
 
 }
+
+
+
+
+
 
 void timebase2()
 {
@@ -533,58 +709,132 @@ void timebase2()
  {
  temp_ligado2 = 0x00;
  }
+
  if(ligar && num2!=0)
  {
  if(temp2==10)
  {
  temp2 = 0x00;
  temp_ligado2++;
+
  }
+
  if(temp_ligado2==mult2)
  {
  toque2 = 0x01;
  atv_mot2 = 0x01;
  abre_mot2();
+
  }
+
  if(atv_mot2)
  {
  read_motbits();
+
  }
+
  else
  {
  alarme();
+
  }
+
  }
 
 }
 
 
 
+
+
+
+void timebase3()
+{
+ if(!ligar)
+ {
+ temp_ligado3 = 0x00;
+ }
+
+ if(ligar && num3!=0)
+ {
+ if(temp3==10)
+ {
+ temp3 = 0x00;
+ temp_ligado3++;
+
+ }
+
+ if(temp_ligado3==mult3)
+ {
+ toque3 = 0x01;
+ atv_mot3 = 0x01;
+ abre_mot3();
+
+ }
+
+ if(atv_mot3)
+ {
+ read_motbits();
+
+ }
+
+ else
+ {
+ alarme();
+
+ }
+
+ }
+
+}
+
+
+
+
+
 void alarme()
 {
- if(toque || toque2)
+ if(toque || toque2 || toque3)
  {
  if(vezes <10)
  {
  toca_som();
+
  }
+
  else
  {
  if(toque)
  {
  toque=0x00;
  temp_ligado=0x00;
+
  }
+
  if(toque2)
  {
  toque2=0x00;
  temp_ligado2=0x00;
+
  }
+
+ if(toque3)
+ {
+ toque3=0x00;
+ temp_ligado3=0x00;
+
+ }
+
  vezes=0x00;
  SOM = 0x00;
+
  }
+
  }
+
 }
+
+
 
 
 
@@ -596,27 +846,60 @@ void toca_som()
  temp_som = 0x00;
  SOM = ~SOM;
  vezes++;
+
  if(!ligar)
  {
  vezes = 0x00;
  SOM = 0x00;
+
  }
+
  }
+
 }
+
+
+
+
+
 
 void abre_mot()
 {
  open_bit = 0x01;
  close_bit = 0x00;
  x_mot = 0x00;
+
 }
+
+
+
+
+
 
 void abre_mot2()
 {
  open_bit2 = 0x01;
  close_bit2 = 0x00;
  x_mot2 = 0x00;
+
 }
+
+
+
+
+
+
+void abre_mot3()
+{
+ open_bit3 = 0x01;
+ close_bit3 = 0x00;
+ x_mot3 = 0x00;
+
+}
+
+
+
+
 
 void mot_aberto()
 {
@@ -628,14 +911,20 @@ void mot_aberto()
  delay_us(2000);
  SM=0;
  x_mot ++;
+
  }
+
  if(x_mot == 10)
  {
  fecha_mot();
+
  }
 
-
 }
+
+
+
+
 
 void mot_aberto2()
 {
@@ -647,12 +936,45 @@ void mot_aberto2()
  delay_us(2000);
  SM2=0;
  x_mot2 ++;
+
  }
+
  if(x_mot2 == 10)
  {
  fecha_mot2();
+
  }
+
 }
+
+
+
+
+
+void mot_aberto3()
+{
+ if(x_mot3<10)
+ {
+ SM3=0;
+ delay_us(18000);
+ SM3=1;
+ delay_us(2000);
+ SM3=0;
+ x_mot3 ++;
+
+ }
+
+ if(x_mot3 == 10)
+ {
+ fecha_mot3();
+
+ }
+
+}
+
+
+
+
 
 
 void fecha_mot()
@@ -660,14 +982,38 @@ void fecha_mot()
  open_bit = 0x00;
  close_bit = 0x01;
  x_mot = 0x00;
+
 }
+
+
+
+
+
 
 void fecha_mot2()
 {
  open_bit2 = 0x00;
  close_bit2 = 0x01;
  x_mot2 = 0x00;
+
 }
+
+
+
+
+
+
+void fecha_mot3()
+{
+ open_bit3 = 0x00;
+ close_bit3 = 0x01;
+ x_mot3 = 0x00;
+
+}
+
+
+
+
 
 void mot_fechado()
 {
@@ -679,13 +1025,20 @@ void mot_fechado()
  delay_us(1500);
  SM=0;
  x_mot++;
+
  }
+
  if(x_mot==10)
  {
  close_bit = 0x00;
+
  }
 
 }
+
+
+
+
 
 void mot_fechado2()
 {
@@ -697,36 +1050,94 @@ void mot_fechado2()
  delay_us(1500);
  SM2=0;
  x_mot2++;
+
  }
+
  if(x_mot2==10)
  {
  close_bit2 = 0x00;
+
  }
+
 }
+
+
+
+
+
+void mot_fechado3()
+{
+ if(x_mot3<10)
+ {
+ SM3=0;
+ delay_us(18500);
+ SM3=1;
+ delay_us(1500);
+ SM3=0;
+ x_mot3++;
+
+ }
+
+ if(x_mot3==10)
+ {
+ close_bit3 = 0x00;
+
+ }
+
+}
+
+
+
+
+
 
 void read_motbits()
 {
  if(!open_bit && !close_bit) atv_mot = 0x00;
 
+
  if(open_bit && !close_bit)
  {
  mot_aberto();
+
  }
 
  if(!open_bit && close_bit)
  {
  mot_fechado();
+
  }
 
+
  if(!open_bit2 && !close_bit2) atv_mot2 = 0x00;
+
 
  if(open_bit2 && !close_bit2)
  {
  mot_aberto2();
+
  }
 
  if(!open_bit2 && close_bit2)
  {
  mot_fechado2();
+
  }
+
+
+ if(!open_bit3 && !close_bit3) atv_mot3 = 0x00;
+
+
+ if(open_bit3 && !close_bit3)
+ {
+ mot_aberto3();
+
+ }
+
+ if(!open_bit3 && close_bit3)
+ {
+ mot_fechado3();
+
+ }
+
 }
