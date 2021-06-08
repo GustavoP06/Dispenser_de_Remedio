@@ -61,6 +61,7 @@ void mot_fechado();
 void mot_fechado2();
 void mot_fechado3();
 void read_motbits();
+void fast_incr();
 
 
 
@@ -88,7 +89,9 @@ unsigned temp2 = 0x00,
  mult2 = 0x00,
  mult3 = 0x00,
  vezes = 0x00,
- option = 0x00;
+ option = 0x00,
+ temp_inc = 0x00,
+ temp_num = 0x00;
 
 bit ligar,
  un,
@@ -112,7 +115,9 @@ bit ligar,
  b2_flag,
  b3_flag,
  b4_flag,
- b5_flag;
+ b5_flag,
+ fast_inc;
+
 
 char dia[] = "dia",
  hora[] = "h  ";
@@ -134,6 +139,8 @@ void interrupt()
  temp_led4++;
  temp_disp++;
  temp_som++;
+ temp_inc++;
+ temp_num++;
  }
 
  if(TMR0IF_bit)
@@ -195,6 +202,7 @@ void main (void)
  b4_flag = 0x00;
  b5_flag = 0x00;
  display = 0x00;
+ fast_inc = 0x00;
  toque = 0x00;
  toque2 = 0x00;
  toque3 = 0x00;
@@ -209,6 +217,8 @@ void main (void)
  atv_mot3 = 0x00;
 
  SM = 0x00;
+ SM2 = 0x00;
+ SM3 = 0x00;
 
  num = EEPROM_Read(0x01);
  un = EEPROM_Read(0x03);
@@ -275,12 +285,17 @@ void ler_bot()
 
 
 
- if(!BOTAO2) b2_flag=0x01;
+ if(!BOTAO2)
+ {
+ b2_flag=0x01;
+ fast_incr();
+ }
 
  if(BOTAO2 && b2_flag)
  {
  LCD_Cmd(_LCD_CLEAR);
  b2_flag = 0x00;
+ fast_inc = 0x00;
  if(option==0)
  {
  if(prog==1)
@@ -291,6 +306,9 @@ void ler_bot()
  {
  un = ~un;
  }
+
+ if(num>24) num=0x00;
+
  }
 
  if(option==1)
@@ -303,6 +321,9 @@ void ler_bot()
  {
  un2 = ~un2;
  }
+
+ if(num2>24) num2=0x00;
+
  }
 
  if(option==2)
@@ -315,6 +336,9 @@ void ler_bot()
  {
  un3 = ~un3;
  }
+
+ if(num3>24) num3=0x00;
+
  }
 
  }
@@ -337,6 +361,8 @@ void ler_bot()
  {
  un = ~un;
  }
+
+ if(num>24) num=24;
  }
 
  if(option==1)
@@ -350,6 +376,9 @@ void ler_bot()
  {
  un2 = ~un2;
  }
+
+ if(num2>24) num2=24;
+
  }
 
  if(option==2)
@@ -363,6 +392,9 @@ void ler_bot()
  {
  un3 = ~un3;
  }
+
+ if(num3>24) num3=24;
+
  }
 
  }
@@ -436,6 +468,68 @@ void ler_bot()
  }
 
 }
+
+
+
+
+
+void fast_incr()
+{
+ if(temp_inc>7)temp_inc=0x00;
+ if(temp_inc==7)
+ {
+ temp_inc=0x00;
+ fast_inc=0x01;
+ }
+
+ if(fast_inc)
+ {
+ if(option==0 && prog==1)
+ {
+ if(temp_num>5)temp_num=0x00;
+ if(temp_num==5)
+ {
+ temp_num=0x00;
+ num += 2;
+
+ }
+
+ }
+
+
+ if(option==1 && prog==1)
+ {
+ if(temp_num>5)temp_num=0x00;
+ if(temp_num==5)
+ {
+ temp_num=0x00;
+ num2 += 2;
+
+ }
+
+ }
+
+ if(num >24) num =0x00;
+ if(num2>24) num2=0x00;
+ if(num3>24) num3=0x00;
+
+ }
+
+
+ if(option==2 && prog==1)
+ {
+ if(temp_num>5)temp_num=0x00;
+ if(temp_num==5)
+ {
+ temp_num=0x00;
+ num3 += 2;
+
+ }
+
+ }
+
+}
+
 
 
 
@@ -585,7 +679,16 @@ void piscaLED()
  }
 
  }
+ else
+ {
+ if(prog>0 && option==0)
+ {
+ LED = 0x01;
+ }
+
  else LED = 0x00;
+
+ }
 
  }
 
@@ -622,7 +725,16 @@ void piscaLED()
 
  }
 
+ else
+ {
+ if(prog>0 && option==1)
+ {
+ LED3 = 0x01;
+ }
+
  else LED3 = 0x00;
+
+ }
 
  }
 
@@ -650,7 +762,16 @@ void piscaLED()
 
  }
 
+ else
+ {
+ if(prog>0 && option==2)
+ {
+ LED4 = 0x01;
+ }
+
  else LED4 = 0x00;
+
+ }
 
  }
 

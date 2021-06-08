@@ -474,6 +474,8 @@ epstall_uep9_bit
 equals_double
 f
 fast
+fast_inc
+fast_incr
 fecha_mot
 fecha_mot2
 fecha_mot3
@@ -1288,6 +1290,7 @@ tblptrl
 tblptru
 temp
 temp_disp
+temp_inc
 temp_led
 temp_led2
 temp_led3
@@ -1295,6 +1298,7 @@ temp_led4
 temp_ligado
 temp_ligado2
 temp_ligado3
+temp_num
 temp_som
 temp2
 temp3

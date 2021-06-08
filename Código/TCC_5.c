@@ -60,6 +60,7 @@ void mot_fechado();                       //fecha o motor n°1
 void mot_fechado2();                      //fecha o motor n°2
 void mot_fechado3();                      //fecha o motor n°3
 void read_motbits();                      //ler os bits dos motores
+void fast_incr();                         //incrementar num rápidamente
 
 //--------------------------
 //-------Variáveis----------
@@ -87,7 +88,9 @@ unsigned temp2        = 0x00,             //variável de interrupção do dispenser
          mult2        = 0x00,             //variável de comparação com o temp_ligado2 (dispenser n°2)
          mult3        = 0x00,             //variável de comparação com o temp_ligado3 (dispenser n°3)
          vezes        = 0x00,             //variável de vezes que o SOM toca
-         option       = 0x00;             //variável que define qual dispenser está selecionado
+         option       = 0x00,             //variável que define qual dispenser está selecionado
+         temp_inc     = 0x00,             //variável de temporização do botão para incremento rápido
+         temp_num     = 0x00;             //variável de temporização do numero para incremento rápido
 
 bit      ligar,                           //bit de ligar/desligar a contagem
          un,       // = EEPROM_Read(0x03)   bit que define a unidade (dia/hora) do dispenser n°1
@@ -111,7 +114,9 @@ bit      ligar,                           //bit de ligar/desligar a contagem
          b2_flag,                         //flag do botão 2
          b3_flag,                         //flag do botão 3
          b4_flag,                         //flag do botão 4
-         b5_flag;                         //flag do botão 5
+         b5_flag,                         //flag do botão 5
+         fast_inc;                        //bit de ativação do incremento rápido
+
 
 char     dia[]        = "dia",            //variável de exibição "dia"
          hora[]       = "h  ";            //variável de exibição "h"
@@ -133,6 +138,8 @@ void interrupt()                          //interrupção
       temp_led4++;                        //incrementa temp_led4
       temp_disp++;                        //incrementa temp_disp
       temp_som++;                         //incrementa temp_som
+      temp_inc++;                         //incrementa temp_inc
+      temp_num++;                         //icrementa temp_num
      }
 
      if(TMR0IF_bit)                        //overflow em 100ms overflow
@@ -194,6 +201,7 @@ void main (void)
         b4_flag       =   0x00;                   //     |
         b5_flag       =   0x00;                   //     |
         display       =   0x00;                   //     |
+        fast_inc      =   0x00;                    //     |
         toque         =   0x00;                   //     |
         toque2        =   0x00;                   //     |
         toque3        =   0x00;                   //     |
@@ -208,6 +216,8 @@ void main (void)
         atv_mot3      =   0x00;                   //    \ /
                                                   //     V
         SM            =   0x00;                   //zerando todos os bits
+        SM2           =   0x00;
+        SM3           =   0x00;
 
         num           =   EEPROM_Read(0x01);      //lê os dados da EEPROM para variável num
         un            =   EEPROM_Read(0x03);      //lê os dados da EEPROM para variável un
@@ -274,12 +284,17 @@ void ler_bot()
 
 
   //___b2___
-  if(!BOTAO2) b2_flag=0x01;                       //se botão2 for pressionado, flag do botão2 = 1
+  if(!BOTAO2) 
+  {
+   b2_flag=0x01;                                  //se botão2 for pressionado, flag do botão2 = 1
+   fast_incr();                                   //executa fast_incr
+  }
 
   if(BOTAO2 && b2_flag)                           //se botão2 for solto e flag do botão2 for 1
   {
     LCD_Cmd(_LCD_CLEAR);                          //limpa LCD
     b2_flag    =  0x00;                           //limpa flag do botão
+    fast_inc   =  0x00;                           //limpa bit de incremento rápido
    if(option==0)                                  //dispenser n°1
    {
     if(prog==1)                                   //programação de numero
@@ -290,6 +305,9 @@ void ler_bot()
     {
       un = ~un;                                   //inverte un
     }                                             //end if prog==2
+    
+    if(num>24) num=0x00;                          //se o numero passar de 24, retorna para 0
+    
    }                                              //end if option==0
    
    if(option==1)                                  //dispenser n°2
@@ -302,6 +320,9 @@ void ler_bot()
     {
       un2 = ~un2;                                 //inverte un2
     }
+    
+    if(num2>24) num2=0x00;                          //se o numero passar de 24, retorna para 0
+
    }                                              //end if option==1
    
    if(option==2)                                  //dispenser n°3
@@ -314,6 +335,9 @@ void ler_bot()
     {
       un3 = ~un3;                                 //inverte un3
     }
+    
+    if(num3>24) num3=0x00;                          //se o numero passar de 24, retorna para 0
+    
    }                                              //end if option==2
    
   }                                               //end if BOTAO2 e b2_flag
@@ -336,6 +360,8 @@ void ler_bot()
     {
      un = ~un;                                    //inverte un
     }
+    
+    if(num>24) num=24;                            //se o numero for maior que 24, vai para 24
    }                                              //end if option==0
    
    if(option==1)                                  //dispenser n°2
@@ -349,6 +375,9 @@ void ler_bot()
     {
      un2 = ~un2;                                  //inverte un2
     }
+    
+    if(num2>24) num2=24;                          //se o numero for maior que 24, vai para 24
+    
    }                                              //end if option==1
    
    if(option==2)                                  //dispenser n°3
@@ -362,6 +391,9 @@ void ler_bot()
     {
      un3 = ~un3;                                  //inverte un3
     }
+    
+    if(num3>24) num3=24;                          //se o numero for maior que 24, vai para 24
+    
    }                                              //end if option==2
    
   }                                               //end if botão3 e b3_flag
@@ -435,6 +467,68 @@ void ler_bot()
   }                                               //end if BOTAO5 && b5_flag
 
 }                                                 //end ler_bot()
+
+
+//================================================================================
+//               FUNÇÃO PARA INCREMENTAR NÚMEROS RAPIDAMENTE
+//================================================================================
+void fast_incr()
+{
+  if(temp_inc>7)temp_inc=0x00;                     //se temp_inc maior que 7, zera temp_inc
+  if(temp_inc==7)                                  //conta 700ms...
+  {
+   temp_inc=0x00;                                  //zera temp_inc
+   fast_inc=0x01;                                  //ativa fast_inc
+  }                                                //end if temp_inc==7
+ 
+ if(fast_inc)                                     //se fast_inc for ativado...
+ {
+  if(option==0 && prog==1)                        //se dispenser n°1 selecionado e programção de número
+  {
+   if(temp_num>5)temp_num=0x00;                   //se temp_num maior que 5, zera temp_num
+   if(temp_num==5)                                //conta 500ms...
+   {
+    temp_num=0x00;                                //zera temp_num
+    num += 2;                                     //acrescenta 2 em num
+    
+   }                                              //end if temp_num==5
+   
+  }                                               //end if option==0 && prog=1
+  
+  
+  if(option==1 && prog==1)                        //se dispenser n°2 selecionado e programção de número
+  {
+   if(temp_num>5)temp_num=0x00;                   //se temp_num maior que 5, zera temp_num
+   if(temp_num==5)                                //conta 500ms...
+   {
+    temp_num=0x00;                                //zera temp_num
+    num2 += 2;                                    //acrescenta 2 em num2
+
+   }                                              //end if temp_num==5
+
+  }                                               //end if option==1 && prog=1
+  
+  if(num >24) num =0x00;                          //se o numero passar de 24, retorna para 0
+  if(num2>24) num2=0x00;                          //se o numero passar de 24, retorna para 0
+  if(num3>24) num3=0x00;                          //se o numero passar de 24, retorna para 0
+  
+ }                                                //end if fast_inc
+ 
+ 
+ if(option==2 && prog==1)                         //se dispenser n°3 selecionado e programção de número
+  {
+   if(temp_num>5)temp_num=0x00;                   //se temp_num maior que 5, zera temp_num
+   if(temp_num==5)                                //conta 500ms...
+   {
+    temp_num=0x00;                                //zera temp_num
+    num3 += 2;                                    //acrescenta 2 em num3
+
+   }                                              //end if temp_num==5
+
+  }                                               //end if option==2 && prog=1
+ 
+}                                                 //end void fast_incr()
+
 
 //================================================================================
 //                      FUNÇÃO DE EXIBIÇÃO DO DISPLAY
@@ -584,7 +678,16 @@ void piscaLED()
     }                                             //end if temp_led>=2
 
    }                                              //end if ligar && toque
-   else LED = 0x00;                               //senão, LED do dispenser n°1 desligado
+   else                                           //senão...
+   {
+    if(prog>0 && option==0)                       //se estiver em programação e dispenser n°1 selecionado
+    {
+     LED = 0x01;                                  //LED do dispenser n°1 aceso
+    }                                             //end if prog>0 && option==0
+
+    else LED = 0x00;                              //senão, LED do dispenser n°1 desligado
+    
+   }                                              //end else
    
   }                                               //end else
 
@@ -621,7 +724,16 @@ void piscaLED()
    
   }                                               //end if ligar && toque2
   
-  else LED3 = 0x00;                               //senão, LED de indicação do dispenser n°2 desligado
+  else
+  {
+   if(prog>0 && option==1)                        //se estiver em programação e dispenser n°2 selecionado
+   {
+    LED3 = 0x01;                                  //LED do dispenser n°2 aceso
+   }                                              //end if prog>0 && option==1
+
+  else LED3 = 0x00;                               //senão, LED do dispenser n°2 desligado
+  
+  }                                               //end else
   
  }                                                //end else
  
@@ -649,7 +761,16 @@ void piscaLED()
 
   }                                               //end if ligar && toque3
 
-  else LED4 = 0x00;                               //senão, LED de indicação do dispenser n°3 desligado
+ else
+  {
+   if(prog>0 && option==2)                        //se estiver em programação e dispenser n°3 selecionado
+   {
+    LED4 = 0x01;                                  //LED do dispenser n°3 aceso
+   }                                              //end if prog>0 && option==2
+
+  else LED4 = 0x00;                               //senão, LED do dispenser n°3 desligado
+
+  }                                               //end else
 
  }                                                //end else
  

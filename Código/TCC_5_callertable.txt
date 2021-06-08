@@ -14,6 +14,7 @@ main
 			Delay_5500us
 			Delay_50us
 		EEPROM_Write
+		fast_incr
 		Mul_16X16_U
 	disp
 		Lcd_Out
