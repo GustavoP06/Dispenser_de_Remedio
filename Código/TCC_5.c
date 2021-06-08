@@ -479,6 +479,19 @@ void ler_bot()
     option++;                                     //incrementa option
     if(option == 3) option=0x00;                  //se option for 3, option = 0
    }
+   
+    if(toque || toque2 || toque3)                 //se algum comando do SOM estiver ativado...
+    {
+    if(toque)temp_ligado=0x00;                    //se for o toque 1, zera o contador 1
+    if(toque2)temp_ligado2=0x00;                  //se for o toque 2, zera o contador 2
+    if(toque3)temp_ligado3=0x00;                  //se for o toque 3, zera o contador 3
+     toque =0x00;
+     toque2=0x00;
+     toque3=0x00;                                 //zera todos os bits de SOM
+     SOM=0x00;
+     
+    }                                             //end if toque || toque2 || toque3
+    
   }                                               //end if BOTAO5 && b5_flag
 
 }                                                 //end ler_bot()
@@ -931,10 +944,9 @@ void alarme()
 {
  if(toque || toque2 || toque3)                    //se toque, toque2 ou toque3 for 1
  {                                                //algum dos contadores acabaram...
-   if(vezes <10)                                  //se vezes for menor que 10
+   if(vezes <200)                                 //se vezes for menor que 200 (toca por 1 minuto)
    {                                              //(vezes que o SOM tocará)
     toca_som();                                   //executa a toca do SOM
-    
    }                                              //end if vezes<10
    
    else                                           //senão...

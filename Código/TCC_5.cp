@@ -463,6 +463,19 @@ void ler_bot()
  option++;
  if(option == 3) option=0x00;
  }
+
+ if(toque || toque2 || toque3)
+ {
+ if(toque)temp_ligado=0x00;
+ if(toque2)temp_ligado2=0x00;
+ if(toque3)temp_ligado3=0x00;
+ toque =0x00;
+ toque2=0x00;
+ toque3=0x00;
+ SOM=0x00;
+
+ }
+
  }
 
 }
@@ -915,10 +928,9 @@ void alarme()
 {
  if(toque || toque2 || toque3)
  {
- if(vezes <10)
+ if(vezes <200)
  {
  toca_som();
-
  }
 
  else

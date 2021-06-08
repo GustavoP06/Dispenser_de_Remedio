@@ -71,7 +71,7 @@ L_interrupt1:
 	CALL        _timebase3+0, 0
 ;TCC_5.c,179 :: 		}                                          //end interrupt()
 L_end_interrupt:
-L__interrupt295:
+L__interrupt302:
 	RETFIE      1
 ; end of _interrupt
 
@@ -173,12 +173,12 @@ _main:
 	MOVWF       FARG_EEPROM_Read_address+0 
 	CALL        _EEPROM_Read+0, 0
 	BTFSC       R0, 0 
-	GOTO        L__main297
+	GOTO        L__main304
 	BCF         _un+0, BitPos(_un+0) 
-	GOTO        L__main298
-L__main297:
+	GOTO        L__main305
+L__main304:
 	BSF         _un+0, BitPos(_un+0) 
-L__main298:
+L__main305:
 ;TCC_5.c,239 :: 		num2          =   EEPROM_Read(0x02);      //lê os dados da EEPROM para variável num2
 	MOVLW       2
 	MOVWF       FARG_EEPROM_Read_address+0 
@@ -192,12 +192,12 @@ L__main298:
 	MOVWF       FARG_EEPROM_Read_address+0 
 	CALL        _EEPROM_Read+0, 0
 	BTFSC       R0, 0 
-	GOTO        L__main299
+	GOTO        L__main306
 	BCF         _un2+0, BitPos(_un2+0) 
-	GOTO        L__main300
-L__main299:
+	GOTO        L__main307
+L__main306:
 	BSF         _un2+0, BitPos(_un2+0) 
-L__main300:
+L__main307:
 ;TCC_5.c,241 :: 		num3          =   EEPROM_Read(0x05);      //lê os dados da EEPROM para variável num3
 	MOVLW       5
 	MOVWF       FARG_EEPROM_Read_address+0 
@@ -211,12 +211,12 @@ L__main300:
 	MOVWF       FARG_EEPROM_Read_address+0 
 	CALL        _EEPROM_Read+0, 0
 	BTFSC       R0, 0 
-	GOTO        L__main301
+	GOTO        L__main308
 	BCF         _un3+0, BitPos(_un3+0) 
-	GOTO        L__main302
-L__main301:
+	GOTO        L__main309
+L__main308:
 	BSF         _un3+0, BitPos(_un3+0) 
-L__main302:
+L__main309:
 ;TCC_5.c,244 :: 		TRISA = 0x00;                             //seta todos os bits do TRISA como saída
 	CLRF        TRISA+0 
 ;TCC_5.c,245 :: 		TRISC = 0x3F;                             //seta os bits 0,1,2,3,5 como entrada
@@ -260,7 +260,7 @@ L_ler_bot4:
 	GOTO        L_ler_bot7
 	BTFSS       _b1_flag+0, BitPos(_b1_flag+0) 
 	GOTO        L_ler_bot7
-L__ler_bot264:
+L__ler_bot271:
 ;TCC_5.c,271 :: 		LCD_Cmd(_LCD_CLEAR);                           //limpa o LCD
 	MOVLW       1
 	MOVWF       FARG_Lcd_Cmd_out_char+0 
@@ -277,10 +277,10 @@ L__ler_bot264:
 	MOVLW       0
 	XORWF       _prog+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__ler_bot304
+	GOTO        L__ler_bot311
 	MOVLW       3
 	XORWF       _prog+0, 0 
-L__ler_bot304:
+L__ler_bot311:
 	BTFSS       STATUS+0, 2 
 	GOTO        L_ler_bot9
 ;TCC_5.c,278 :: 		prog=0x00;                                   //zera a variável prog
@@ -416,7 +416,7 @@ L_ler_bot16:
 	GOTO        L_ler_bot19
 	BTFSS       _b2_flag+0, BitPos(_b2_flag+0) 
 	GOTO        L_ler_bot19
-L__ler_bot263:
+L__ler_bot270:
 ;TCC_5.c,310 :: 		LCD_Cmd(_LCD_CLEAR);                          //limpa LCD
 	MOVLW       1
 	MOVWF       FARG_Lcd_Cmd_out_char+0 
@@ -429,20 +429,20 @@ L__ler_bot263:
 	MOVLW       0
 	XORWF       _option+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__ler_bot305
+	GOTO        L__ler_bot312
 	MOVLW       0
 	XORWF       _option+0, 0 
-L__ler_bot305:
+L__ler_bot312:
 	BTFSS       STATUS+0, 2 
 	GOTO        L_ler_bot20
 ;TCC_5.c,315 :: 		if(prog==1)                                   //programação de numero
 	MOVLW       0
 	XORWF       _prog+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__ler_bot306
+	GOTO        L__ler_bot313
 	MOVLW       1
 	XORWF       _prog+0, 0 
-L__ler_bot306:
+L__ler_bot313:
 	BTFSS       STATUS+0, 2 
 	GOTO        L_ler_bot21
 ;TCC_5.c,317 :: 		num++;                                       //incrementa num
@@ -454,10 +454,10 @@ L_ler_bot21:
 	MOVLW       0
 	XORWF       _prog+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__ler_bot307
+	GOTO        L__ler_bot314
 	MOVLW       2
 	XORWF       _prog+0, 0 
-L__ler_bot307:
+L__ler_bot314:
 	BTFSS       STATUS+0, 2 
 	GOTO        L_ler_bot22
 ;TCC_5.c,321 :: 		un = ~un;                                   //inverte un
@@ -470,10 +470,10 @@ L_ler_bot22:
 	MOVF        _num+1, 0 
 	SUBWF       R0, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__ler_bot308
+	GOTO        L__ler_bot315
 	MOVF        _num+0, 0 
 	SUBLW       24
-L__ler_bot308:
+L__ler_bot315:
 	BTFSC       STATUS+0, 0 
 	GOTO        L_ler_bot23
 	CLRF        _num+0 
@@ -485,20 +485,20 @@ L_ler_bot20:
 	MOVLW       0
 	XORWF       _option+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__ler_bot309
+	GOTO        L__ler_bot316
 	MOVLW       1
 	XORWF       _option+0, 0 
-L__ler_bot309:
+L__ler_bot316:
 	BTFSS       STATUS+0, 2 
 	GOTO        L_ler_bot24
 ;TCC_5.c,330 :: 		if(prog==1)                                   //programação do numero
 	MOVLW       0
 	XORWF       _prog+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__ler_bot310
+	GOTO        L__ler_bot317
 	MOVLW       1
 	XORWF       _prog+0, 0 
-L__ler_bot310:
+L__ler_bot317:
 	BTFSS       STATUS+0, 2 
 	GOTO        L_ler_bot25
 ;TCC_5.c,332 :: 		num2++;                                      //incrementa num2
@@ -510,10 +510,10 @@ L_ler_bot25:
 	MOVLW       0
 	XORWF       _prog+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__ler_bot311
+	GOTO        L__ler_bot318
 	MOVLW       2
 	XORWF       _prog+0, 0 
-L__ler_bot311:
+L__ler_bot318:
 	BTFSS       STATUS+0, 2 
 	GOTO        L_ler_bot26
 ;TCC_5.c,336 :: 		un2 = ~un2;                                 //inverte un2
@@ -526,10 +526,10 @@ L_ler_bot26:
 	MOVF        _num2+1, 0 
 	SUBWF       R0, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__ler_bot312
+	GOTO        L__ler_bot319
 	MOVF        _num2+0, 0 
 	SUBLW       24
-L__ler_bot312:
+L__ler_bot319:
 	BTFSC       STATUS+0, 0 
 	GOTO        L_ler_bot27
 	CLRF        _num2+0 
@@ -541,20 +541,20 @@ L_ler_bot24:
 	MOVLW       0
 	XORWF       _option+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__ler_bot313
+	GOTO        L__ler_bot320
 	MOVLW       2
 	XORWF       _option+0, 0 
-L__ler_bot313:
+L__ler_bot320:
 	BTFSS       STATUS+0, 2 
 	GOTO        L_ler_bot28
 ;TCC_5.c,345 :: 		if(prog==1)                                   //programação do numero
 	MOVLW       0
 	XORWF       _prog+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__ler_bot314
+	GOTO        L__ler_bot321
 	MOVLW       1
 	XORWF       _prog+0, 0 
-L__ler_bot314:
+L__ler_bot321:
 	BTFSS       STATUS+0, 2 
 	GOTO        L_ler_bot29
 ;TCC_5.c,347 :: 		num3++;                                      //incrementa num3
@@ -566,10 +566,10 @@ L_ler_bot29:
 	MOVLW       0
 	XORWF       _prog+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__ler_bot315
+	GOTO        L__ler_bot322
 	MOVLW       2
 	XORWF       _prog+0, 0 
-L__ler_bot315:
+L__ler_bot322:
 	BTFSS       STATUS+0, 2 
 	GOTO        L_ler_bot30
 ;TCC_5.c,351 :: 		un3 = ~un3;                                 //inverte un3
@@ -582,10 +582,10 @@ L_ler_bot30:
 	MOVF        _num3+1, 0 
 	SUBWF       R0, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__ler_bot316
+	GOTO        L__ler_bot323
 	MOVF        _num3+0, 0 
 	SUBLW       24
-L__ler_bot316:
+L__ler_bot323:
 	BTFSC       STATUS+0, 0 
 	GOTO        L_ler_bot31
 	CLRF        _num3+0 
@@ -605,7 +605,7 @@ L_ler_bot32:
 	GOTO        L_ler_bot35
 	BTFSS       _b3_flag+0, BitPos(_b3_flag+0) 
 	GOTO        L_ler_bot35
-L__ler_bot262:
+L__ler_bot269:
 ;TCC_5.c,365 :: 		LCD_Cmd(_LCD_CLEAR);                           //limpa LCD
 	MOVLW       1
 	MOVWF       FARG_Lcd_Cmd_out_char+0 
@@ -616,20 +616,20 @@ L__ler_bot262:
 	MOVLW       0
 	XORWF       _option+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__ler_bot317
+	GOTO        L__ler_bot324
 	MOVLW       0
 	XORWF       _option+0, 0 
-L__ler_bot317:
+L__ler_bot324:
 	BTFSS       STATUS+0, 2 
 	GOTO        L_ler_bot36
 ;TCC_5.c,369 :: 		if(prog==1)                                   //programação do numero
 	MOVLW       0
 	XORWF       _prog+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__ler_bot318
+	GOTO        L__ler_bot325
 	MOVLW       1
 	XORWF       _prog+0, 0 
-L__ler_bot318:
+L__ler_bot325:
 	BTFSS       STATUS+0, 2 
 	GOTO        L_ler_bot37
 ;TCC_5.c,371 :: 		num--;                                       //decrementa num
@@ -643,10 +643,10 @@ L_ler_bot37:
 	MOVLW       0
 	XORWF       _prog+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__ler_bot319
+	GOTO        L__ler_bot326
 	MOVLW       2
 	XORWF       _prog+0, 0 
-L__ler_bot319:
+L__ler_bot326:
 	BTFSS       STATUS+0, 2 
 	GOTO        L_ler_bot38
 ;TCC_5.c,376 :: 		un = ~un;                                    //inverte un
@@ -659,10 +659,10 @@ L_ler_bot38:
 	MOVF        _num+1, 0 
 	SUBWF       R0, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__ler_bot320
+	GOTO        L__ler_bot327
 	MOVF        _num+0, 0 
 	SUBLW       24
-L__ler_bot320:
+L__ler_bot327:
 	BTFSC       STATUS+0, 0 
 	GOTO        L_ler_bot39
 	MOVLW       24
@@ -676,20 +676,20 @@ L_ler_bot36:
 	MOVLW       0
 	XORWF       _option+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__ler_bot321
+	GOTO        L__ler_bot328
 	MOVLW       1
 	XORWF       _option+0, 0 
-L__ler_bot321:
+L__ler_bot328:
 	BTFSS       STATUS+0, 2 
 	GOTO        L_ler_bot40
 ;TCC_5.c,384 :: 		if(prog==1)                                   //programação do número
 	MOVLW       0
 	XORWF       _prog+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__ler_bot322
+	GOTO        L__ler_bot329
 	MOVLW       1
 	XORWF       _prog+0, 0 
-L__ler_bot322:
+L__ler_bot329:
 	BTFSS       STATUS+0, 2 
 	GOTO        L_ler_bot41
 ;TCC_5.c,386 :: 		num2--;                                      //decrementa num2
@@ -703,10 +703,10 @@ L_ler_bot41:
 	MOVLW       0
 	XORWF       _prog+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__ler_bot323
+	GOTO        L__ler_bot330
 	MOVLW       2
 	XORWF       _prog+0, 0 
-L__ler_bot323:
+L__ler_bot330:
 	BTFSS       STATUS+0, 2 
 	GOTO        L_ler_bot42
 ;TCC_5.c,391 :: 		un2 = ~un2;                                  //inverte un2
@@ -719,10 +719,10 @@ L_ler_bot42:
 	MOVF        _num2+1, 0 
 	SUBWF       R0, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__ler_bot324
+	GOTO        L__ler_bot331
 	MOVF        _num2+0, 0 
 	SUBLW       24
-L__ler_bot324:
+L__ler_bot331:
 	BTFSC       STATUS+0, 0 
 	GOTO        L_ler_bot43
 	MOVLW       24
@@ -736,20 +736,20 @@ L_ler_bot40:
 	MOVLW       0
 	XORWF       _option+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__ler_bot325
+	GOTO        L__ler_bot332
 	MOVLW       2
 	XORWF       _option+0, 0 
-L__ler_bot325:
+L__ler_bot332:
 	BTFSS       STATUS+0, 2 
 	GOTO        L_ler_bot44
 ;TCC_5.c,400 :: 		if(prog==1)                                   //programação do número
 	MOVLW       0
 	XORWF       _prog+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__ler_bot326
+	GOTO        L__ler_bot333
 	MOVLW       1
 	XORWF       _prog+0, 0 
-L__ler_bot326:
+L__ler_bot333:
 	BTFSS       STATUS+0, 2 
 	GOTO        L_ler_bot45
 ;TCC_5.c,402 :: 		num3--;                                      //decrementa num3
@@ -763,10 +763,10 @@ L_ler_bot45:
 	MOVLW       0
 	XORWF       _prog+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__ler_bot327
+	GOTO        L__ler_bot334
 	MOVLW       2
 	XORWF       _prog+0, 0 
-L__ler_bot327:
+L__ler_bot334:
 	BTFSS       STATUS+0, 2 
 	GOTO        L_ler_bot46
 ;TCC_5.c,407 :: 		un3 = ~un3;                                  //inverte un3
@@ -779,10 +779,10 @@ L_ler_bot46:
 	MOVF        _num3+1, 0 
 	SUBWF       R0, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__ler_bot328
+	GOTO        L__ler_bot335
 	MOVF        _num3+0, 0 
 	SUBLW       24
-L__ler_bot328:
+L__ler_bot335:
 	BTFSC       STATUS+0, 0 
 	GOTO        L_ler_bot47
 	MOVLW       24
@@ -804,7 +804,7 @@ L_ler_bot48:
 	GOTO        L_ler_bot51
 	BTFSS       _b4_flag+0, BitPos(_b4_flag+0) 
 	GOTO        L_ler_bot51
-L__ler_bot261:
+L__ler_bot268:
 ;TCC_5.c,421 :: 		LCD_Cmd(_LCD_CLEAR);                          //limpa LCD
 	MOVLW       1
 	MOVWF       FARG_Lcd_Cmd_out_char+0 
@@ -815,35 +815,35 @@ L__ler_bot261:
 	MOVLW       0
 	XORWF       _num+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__ler_bot329
+	GOTO        L__ler_bot336
 	MOVLW       0
 	XORWF       _num+0, 0 
-L__ler_bot329:
+L__ler_bot336:
 	BTFSS       STATUS+0, 2 
-	GOTO        L__ler_bot260
+	GOTO        L__ler_bot267
 	MOVLW       0
 	XORWF       _num2+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__ler_bot330
+	GOTO        L__ler_bot337
 	MOVLW       0
 	XORWF       _num2+0, 0 
-L__ler_bot330:
+L__ler_bot337:
 	BTFSS       STATUS+0, 2 
-	GOTO        L__ler_bot260
+	GOTO        L__ler_bot267
 	MOVF        _num3+0, 0 
 	IORWF       _num3+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__ler_bot260
+	GOTO        L__ler_bot267
 	GOTO        L_ler_bot54
-L__ler_bot260:
+L__ler_bot267:
 ;TCC_5.c,425 :: 		if(prog==0)                                   //se prog = 0
 	MOVLW       0
 	XORWF       _prog+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__ler_bot331
+	GOTO        L__ler_bot338
 	MOVLW       0
 	XORWF       _prog+0, 0 
-L__ler_bot331:
+L__ler_bot338:
 	BTFSS       STATUS+0, 2 
 	GOTO        L_ler_bot55
 ;TCC_5.c,427 :: 		if(!ligar)                                   //se bit de ligar = 0 (desligado)
@@ -970,7 +970,7 @@ L_ler_bot64:
 	GOTO        L_ler_bot67
 	BTFSS       _b5_flag+0, BitPos(_b5_flag+0) 
 	GOTO        L_ler_bot67
-L__ler_bot259:
+L__ler_bot266:
 ;TCC_5.c,475 :: 		LCD_Cmd(_LCD_CLEAR);                           //limpa LCD
 	MOVLW       1
 	MOVWF       FARG_Lcd_Cmd_out_char+0 
@@ -981,10 +981,10 @@ L__ler_bot259:
 	MOVLW       0
 	XORWF       _prog+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__ler_bot332
+	GOTO        L__ler_bot339
 	MOVLW       0
 	XORWF       _prog+0, 0 
-L__ler_bot332:
+L__ler_bot339:
 	BTFSC       STATUS+0, 2 
 	GOTO        L_ler_bot68
 ;TCC_5.c,479 :: 		option++;                                     //incrementa option
@@ -994,10 +994,10 @@ L__ler_bot332:
 	MOVLW       0
 	XORWF       _option+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__ler_bot333
+	GOTO        L__ler_bot340
 	MOVLW       3
 	XORWF       _option+0, 0 
-L__ler_bot333:
+L__ler_bot340:
 	BTFSS       STATUS+0, 2 
 	GOTO        L_ler_bot69
 	CLRF        _option+0 
@@ -1005,222 +1005,155 @@ L__ler_bot333:
 L_ler_bot69:
 ;TCC_5.c,481 :: 		}
 L_ler_bot68:
-;TCC_5.c,482 :: 		}                                               //end if BOTAO5 && b5_flag
+;TCC_5.c,483 :: 		if(toque || toque2 || toque3)                 //se algum comando do SOM estiver ativado...
+	BTFSC       _toque+0, BitPos(_toque+0) 
+	GOTO        L__ler_bot265
+	BTFSC       _toque2+0, BitPos(_toque2+0) 
+	GOTO        L__ler_bot265
+	BTFSC       _toque3+0, BitPos(_toque3+0) 
+	GOTO        L__ler_bot265
+	GOTO        L_ler_bot72
+L__ler_bot265:
+;TCC_5.c,485 :: 		if(toque)temp_ligado=0x00;                    //se for o toque 1, zera o contador 1
+	BTFSS       _toque+0, BitPos(_toque+0) 
+	GOTO        L_ler_bot73
+	CLRF        _temp_ligado+0 
+	CLRF        _temp_ligado+1 
+L_ler_bot73:
+;TCC_5.c,486 :: 		if(toque2)temp_ligado2=0x00;                  //se for o toque 2, zera o contador 2
+	BTFSS       _toque2+0, BitPos(_toque2+0) 
+	GOTO        L_ler_bot74
+	CLRF        _temp_ligado2+0 
+	CLRF        _temp_ligado2+1 
+L_ler_bot74:
+;TCC_5.c,487 :: 		if(toque3)temp_ligado3=0x00;                  //se for o toque 3, zera o contador 3
+	BTFSS       _toque3+0, BitPos(_toque3+0) 
+	GOTO        L_ler_bot75
+	CLRF        _temp_ligado3+0 
+	CLRF        _temp_ligado3+1 
+L_ler_bot75:
+;TCC_5.c,488 :: 		toque =0x00;
+	BCF         _toque+0, BitPos(_toque+0) 
+;TCC_5.c,489 :: 		toque2=0x00;
+	BCF         _toque2+0, BitPos(_toque2+0) 
+;TCC_5.c,490 :: 		toque3=0x00;                                 //zera todos os bits de SOM
+	BCF         _toque3+0, BitPos(_toque3+0) 
+;TCC_5.c,491 :: 		SOM=0x00;
+	BCF         PORTA+0, 2 
+;TCC_5.c,493 :: 		}                                             //end if toque || toque2 || toque3
+L_ler_bot72:
+;TCC_5.c,495 :: 		}                                               //end if BOTAO5 && b5_flag
 L_ler_bot67:
-;TCC_5.c,484 :: 		}                                                 //end ler_bot()
+;TCC_5.c,497 :: 		}                                                 //end ler_bot()
 L_end_ler_bot:
 	RETURN      0
 ; end of _ler_bot
 
 _fast_incr:
 
-;TCC_5.c,490 :: 		void fast_incr()
-;TCC_5.c,492 :: 		if(temp_inc>7)temp_inc=0x00;                     //se temp_inc maior que 7, zera temp_inc
+;TCC_5.c,503 :: 		void fast_incr()
+;TCC_5.c,505 :: 		if(temp_inc>7)temp_inc=0x00;                     //se temp_inc maior que 7, zera temp_inc
 	MOVLW       0
 	MOVWF       R0 
 	MOVF        _temp_inc+1, 0 
 	SUBWF       R0, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__fast_incr335
+	GOTO        L__fast_incr342
 	MOVF        _temp_inc+0, 0 
 	SUBLW       7
-L__fast_incr335:
+L__fast_incr342:
 	BTFSC       STATUS+0, 0 
-	GOTO        L_fast_incr70
+	GOTO        L_fast_incr76
 	CLRF        _temp_inc+0 
 	CLRF        _temp_inc+1 
-L_fast_incr70:
-;TCC_5.c,493 :: 		if(temp_inc==7)                                  //conta 700ms...
+L_fast_incr76:
+;TCC_5.c,506 :: 		if(temp_inc==7)                                  //conta 700ms...
 	MOVLW       0
 	XORWF       _temp_inc+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__fast_incr336
+	GOTO        L__fast_incr343
 	MOVLW       7
 	XORWF       _temp_inc+0, 0 
-L__fast_incr336:
-	BTFSS       STATUS+0, 2 
-	GOTO        L_fast_incr71
-;TCC_5.c,495 :: 		temp_inc=0x00;                                  //zera temp_inc
-	CLRF        _temp_inc+0 
-	CLRF        _temp_inc+1 
-;TCC_5.c,496 :: 		fast_inc=0x01;                                  //ativa fast_inc
-	BSF         _fast_inc+0, BitPos(_fast_inc+0) 
-;TCC_5.c,497 :: 		}                                                //end if temp_inc==7
-L_fast_incr71:
-;TCC_5.c,499 :: 		if(fast_inc)                                     //se fast_inc for ativado...
-	BTFSS       _fast_inc+0, BitPos(_fast_inc+0) 
-	GOTO        L_fast_incr72
-;TCC_5.c,501 :: 		if(option==0 && prog==1)                        //se dispenser n°1 selecionado e programção de número
-	MOVLW       0
-	XORWF       _option+1, 0 
-	BTFSS       STATUS+0, 2 
-	GOTO        L__fast_incr337
-	MOVLW       0
-	XORWF       _option+0, 0 
-L__fast_incr337:
-	BTFSS       STATUS+0, 2 
-	GOTO        L_fast_incr75
-	MOVLW       0
-	XORWF       _prog+1, 0 
-	BTFSS       STATUS+0, 2 
-	GOTO        L__fast_incr338
-	MOVLW       1
-	XORWF       _prog+0, 0 
-L__fast_incr338:
-	BTFSS       STATUS+0, 2 
-	GOTO        L_fast_incr75
-L__fast_incr267:
-;TCC_5.c,503 :: 		if(temp_num>5)temp_num=0x00;                   //se temp_num maior que 5, zera temp_num
-	MOVLW       0
-	MOVWF       R0 
-	MOVF        _temp_num+1, 0 
-	SUBWF       R0, 0 
-	BTFSS       STATUS+0, 2 
-	GOTO        L__fast_incr339
-	MOVF        _temp_num+0, 0 
-	SUBLW       5
-L__fast_incr339:
-	BTFSC       STATUS+0, 0 
-	GOTO        L_fast_incr76
-	CLRF        _temp_num+0 
-	CLRF        _temp_num+1 
-L_fast_incr76:
-;TCC_5.c,504 :: 		if(temp_num==5)                                //conta 500ms...
-	MOVLW       0
-	XORWF       _temp_num+1, 0 
-	BTFSS       STATUS+0, 2 
-	GOTO        L__fast_incr340
-	MOVLW       5
-	XORWF       _temp_num+0, 0 
-L__fast_incr340:
+L__fast_incr343:
 	BTFSS       STATUS+0, 2 
 	GOTO        L_fast_incr77
-;TCC_5.c,506 :: 		temp_num=0x00;                                //zera temp_num
-	CLRF        _temp_num+0 
-	CLRF        _temp_num+1 
-;TCC_5.c,507 :: 		num += 2;                                     //acrescenta 2 em num
-	MOVLW       2
-	ADDWF       _num+0, 1 
-	MOVLW       0
-	ADDWFC      _num+1, 1 
-;TCC_5.c,509 :: 		}                                              //end if temp_num==5
+;TCC_5.c,508 :: 		temp_inc=0x00;                                  //zera temp_inc
+	CLRF        _temp_inc+0 
+	CLRF        _temp_inc+1 
+;TCC_5.c,509 :: 		fast_inc=0x01;                                  //ativa fast_inc
+	BSF         _fast_inc+0, BitPos(_fast_inc+0) 
+;TCC_5.c,510 :: 		}                                                //end if temp_inc==7
 L_fast_incr77:
-;TCC_5.c,511 :: 		}                                               //end if option==0 && prog=1
-L_fast_incr75:
-;TCC_5.c,514 :: 		if(option==1 && prog==1)                        //se dispenser n°2 selecionado e programção de número
+;TCC_5.c,512 :: 		if(fast_inc)                                     //se fast_inc for ativado...
+	BTFSS       _fast_inc+0, BitPos(_fast_inc+0) 
+	GOTO        L_fast_incr78
+;TCC_5.c,514 :: 		if(option==0 && prog==1)                        //se dispenser n°1 selecionado e programção de número
 	MOVLW       0
 	XORWF       _option+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__fast_incr341
-	MOVLW       1
+	GOTO        L__fast_incr344
+	MOVLW       0
 	XORWF       _option+0, 0 
-L__fast_incr341:
+L__fast_incr344:
 	BTFSS       STATUS+0, 2 
-	GOTO        L_fast_incr80
+	GOTO        L_fast_incr81
 	MOVLW       0
 	XORWF       _prog+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__fast_incr342
+	GOTO        L__fast_incr345
 	MOVLW       1
 	XORWF       _prog+0, 0 
-L__fast_incr342:
+L__fast_incr345:
 	BTFSS       STATUS+0, 2 
-	GOTO        L_fast_incr80
-L__fast_incr266:
+	GOTO        L_fast_incr81
+L__fast_incr274:
 ;TCC_5.c,516 :: 		if(temp_num>5)temp_num=0x00;                   //se temp_num maior que 5, zera temp_num
 	MOVLW       0
 	MOVWF       R0 
 	MOVF        _temp_num+1, 0 
 	SUBWF       R0, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__fast_incr343
+	GOTO        L__fast_incr346
 	MOVF        _temp_num+0, 0 
 	SUBLW       5
-L__fast_incr343:
+L__fast_incr346:
 	BTFSC       STATUS+0, 0 
-	GOTO        L_fast_incr81
+	GOTO        L_fast_incr82
 	CLRF        _temp_num+0 
 	CLRF        _temp_num+1 
-L_fast_incr81:
+L_fast_incr82:
 ;TCC_5.c,517 :: 		if(temp_num==5)                                //conta 500ms...
 	MOVLW       0
 	XORWF       _temp_num+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__fast_incr344
+	GOTO        L__fast_incr347
 	MOVLW       5
 	XORWF       _temp_num+0, 0 
-L__fast_incr344:
+L__fast_incr347:
 	BTFSS       STATUS+0, 2 
-	GOTO        L_fast_incr82
+	GOTO        L_fast_incr83
 ;TCC_5.c,519 :: 		temp_num=0x00;                                //zera temp_num
 	CLRF        _temp_num+0 
 	CLRF        _temp_num+1 
-;TCC_5.c,520 :: 		num2 += 2;                                    //acrescenta 2 em num2
+;TCC_5.c,520 :: 		num += 2;                                     //acrescenta 2 em num
 	MOVLW       2
-	ADDWF       _num2+0, 1 
+	ADDWF       _num+0, 1 
 	MOVLW       0
-	ADDWFC      _num2+1, 1 
+	ADDWFC      _num+1, 1 
 ;TCC_5.c,522 :: 		}                                              //end if temp_num==5
-L_fast_incr82:
-;TCC_5.c,524 :: 		}                                               //end if option==1 && prog=1
-L_fast_incr80:
-;TCC_5.c,526 :: 		if(num >24) num =0x00;                          //se o numero passar de 24, retorna para 0
-	MOVLW       0
-	MOVWF       R0 
-	MOVF        _num+1, 0 
-	SUBWF       R0, 0 
-	BTFSS       STATUS+0, 2 
-	GOTO        L__fast_incr345
-	MOVF        _num+0, 0 
-	SUBLW       24
-L__fast_incr345:
-	BTFSC       STATUS+0, 0 
-	GOTO        L_fast_incr83
-	CLRF        _num+0 
-	CLRF        _num+1 
 L_fast_incr83:
-;TCC_5.c,527 :: 		if(num2>24) num2=0x00;                          //se o numero passar de 24, retorna para 0
-	MOVLW       0
-	MOVWF       R0 
-	MOVF        _num2+1, 0 
-	SUBWF       R0, 0 
-	BTFSS       STATUS+0, 2 
-	GOTO        L__fast_incr346
-	MOVF        _num2+0, 0 
-	SUBLW       24
-L__fast_incr346:
-	BTFSC       STATUS+0, 0 
-	GOTO        L_fast_incr84
-	CLRF        _num2+0 
-	CLRF        _num2+1 
-L_fast_incr84:
-;TCC_5.c,528 :: 		if(num3>24) num3=0x00;                          //se o numero passar de 24, retorna para 0
-	MOVLW       0
-	MOVWF       R0 
-	MOVF        _num3+1, 0 
-	SUBWF       R0, 0 
-	BTFSS       STATUS+0, 2 
-	GOTO        L__fast_incr347
-	MOVF        _num3+0, 0 
-	SUBLW       24
-L__fast_incr347:
-	BTFSC       STATUS+0, 0 
-	GOTO        L_fast_incr85
-	CLRF        _num3+0 
-	CLRF        _num3+1 
-L_fast_incr85:
-;TCC_5.c,530 :: 		}                                                //end if fast_inc
-L_fast_incr72:
-;TCC_5.c,533 :: 		if(option==2 && prog==1)                         //se dispenser n°3 selecionado e programção de número
+;TCC_5.c,524 :: 		}                                               //end if option==0 && prog=1
+L_fast_incr81:
+;TCC_5.c,527 :: 		if(option==1 && prog==1)                        //se dispenser n°2 selecionado e programção de número
 	MOVLW       0
 	XORWF       _option+1, 0 
 	BTFSS       STATUS+0, 2 
 	GOTO        L__fast_incr348
-	MOVLW       2
+	MOVLW       1
 	XORWF       _option+0, 0 
 L__fast_incr348:
 	BTFSS       STATUS+0, 2 
-	GOTO        L_fast_incr88
+	GOTO        L_fast_incr86
 	MOVLW       0
 	XORWF       _prog+1, 0 
 	BTFSS       STATUS+0, 2 
@@ -1229,9 +1162,9 @@ L__fast_incr348:
 	XORWF       _prog+0, 0 
 L__fast_incr349:
 	BTFSS       STATUS+0, 2 
-	GOTO        L_fast_incr88
-L__fast_incr265:
-;TCC_5.c,535 :: 		if(temp_num>5)temp_num=0x00;                   //se temp_num maior que 5, zera temp_num
+	GOTO        L_fast_incr86
+L__fast_incr273:
+;TCC_5.c,529 :: 		if(temp_num>5)temp_num=0x00;                   //se temp_num maior que 5, zera temp_num
 	MOVLW       0
 	MOVWF       R0 
 	MOVF        _temp_num+1, 0 
@@ -1242,11 +1175,11 @@ L__fast_incr265:
 	SUBLW       5
 L__fast_incr350:
 	BTFSC       STATUS+0, 0 
-	GOTO        L_fast_incr89
+	GOTO        L_fast_incr87
 	CLRF        _temp_num+0 
 	CLRF        _temp_num+1 
-L_fast_incr89:
-;TCC_5.c,536 :: 		if(temp_num==5)                                //conta 500ms...
+L_fast_incr87:
+;TCC_5.c,530 :: 		if(temp_num==5)                                //conta 500ms...
 	MOVLW       0
 	XORWF       _temp_num+1, 0 
 	BTFSS       STATUS+0, 2 
@@ -1255,47 +1188,151 @@ L_fast_incr89:
 	XORWF       _temp_num+0, 0 
 L__fast_incr351:
 	BTFSS       STATUS+0, 2 
-	GOTO        L_fast_incr90
-;TCC_5.c,538 :: 		temp_num=0x00;                                //zera temp_num
+	GOTO        L_fast_incr88
+;TCC_5.c,532 :: 		temp_num=0x00;                                //zera temp_num
 	CLRF        _temp_num+0 
 	CLRF        _temp_num+1 
-;TCC_5.c,539 :: 		num3 += 2;                                    //acrescenta 2 em num3
+;TCC_5.c,533 :: 		num2 += 2;                                    //acrescenta 2 em num2
+	MOVLW       2
+	ADDWF       _num2+0, 1 
+	MOVLW       0
+	ADDWFC      _num2+1, 1 
+;TCC_5.c,535 :: 		}                                              //end if temp_num==5
+L_fast_incr88:
+;TCC_5.c,537 :: 		}                                               //end if option==1 && prog=1
+L_fast_incr86:
+;TCC_5.c,539 :: 		if(num >24) num =0x00;                          //se o numero passar de 24, retorna para 0
+	MOVLW       0
+	MOVWF       R0 
+	MOVF        _num+1, 0 
+	SUBWF       R0, 0 
+	BTFSS       STATUS+0, 2 
+	GOTO        L__fast_incr352
+	MOVF        _num+0, 0 
+	SUBLW       24
+L__fast_incr352:
+	BTFSC       STATUS+0, 0 
+	GOTO        L_fast_incr89
+	CLRF        _num+0 
+	CLRF        _num+1 
+L_fast_incr89:
+;TCC_5.c,540 :: 		if(num2>24) num2=0x00;                          //se o numero passar de 24, retorna para 0
+	MOVLW       0
+	MOVWF       R0 
+	MOVF        _num2+1, 0 
+	SUBWF       R0, 0 
+	BTFSS       STATUS+0, 2 
+	GOTO        L__fast_incr353
+	MOVF        _num2+0, 0 
+	SUBLW       24
+L__fast_incr353:
+	BTFSC       STATUS+0, 0 
+	GOTO        L_fast_incr90
+	CLRF        _num2+0 
+	CLRF        _num2+1 
+L_fast_incr90:
+;TCC_5.c,541 :: 		if(num3>24) num3=0x00;                          //se o numero passar de 24, retorna para 0
+	MOVLW       0
+	MOVWF       R0 
+	MOVF        _num3+1, 0 
+	SUBWF       R0, 0 
+	BTFSS       STATUS+0, 2 
+	GOTO        L__fast_incr354
+	MOVF        _num3+0, 0 
+	SUBLW       24
+L__fast_incr354:
+	BTFSC       STATUS+0, 0 
+	GOTO        L_fast_incr91
+	CLRF        _num3+0 
+	CLRF        _num3+1 
+L_fast_incr91:
+;TCC_5.c,543 :: 		}                                                //end if fast_inc
+L_fast_incr78:
+;TCC_5.c,546 :: 		if(option==2 && prog==1)                         //se dispenser n°3 selecionado e programção de número
+	MOVLW       0
+	XORWF       _option+1, 0 
+	BTFSS       STATUS+0, 2 
+	GOTO        L__fast_incr355
+	MOVLW       2
+	XORWF       _option+0, 0 
+L__fast_incr355:
+	BTFSS       STATUS+0, 2 
+	GOTO        L_fast_incr94
+	MOVLW       0
+	XORWF       _prog+1, 0 
+	BTFSS       STATUS+0, 2 
+	GOTO        L__fast_incr356
+	MOVLW       1
+	XORWF       _prog+0, 0 
+L__fast_incr356:
+	BTFSS       STATUS+0, 2 
+	GOTO        L_fast_incr94
+L__fast_incr272:
+;TCC_5.c,548 :: 		if(temp_num>5)temp_num=0x00;                   //se temp_num maior que 5, zera temp_num
+	MOVLW       0
+	MOVWF       R0 
+	MOVF        _temp_num+1, 0 
+	SUBWF       R0, 0 
+	BTFSS       STATUS+0, 2 
+	GOTO        L__fast_incr357
+	MOVF        _temp_num+0, 0 
+	SUBLW       5
+L__fast_incr357:
+	BTFSC       STATUS+0, 0 
+	GOTO        L_fast_incr95
+	CLRF        _temp_num+0 
+	CLRF        _temp_num+1 
+L_fast_incr95:
+;TCC_5.c,549 :: 		if(temp_num==5)                                //conta 500ms...
+	MOVLW       0
+	XORWF       _temp_num+1, 0 
+	BTFSS       STATUS+0, 2 
+	GOTO        L__fast_incr358
+	MOVLW       5
+	XORWF       _temp_num+0, 0 
+L__fast_incr358:
+	BTFSS       STATUS+0, 2 
+	GOTO        L_fast_incr96
+;TCC_5.c,551 :: 		temp_num=0x00;                                //zera temp_num
+	CLRF        _temp_num+0 
+	CLRF        _temp_num+1 
+;TCC_5.c,552 :: 		num3 += 2;                                    //acrescenta 2 em num3
 	MOVLW       2
 	ADDWF       _num3+0, 1 
 	MOVLW       0
 	ADDWFC      _num3+1, 1 
-;TCC_5.c,541 :: 		}                                              //end if temp_num==5
-L_fast_incr90:
-;TCC_5.c,543 :: 		}                                               //end if option==2 && prog=1
-L_fast_incr88:
-;TCC_5.c,545 :: 		}                                                 //end void fast_incr()
+;TCC_5.c,554 :: 		}                                              //end if temp_num==5
+L_fast_incr96:
+;TCC_5.c,556 :: 		}                                               //end if option==2 && prog=1
+L_fast_incr94:
+;TCC_5.c,558 :: 		}                                                 //end void fast_incr()
 L_end_fast_incr:
 	RETURN      0
 ; end of _fast_incr
 
 _disp:
 
-;TCC_5.c,551 :: 		void disp()
-;TCC_5.c,553 :: 		if(!ligar && prog==0)                           //se ligar for 0 e prog for 0
+;TCC_5.c,564 :: 		void disp()
+;TCC_5.c,566 :: 		if(!ligar && prog==0)                           //se ligar for 0 e prog for 0
 	BTFSC       _ligar+0, BitPos(_ligar+0) 
-	GOTO        L_disp93
+	GOTO        L_disp99
 	MOVLW       0
 	XORWF       _prog+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__disp353
+	GOTO        L__disp360
 	MOVLW       0
 	XORWF       _prog+0, 0 
-L__disp353:
+L__disp360:
 	BTFSS       STATUS+0, 2 
-	GOTO        L_disp93
-L__disp271:
-;TCC_5.c,555 :: 		if(!display && !display2)                      //se os bits diplay e display2 forem 0
+	GOTO        L_disp99
+L__disp278:
+;TCC_5.c,568 :: 		if(!display && !display2)                      //se os bits diplay e display2 forem 0
 	BTFSC       _display+0, BitPos(_display+0) 
-	GOTO        L_disp96
+	GOTO        L_disp102
 	BTFSC       _display2+0, BitPos(_display2+0) 
-	GOTO        L_disp96
-L__disp270:
-;TCC_5.c,557 :: 		LCD_Out(1,1,"  DISPENSER DE  ");             //exibe "DISPENSER DE"
+	GOTO        L_disp102
+L__disp277:
+;TCC_5.c,570 :: 		LCD_Out(1,1,"  DISPENSER DE  ");             //exibe "DISPENSER DE"
 	MOVLW       1
 	MOVWF       FARG_Lcd_Out_row+0 
 	MOVLW       1
@@ -1305,7 +1342,7 @@ L__disp270:
 	MOVLW       hi_addr(?lstr1_TCC_5+0)
 	MOVWF       FARG_Lcd_Out_text+1 
 	CALL        _Lcd_Out+0, 0
-;TCC_5.c,558 :: 		LCD_Out(2,1,"    REMEDIOS    ");             //      "  REMEDIOS  "
+;TCC_5.c,571 :: 		LCD_Out(2,1,"    REMEDIOS    ");             //      "  REMEDIOS  "
 	MOVLW       2
 	MOVWF       FARG_Lcd_Out_row+0 
 	MOVLW       1
@@ -1315,18 +1352,18 @@ L__disp270:
 	MOVLW       hi_addr(?lstr2_TCC_5+0)
 	MOVWF       FARG_Lcd_Out_text+1 
 	CALL        _Lcd_Out+0, 0
-;TCC_5.c,559 :: 		}
-	GOTO        L_disp97
-L_disp96:
-;TCC_5.c,562 :: 		if(display && !display2)                      //se bits display for 1 e display2 for 0
+;TCC_5.c,572 :: 		}
+	GOTO        L_disp103
+L_disp102:
+;TCC_5.c,575 :: 		if(display && !display2)                      //se bits display for 1 e display2 for 0
 	BTFSS       _display+0, BitPos(_display+0) 
-	GOTO        L_disp100
+	GOTO        L_disp106
 	BTFSC       _display2+0, BitPos(_display2+0) 
-	GOTO        L_disp100
-L__disp269:
-;TCC_5.c,564 :: 		display=0x00;                                //limpa bit display
+	GOTO        L_disp106
+L__disp276:
+;TCC_5.c,577 :: 		display=0x00;                                //limpa bit display
 	BCF         _display+0, BitPos(_display+0) 
-;TCC_5.c,565 :: 		LCD_Out(1,1,"ETEC LAURO GOMES");             //exibe "ETEC LAURO GOMES"
+;TCC_5.c,578 :: 		LCD_Out(1,1,"ETEC LAURO GOMES");             //exibe "ETEC LAURO GOMES"
 	MOVLW       1
 	MOVWF       FARG_Lcd_Out_row+0 
 	MOVLW       1
@@ -1336,7 +1373,7 @@ L__disp269:
 	MOVLW       hi_addr(?lstr3_TCC_5+0)
 	MOVWF       FARG_Lcd_Out_text+1 
 	CALL        _Lcd_Out+0, 0
-;TCC_5.c,566 :: 		LCD_Out(2,1,"  3A MECA 2021  ");             //      "  3A MECA 2021  "
+;TCC_5.c,579 :: 		LCD_Out(2,1,"  3A MECA 2021  ");             //      "  3A MECA 2021  "
 	MOVLW       2
 	MOVWF       FARG_Lcd_Out_row+0 
 	MOVLW       1
@@ -1346,33 +1383,33 @@ L__disp269:
 	MOVLW       hi_addr(?lstr4_TCC_5+0)
 	MOVWF       FARG_Lcd_Out_text+1 
 	CALL        _Lcd_Out+0, 0
-;TCC_5.c,567 :: 		delay_ms(1000);                              //espera 1 segundo
+;TCC_5.c,580 :: 		delay_ms(1000);                              //espera 1 segundo
 	MOVLW       11
 	MOVWF       R11, 0
 	MOVLW       38
 	MOVWF       R12, 0
 	MOVLW       93
 	MOVWF       R13, 0
-L_disp101:
+L_disp107:
 	DECFSZ      R13, 1, 1
-	BRA         L_disp101
+	BRA         L_disp107
 	DECFSZ      R12, 1, 1
-	BRA         L_disp101
+	BRA         L_disp107
 	DECFSZ      R11, 1, 1
-	BRA         L_disp101
+	BRA         L_disp107
 	NOP
 	NOP
-;TCC_5.c,568 :: 		}
-L_disp100:
-;TCC_5.c,569 :: 		if(!display && display2)                      //se os bits display for 0 e display2 for 1
+;TCC_5.c,581 :: 		}
+L_disp106:
+;TCC_5.c,582 :: 		if(!display && display2)                      //se os bits display for 0 e display2 for 1
 	BTFSC       _display+0, BitPos(_display+0) 
-	GOTO        L_disp104
+	GOTO        L_disp110
 	BTFSS       _display2+0, BitPos(_display2+0) 
-	GOTO        L_disp104
-L__disp268:
-;TCC_5.c,571 :: 		display2=0x00;                               //limpa bit display2
+	GOTO        L_disp110
+L__disp275:
+;TCC_5.c,584 :: 		display2=0x00;                               //limpa bit display2
 	BCF         _display2+0, BitPos(_display2+0) 
-;TCC_5.c,572 :: 		LCD_Out(1,1,"     PARANDO    ");             //exibe "     PARANDO    "
+;TCC_5.c,585 :: 		LCD_Out(1,1,"     PARANDO    ");             //exibe "     PARANDO    "
 	MOVLW       1
 	MOVWF       FARG_Lcd_Out_row+0 
 	MOVLW       1
@@ -1382,7 +1419,7 @@ L__disp268:
 	MOVLW       hi_addr(?lstr5_TCC_5+0)
 	MOVWF       FARG_Lcd_Out_text+1 
 	CALL        _Lcd_Out+0, 0
-;TCC_5.c,573 :: 		LCD_Out(2,1,"     CONTAGEM   ");             //      "     CONTAGEM   "
+;TCC_5.c,586 :: 		LCD_Out(2,1,"     CONTAGEM   ");             //      "     CONTAGEM   "
 	MOVLW       2
 	MOVWF       FARG_Lcd_Out_row+0 
 	MOVLW       1
@@ -1392,39 +1429,39 @@ L__disp268:
 	MOVLW       hi_addr(?lstr6_TCC_5+0)
 	MOVWF       FARG_Lcd_Out_text+1 
 	CALL        _Lcd_Out+0, 0
-;TCC_5.c,574 :: 		delay_ms(1000);                              //espera 1 segundo
+;TCC_5.c,587 :: 		delay_ms(1000);                              //espera 1 segundo
 	MOVLW       11
 	MOVWF       R11, 0
 	MOVLW       38
 	MOVWF       R12, 0
 	MOVLW       93
 	MOVWF       R13, 0
-L_disp105:
+L_disp111:
 	DECFSZ      R13, 1, 1
-	BRA         L_disp105
+	BRA         L_disp111
 	DECFSZ      R12, 1, 1
-	BRA         L_disp105
+	BRA         L_disp111
 	DECFSZ      R11, 1, 1
-	BRA         L_disp105
+	BRA         L_disp111
 	NOP
 	NOP
-;TCC_5.c,575 :: 		}
-L_disp104:
-;TCC_5.c,576 :: 		}                                              //end else
-L_disp97:
-;TCC_5.c,577 :: 		}                                               //end if !ligar && prog==0
-L_disp93:
-;TCC_5.c,579 :: 		if(prog==1)                                     //programação de numeros
+;TCC_5.c,588 :: 		}
+L_disp110:
+;TCC_5.c,589 :: 		}                                              //end else
+L_disp103:
+;TCC_5.c,590 :: 		}                                               //end if !ligar && prog==0
+L_disp99:
+;TCC_5.c,592 :: 		if(prog==1)                                     //programação de numeros
 	MOVLW       0
 	XORWF       _prog+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__disp354
+	GOTO        L__disp361
 	MOVLW       1
 	XORWF       _prog+0, 0 
-L__disp354:
+L__disp361:
 	BTFSS       STATUS+0, 2 
-	GOTO        L_disp106
-;TCC_5.c,581 :: 		LCD_Out(1,1,"PROGRAME NUMERO:");               //exibe "PROGRAME NUMERO:
+	GOTO        L_disp112
+;TCC_5.c,594 :: 		LCD_Out(1,1,"PROGRAME NUMERO:");               //exibe "PROGRAME NUMERO:
 	MOVLW       1
 	MOVWF       FARG_Lcd_Out_row+0 
 	MOVLW       1
@@ -1434,18 +1471,18 @@ L__disp354:
 	MOVLW       hi_addr(?lstr7_TCC_5+0)
 	MOVWF       FARG_Lcd_Out_text+1 
 	CALL        _Lcd_Out+0, 0
-;TCC_5.c,582 :: 		num_un();                                      //executa num_un
+;TCC_5.c,595 :: 		num_un();                                      //executa num_un
 	CALL        _num_un+0, 0
-;TCC_5.c,583 :: 		if(option==0) LCD_Chr(2,14,'1');               //se option for 0, exibe "1"
+;TCC_5.c,596 :: 		if(option==0) LCD_Chr(2,14,'1');               //se option for 0, exibe "1"
 	MOVLW       0
 	XORWF       _option+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__disp355
+	GOTO        L__disp362
 	MOVLW       0
 	XORWF       _option+0, 0 
-L__disp355:
+L__disp362:
 	BTFSS       STATUS+0, 2 
-	GOTO        L_disp107
+	GOTO        L_disp113
 	MOVLW       2
 	MOVWF       FARG_Lcd_Chr_row+0 
 	MOVLW       14
@@ -1453,17 +1490,17 @@ L__disp355:
 	MOVLW       49
 	MOVWF       FARG_Lcd_Chr_out_char+0 
 	CALL        _Lcd_Chr+0, 0
-L_disp107:
-;TCC_5.c,584 :: 		if(option==1) LCD_Chr(2,14,'2');               //se option for 1, exibe "2"
+L_disp113:
+;TCC_5.c,597 :: 		if(option==1) LCD_Chr(2,14,'2');               //se option for 1, exibe "2"
 	MOVLW       0
 	XORWF       _option+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__disp356
+	GOTO        L__disp363
 	MOVLW       1
 	XORWF       _option+0, 0 
-L__disp356:
+L__disp363:
 	BTFSS       STATUS+0, 2 
-	GOTO        L_disp108
+	GOTO        L_disp114
 	MOVLW       2
 	MOVWF       FARG_Lcd_Chr_row+0 
 	MOVLW       14
@@ -1471,17 +1508,17 @@ L__disp356:
 	MOVLW       50
 	MOVWF       FARG_Lcd_Chr_out_char+0 
 	CALL        _Lcd_Chr+0, 0
-L_disp108:
-;TCC_5.c,585 :: 		if(option==2) LCD_Chr(2,14,'3');              //se option for 2, exibe "3"
+L_disp114:
+;TCC_5.c,598 :: 		if(option==2) LCD_Chr(2,14,'3');              //se option for 2, exibe "3"
 	MOVLW       0
 	XORWF       _option+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__disp357
+	GOTO        L__disp364
 	MOVLW       2
 	XORWF       _option+0, 0 
-L__disp357:
+L__disp364:
 	BTFSS       STATUS+0, 2 
-	GOTO        L_disp109
+	GOTO        L_disp115
 	MOVLW       2
 	MOVWF       FARG_Lcd_Chr_row+0 
 	MOVLW       14
@@ -1489,20 +1526,20 @@ L__disp357:
 	MOVLW       51
 	MOVWF       FARG_Lcd_Chr_out_char+0 
 	CALL        _Lcd_Chr+0, 0
-L_disp109:
-;TCC_5.c,586 :: 		}
-L_disp106:
-;TCC_5.c,588 :: 		if(prog==2)                                     //se prog for 2
+L_disp115:
+;TCC_5.c,599 :: 		}
+L_disp112:
+;TCC_5.c,601 :: 		if(prog==2)                                     //se prog for 2
 	MOVLW       0
 	XORWF       _prog+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__disp358
+	GOTO        L__disp365
 	MOVLW       2
 	XORWF       _prog+0, 0 
-L__disp358:
+L__disp365:
 	BTFSS       STATUS+0, 2 
-	GOTO        L_disp110
-;TCC_5.c,590 :: 		LCD_Out(1,1,"PROGRAME Un.:");                  //exibe "PROGRAME Un.:"
+	GOTO        L_disp116
+;TCC_5.c,603 :: 		LCD_Out(1,1,"PROGRAME Un.:");                  //exibe "PROGRAME Un.:"
 	MOVLW       1
 	MOVWF       FARG_Lcd_Out_row+0 
 	MOVLW       1
@@ -1512,18 +1549,18 @@ L__disp358:
 	MOVLW       hi_addr(?lstr8_TCC_5+0)
 	MOVWF       FARG_Lcd_Out_text+1 
 	CALL        _Lcd_Out+0, 0
-;TCC_5.c,591 :: 		num_un();                                      //executa num_un
+;TCC_5.c,604 :: 		num_un();                                      //executa num_un
 	CALL        _num_un+0, 0
-;TCC_5.c,592 :: 		if(option==0) LCD_Chr(2,14,'1');               //se option for 0, exibe "1"
+;TCC_5.c,605 :: 		if(option==0) LCD_Chr(2,14,'1');               //se option for 0, exibe "1"
 	MOVLW       0
 	XORWF       _option+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__disp359
+	GOTO        L__disp366
 	MOVLW       0
 	XORWF       _option+0, 0 
-L__disp359:
+L__disp366:
 	BTFSS       STATUS+0, 2 
-	GOTO        L_disp111
+	GOTO        L_disp117
 	MOVLW       2
 	MOVWF       FARG_Lcd_Chr_row+0 
 	MOVLW       14
@@ -1531,17 +1568,17 @@ L__disp359:
 	MOVLW       49
 	MOVWF       FARG_Lcd_Chr_out_char+0 
 	CALL        _Lcd_Chr+0, 0
-L_disp111:
-;TCC_5.c,593 :: 		if(option==1) LCD_Chr(2,14,'2');               //se option for 1, exibe "2"
+L_disp117:
+;TCC_5.c,606 :: 		if(option==1) LCD_Chr(2,14,'2');               //se option for 1, exibe "2"
 	MOVLW       0
 	XORWF       _option+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__disp360
+	GOTO        L__disp367
 	MOVLW       1
 	XORWF       _option+0, 0 
-L__disp360:
+L__disp367:
 	BTFSS       STATUS+0, 2 
-	GOTO        L_disp112
+	GOTO        L_disp118
 	MOVLW       2
 	MOVWF       FARG_Lcd_Chr_row+0 
 	MOVLW       14
@@ -1549,17 +1586,17 @@ L__disp360:
 	MOVLW       50
 	MOVWF       FARG_Lcd_Chr_out_char+0 
 	CALL        _Lcd_Chr+0, 0
-L_disp112:
-;TCC_5.c,594 :: 		if(option==2) LCD_Chr(2,14,'3');              //se option for 2, exibe "3"
+L_disp118:
+;TCC_5.c,607 :: 		if(option==2) LCD_Chr(2,14,'3');              //se option for 2, exibe "3"
 	MOVLW       0
 	XORWF       _option+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__disp361
+	GOTO        L__disp368
 	MOVLW       2
 	XORWF       _option+0, 0 
-L__disp361:
+L__disp368:
 	BTFSS       STATUS+0, 2 
-	GOTO        L_disp113
+	GOTO        L_disp119
 	MOVLW       2
 	MOVWF       FARG_Lcd_Chr_row+0 
 	MOVLW       14
@@ -1567,13 +1604,13 @@ L__disp361:
 	MOVLW       51
 	MOVWF       FARG_Lcd_Chr_out_char+0 
 	CALL        _Lcd_Chr+0, 0
-L_disp113:
-;TCC_5.c,595 :: 		}
-L_disp110:
-;TCC_5.c,597 :: 		if(ligar)                                       //se ligar for 1 (ligado)
+L_disp119:
+;TCC_5.c,608 :: 		}
+L_disp116:
+;TCC_5.c,610 :: 		if(ligar)                                       //se ligar for 1 (ligado)
 	BTFSS       _ligar+0, BitPos(_ligar+0) 
-	GOTO        L_disp114
-;TCC_5.c,599 :: 		LCD_Out(1,1,"CONTANDO:   DISP");               //exibe "CONTANDO:   DISP";
+	GOTO        L_disp120
+;TCC_5.c,612 :: 		LCD_Out(1,1,"CONTANDO:   DISP");               //exibe "CONTANDO:   DISP";
 	MOVLW       1
 	MOVWF       FARG_Lcd_Out_row+0 
 	MOVLW       1
@@ -1583,60 +1620,60 @@ L_disp110:
 	MOVLW       hi_addr(?lstr9_TCC_5+0)
 	MOVWF       FARG_Lcd_Out_text+1 
 	CALL        _Lcd_Out+0, 0
-;TCC_5.c,600 :: 		if(temp_disp>20) temp_disp=0x00;               //se temp_disp for maior que 20, zera temp_disp
+;TCC_5.c,613 :: 		if(temp_disp>20) temp_disp=0x00;               //se temp_disp for maior que 20, zera temp_disp
 	MOVLW       0
 	MOVWF       R0 
 	MOVF        _temp_disp+1, 0 
 	SUBWF       R0, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__disp362
+	GOTO        L__disp369
 	MOVF        _temp_disp+0, 0 
 	SUBLW       20
-L__disp362:
+L__disp369:
 	BTFSC       STATUS+0, 0 
-	GOTO        L_disp115
+	GOTO        L_disp121
 	CLRF        _temp_disp+0 
 	CLRF        _temp_disp+1 
-L_disp115:
-;TCC_5.c,601 :: 		if(temp_disp == 20)                            //se temp_disp for 20 (2 segundos)
+L_disp121:
+;TCC_5.c,614 :: 		if(temp_disp == 20)                            //se temp_disp for 20 (2 segundos)
 	MOVLW       0
 	XORWF       _temp_disp+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__disp363
+	GOTO        L__disp370
 	MOVLW       20
 	XORWF       _temp_disp+0, 0 
-L__disp363:
+L__disp370:
 	BTFSS       STATUS+0, 2 
-	GOTO        L_disp116
-;TCC_5.c,603 :: 		temp_disp=0x00;                               //zera temp_disp
+	GOTO        L_disp122
+;TCC_5.c,616 :: 		temp_disp=0x00;                               //zera temp_disp
 	CLRF        _temp_disp+0 
 	CLRF        _temp_disp+1 
-;TCC_5.c,604 :: 		option++;                                     //incrementa option
+;TCC_5.c,617 :: 		option++;                                     //incrementa option
 	INFSNZ      _option+0, 1 
 	INCF        _option+1, 1 
-;TCC_5.c,605 :: 		if(option == 3) option=0x00;                  //se option for 3, option = 0
+;TCC_5.c,618 :: 		if(option == 3) option=0x00;                  //se option for 3, option = 0
 	MOVLW       0
 	XORWF       _option+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__disp364
+	GOTO        L__disp371
 	MOVLW       3
 	XORWF       _option+0, 0 
-L__disp364:
+L__disp371:
 	BTFSS       STATUS+0, 2 
-	GOTO        L_disp117
+	GOTO        L_disp123
 	CLRF        _option+0 
 	CLRF        _option+1 
-L_disp117:
-;TCC_5.c,606 :: 		if(option==0) LCD_Chr(2,14,'1');              //se option for 0, exibe "1"
+L_disp123:
+;TCC_5.c,619 :: 		if(option==0) LCD_Chr(2,14,'1');              //se option for 0, exibe "1"
 	MOVLW       0
 	XORWF       _option+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__disp365
+	GOTO        L__disp372
 	MOVLW       0
 	XORWF       _option+0, 0 
-L__disp365:
+L__disp372:
 	BTFSS       STATUS+0, 2 
-	GOTO        L_disp118
+	GOTO        L_disp124
 	MOVLW       2
 	MOVWF       FARG_Lcd_Chr_row+0 
 	MOVLW       14
@@ -1644,17 +1681,17 @@ L__disp365:
 	MOVLW       49
 	MOVWF       FARG_Lcd_Chr_out_char+0 
 	CALL        _Lcd_Chr+0, 0
-L_disp118:
-;TCC_5.c,607 :: 		if(option==1) LCD_Chr(2,14,'2');              //se option for 1, exibe "2"
+L_disp124:
+;TCC_5.c,620 :: 		if(option==1) LCD_Chr(2,14,'2');              //se option for 1, exibe "2"
 	MOVLW       0
 	XORWF       _option+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__disp366
+	GOTO        L__disp373
 	MOVLW       1
 	XORWF       _option+0, 0 
-L__disp366:
+L__disp373:
 	BTFSS       STATUS+0, 2 
-	GOTO        L_disp119
+	GOTO        L_disp125
 	MOVLW       2
 	MOVWF       FARG_Lcd_Chr_row+0 
 	MOVLW       14
@@ -1662,17 +1699,17 @@ L__disp366:
 	MOVLW       50
 	MOVWF       FARG_Lcd_Chr_out_char+0 
 	CALL        _Lcd_Chr+0, 0
-L_disp119:
-;TCC_5.c,608 :: 		if(option==2) LCD_Chr(2,14,'3');              //se option for 2, exibe "3"
+L_disp125:
+;TCC_5.c,621 :: 		if(option==2) LCD_Chr(2,14,'3');              //se option for 2, exibe "3"
 	MOVLW       0
 	XORWF       _option+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__disp367
+	GOTO        L__disp374
 	MOVLW       2
 	XORWF       _option+0, 0 
-L__disp367:
+L__disp374:
 	BTFSS       STATUS+0, 2 
-	GOTO        L_disp120
+	GOTO        L_disp126
 	MOVLW       2
 	MOVWF       FARG_Lcd_Chr_row+0 
 	MOVLW       14
@@ -1680,203 +1717,39 @@ L__disp367:
 	MOVLW       51
 	MOVWF       FARG_Lcd_Chr_out_char+0 
 	CALL        _Lcd_Chr+0, 0
-L_disp120:
-;TCC_5.c,609 :: 		}
-L_disp116:
-;TCC_5.c,610 :: 		num_un();                                      //executa num_un
+L_disp126:
+;TCC_5.c,622 :: 		}
+L_disp122:
+;TCC_5.c,623 :: 		num_un();                                      //executa num_un
 	CALL        _num_un+0, 0
-;TCC_5.c,611 :: 		}
-L_disp114:
-;TCC_5.c,613 :: 		}                                                 //end disp()
+;TCC_5.c,624 :: 		}
+L_disp120:
+;TCC_5.c,626 :: 		}                                                 //end disp()
 L_end_disp:
 	RETURN      0
 ; end of _disp
 
 _num_un:
 
-;TCC_5.c,619 :: 		void num_un()
-;TCC_5.c,622 :: 		if(option==0)                                    //se option for 0 (dispenser n° 1 selecionado)
+;TCC_5.c,632 :: 		void num_un()
+;TCC_5.c,635 :: 		if(option==0)                                    //se option for 0 (dispenser n° 1 selecionado)
 	MOVLW       0
 	XORWF       _option+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__num_un369
+	GOTO        L__num_un376
 	MOVLW       0
 	XORWF       _option+0, 0 
-L__num_un369:
-	BTFSS       STATUS+0, 2 
-	GOTO        L_num_un121
-;TCC_5.c,624 :: 		dig2 = num/10;                                  //dígito 2 é igual a num dividido por 10
-	MOVLW       10
-	MOVWF       R4 
-	MOVLW       0
-	MOVWF       R5 
-	MOVF        _num+0, 0 
-	MOVWF       R0 
-	MOVF        _num+1, 0 
-	MOVWF       R1 
-	CALL        _Div_16X16_U+0, 0
-	MOVF        R0, 0 
-	MOVWF       FLOC__num_un+0 
-	MOVF        R1, 0 
-	MOVWF       FLOC__num_un+1 
-	MOVLW       10
-	MOVWF       R4 
-	MOVLW       0
-	MOVWF       R5 
-	MOVF        _num+0, 0 
-	MOVWF       R0 
-	MOVF        _num+1, 0 
-	MOVWF       R1 
-	CALL        _Div_16X16_U+0, 0
-	MOVF        R8, 0 
-	MOVWF       R0 
-	MOVF        R9, 0 
-	MOVWF       R1 
-;TCC_5.c,625 :: 		dig1 = num%10;                                  //digito 1 é igual a sobra da divisão de num por 10
-	MOVF        R0, 0 
-	MOVWF       num_un_dig1_L0+0 
-;TCC_5.c,627 :: 		LCD_Chr(2,2,dig2+0x30);                         //soma digito 2 com 30 hexa para exibição no display
-	MOVLW       2
-	MOVWF       FARG_Lcd_Chr_row+0 
-	MOVLW       2
-	MOVWF       FARG_Lcd_Chr_column+0 
-	MOVLW       48
-	ADDWF       FLOC__num_un+0, 0 
-	MOVWF       FARG_Lcd_Chr_out_char+0 
-	CALL        _Lcd_Chr+0, 0
-;TCC_5.c,628 :: 		LCD_Chr_Cp (dig1+0x30);                         //soma digito 1 com 30 hexa para exibição no display
-	MOVLW       48
-	ADDWF       num_un_dig1_L0+0, 0 
-	MOVWF       FARG_Lcd_Chr_CP_out_char+0 
-	CALL        _Lcd_Chr_CP+0, 0
-;TCC_5.c,630 :: 		if(!un) LCD_Out(2,5,hora);                      //se un for zero, exibe "hora"
-	BTFSC       _un+0, BitPos(_un+0) 
-	GOTO        L_num_un122
-	MOVLW       2
-	MOVWF       FARG_Lcd_Out_row+0 
-	MOVLW       5
-	MOVWF       FARG_Lcd_Out_column+0 
-	MOVLW       _hora+0
-	MOVWF       FARG_Lcd_Out_text+0 
-	MOVLW       hi_addr(_hora+0)
-	MOVWF       FARG_Lcd_Out_text+1 
-	CALL        _Lcd_Out+0, 0
-L_num_un122:
-;TCC_5.c,632 :: 		if(un) LCD_Out(2,5,dia);                        //se un for um, exibe "dia"
-	BTFSS       _un+0, BitPos(_un+0) 
-	GOTO        L_num_un123
-	MOVLW       2
-	MOVWF       FARG_Lcd_Out_row+0 
-	MOVLW       5
-	MOVWF       FARG_Lcd_Out_column+0 
-	MOVLW       _dia+0
-	MOVWF       FARG_Lcd_Out_text+0 
-	MOVLW       hi_addr(_dia+0)
-	MOVWF       FARG_Lcd_Out_text+1 
-	CALL        _Lcd_Out+0, 0
-L_num_un123:
-;TCC_5.c,634 :: 		}                                                //end if option==0
-L_num_un121:
-;TCC_5.c,637 :: 		if(option==1)                                    //se option for 1 (dispenser n°2 selecionado)
-	MOVLW       0
-	XORWF       _option+1, 0 
-	BTFSS       STATUS+0, 2 
-	GOTO        L__num_un370
-	MOVLW       1
-	XORWF       _option+0, 0 
-L__num_un370:
-	BTFSS       STATUS+0, 2 
-	GOTO        L_num_un124
-;TCC_5.c,639 :: 		dig2 = num2/10;                                 //digito 2 é igual a num2 dividido por 10
-	MOVLW       10
-	MOVWF       R4 
-	MOVLW       0
-	MOVWF       R5 
-	MOVF        _num2+0, 0 
-	MOVWF       R0 
-	MOVF        _num2+1, 0 
-	MOVWF       R1 
-	CALL        _Div_16X16_U+0, 0
-	MOVF        R0, 0 
-	MOVWF       FLOC__num_un+0 
-	MOVF        R1, 0 
-	MOVWF       FLOC__num_un+1 
-	MOVLW       10
-	MOVWF       R4 
-	MOVLW       0
-	MOVWF       R5 
-	MOVF        _num2+0, 0 
-	MOVWF       R0 
-	MOVF        _num2+1, 0 
-	MOVWF       R1 
-	CALL        _Div_16X16_U+0, 0
-	MOVF        R8, 0 
-	MOVWF       R0 
-	MOVF        R9, 0 
-	MOVWF       R1 
-;TCC_5.c,640 :: 		dig1 = num2%10;                                 //digito 1 é igual a sobra da divisão de num2 por 10
-	MOVF        R0, 0 
-	MOVWF       num_un_dig1_L0+0 
-;TCC_5.c,642 :: 		LCD_Chr(2,2,dig2+0x30);                         //soma digito 2 com 30 hexa para exibição no display
-	MOVLW       2
-	MOVWF       FARG_Lcd_Chr_row+0 
-	MOVLW       2
-	MOVWF       FARG_Lcd_Chr_column+0 
-	MOVLW       48
-	ADDWF       FLOC__num_un+0, 0 
-	MOVWF       FARG_Lcd_Chr_out_char+0 
-	CALL        _Lcd_Chr+0, 0
-;TCC_5.c,643 :: 		LCD_Chr_Cp (dig1+0x30);                         //soma digito 1 com 30 hexa para exibição no display
-	MOVLW       48
-	ADDWF       num_un_dig1_L0+0, 0 
-	MOVWF       FARG_Lcd_Chr_CP_out_char+0 
-	CALL        _Lcd_Chr_CP+0, 0
-;TCC_5.c,645 :: 		if(!un2) LCD_Out(2,5,hora);                     //se un2 for zero, exibe "hora"
-	BTFSC       _un2+0, BitPos(_un2+0) 
-	GOTO        L_num_un125
-	MOVLW       2
-	MOVWF       FARG_Lcd_Out_row+0 
-	MOVLW       5
-	MOVWF       FARG_Lcd_Out_column+0 
-	MOVLW       _hora+0
-	MOVWF       FARG_Lcd_Out_text+0 
-	MOVLW       hi_addr(_hora+0)
-	MOVWF       FARG_Lcd_Out_text+1 
-	CALL        _Lcd_Out+0, 0
-L_num_un125:
-;TCC_5.c,647 :: 		if(un2) LCD_Out(2,5,dia);                       //se un2 for um, exibe "dia"
-	BTFSS       _un2+0, BitPos(_un2+0) 
-	GOTO        L_num_un126
-	MOVLW       2
-	MOVWF       FARG_Lcd_Out_row+0 
-	MOVLW       5
-	MOVWF       FARG_Lcd_Out_column+0 
-	MOVLW       _dia+0
-	MOVWF       FARG_Lcd_Out_text+0 
-	MOVLW       hi_addr(_dia+0)
-	MOVWF       FARG_Lcd_Out_text+1 
-	CALL        _Lcd_Out+0, 0
-L_num_un126:
-;TCC_5.c,649 :: 		}                                                //end if option==1
-L_num_un124:
-;TCC_5.c,651 :: 		if(option==2)                                    //se option for 1 (dispenser n°2 selecionado)
-	MOVLW       0
-	XORWF       _option+1, 0 
-	BTFSS       STATUS+0, 2 
-	GOTO        L__num_un371
-	MOVLW       2
-	XORWF       _option+0, 0 
-L__num_un371:
+L__num_un376:
 	BTFSS       STATUS+0, 2 
 	GOTO        L_num_un127
-;TCC_5.c,653 :: 		dig2 = num3/10;                                 //digito 2 é igual a num3 dividido por 10
+;TCC_5.c,637 :: 		dig2 = num/10;                                  //dígito 2 é igual a num dividido por 10
 	MOVLW       10
 	MOVWF       R4 
 	MOVLW       0
 	MOVWF       R5 
-	MOVF        _num3+0, 0 
+	MOVF        _num+0, 0 
 	MOVWF       R0 
-	MOVF        _num3+1, 0 
+	MOVF        _num+1, 0 
 	MOVWF       R1 
 	CALL        _Div_16X16_U+0, 0
 	MOVF        R0, 0 
@@ -1887,19 +1760,19 @@ L__num_un371:
 	MOVWF       R4 
 	MOVLW       0
 	MOVWF       R5 
-	MOVF        _num3+0, 0 
+	MOVF        _num+0, 0 
 	MOVWF       R0 
-	MOVF        _num3+1, 0 
+	MOVF        _num+1, 0 
 	MOVWF       R1 
 	CALL        _Div_16X16_U+0, 0
 	MOVF        R8, 0 
 	MOVWF       R0 
 	MOVF        R9, 0 
 	MOVWF       R1 
-;TCC_5.c,654 :: 		dig1 = num3%10;                                 //digito 1 é igual a sobra da divisão de num3 por 10
+;TCC_5.c,638 :: 		dig1 = num%10;                                  //digito 1 é igual a sobra da divisão de num por 10
 	MOVF        R0, 0 
 	MOVWF       num_un_dig1_L0+0 
-;TCC_5.c,656 :: 		LCD_Chr(2,2,dig2+0x30);                         //soma digito 2 com 30 hexa para exibição no display
+;TCC_5.c,640 :: 		LCD_Chr(2,2,dig2+0x30);                         //soma digito 2 com 30 hexa para exibição no display
 	MOVLW       2
 	MOVWF       FARG_Lcd_Chr_row+0 
 	MOVLW       2
@@ -1908,13 +1781,13 @@ L__num_un371:
 	ADDWF       FLOC__num_un+0, 0 
 	MOVWF       FARG_Lcd_Chr_out_char+0 
 	CALL        _Lcd_Chr+0, 0
-;TCC_5.c,657 :: 		LCD_Chr_Cp (dig1+0x30);                         //soma digito 1 com 30 hexa para exibição no display
+;TCC_5.c,641 :: 		LCD_Chr_Cp (dig1+0x30);                         //soma digito 1 com 30 hexa para exibição no display
 	MOVLW       48
 	ADDWF       num_un_dig1_L0+0, 0 
 	MOVWF       FARG_Lcd_Chr_CP_out_char+0 
 	CALL        _Lcd_Chr_CP+0, 0
-;TCC_5.c,659 :: 		if(!un3) LCD_Out(2,5,hora);                     //se un3 for zero, exibe "hora"
-	BTFSC       _un3+0, BitPos(_un3+0) 
+;TCC_5.c,643 :: 		if(!un) LCD_Out(2,5,hora);                      //se un for zero, exibe "hora"
+	BTFSC       _un+0, BitPos(_un+0) 
 	GOTO        L_num_un128
 	MOVLW       2
 	MOVWF       FARG_Lcd_Out_row+0 
@@ -1926,8 +1799,8 @@ L__num_un371:
 	MOVWF       FARG_Lcd_Out_text+1 
 	CALL        _Lcd_Out+0, 0
 L_num_un128:
-;TCC_5.c,661 :: 		if(un3) LCD_Out(2,5,dia);                       //se un3 for um, exibe "dia"
-	BTFSS       _un3+0, BitPos(_un3+0) 
+;TCC_5.c,645 :: 		if(un) LCD_Out(2,5,dia);                        //se un for um, exibe "dia"
+	BTFSS       _un+0, BitPos(_un+0) 
 	GOTO        L_num_un129
 	MOVLW       2
 	MOVWF       FARG_Lcd_Out_row+0 
@@ -1939,1258 +1812,1422 @@ L_num_un128:
 	MOVWF       FARG_Lcd_Out_text+1 
 	CALL        _Lcd_Out+0, 0
 L_num_un129:
-;TCC_5.c,663 :: 		}                                                //end if option==2
+;TCC_5.c,647 :: 		}                                                //end if option==0
 L_num_un127:
-;TCC_5.c,665 :: 		}                                                 //end num_un()
+;TCC_5.c,650 :: 		if(option==1)                                    //se option for 1 (dispenser n°2 selecionado)
+	MOVLW       0
+	XORWF       _option+1, 0 
+	BTFSS       STATUS+0, 2 
+	GOTO        L__num_un377
+	MOVLW       1
+	XORWF       _option+0, 0 
+L__num_un377:
+	BTFSS       STATUS+0, 2 
+	GOTO        L_num_un130
+;TCC_5.c,652 :: 		dig2 = num2/10;                                 //digito 2 é igual a num2 dividido por 10
+	MOVLW       10
+	MOVWF       R4 
+	MOVLW       0
+	MOVWF       R5 
+	MOVF        _num2+0, 0 
+	MOVWF       R0 
+	MOVF        _num2+1, 0 
+	MOVWF       R1 
+	CALL        _Div_16X16_U+0, 0
+	MOVF        R0, 0 
+	MOVWF       FLOC__num_un+0 
+	MOVF        R1, 0 
+	MOVWF       FLOC__num_un+1 
+	MOVLW       10
+	MOVWF       R4 
+	MOVLW       0
+	MOVWF       R5 
+	MOVF        _num2+0, 0 
+	MOVWF       R0 
+	MOVF        _num2+1, 0 
+	MOVWF       R1 
+	CALL        _Div_16X16_U+0, 0
+	MOVF        R8, 0 
+	MOVWF       R0 
+	MOVF        R9, 0 
+	MOVWF       R1 
+;TCC_5.c,653 :: 		dig1 = num2%10;                                 //digito 1 é igual a sobra da divisão de num2 por 10
+	MOVF        R0, 0 
+	MOVWF       num_un_dig1_L0+0 
+;TCC_5.c,655 :: 		LCD_Chr(2,2,dig2+0x30);                         //soma digito 2 com 30 hexa para exibição no display
+	MOVLW       2
+	MOVWF       FARG_Lcd_Chr_row+0 
+	MOVLW       2
+	MOVWF       FARG_Lcd_Chr_column+0 
+	MOVLW       48
+	ADDWF       FLOC__num_un+0, 0 
+	MOVWF       FARG_Lcd_Chr_out_char+0 
+	CALL        _Lcd_Chr+0, 0
+;TCC_5.c,656 :: 		LCD_Chr_Cp (dig1+0x30);                         //soma digito 1 com 30 hexa para exibição no display
+	MOVLW       48
+	ADDWF       num_un_dig1_L0+0, 0 
+	MOVWF       FARG_Lcd_Chr_CP_out_char+0 
+	CALL        _Lcd_Chr_CP+0, 0
+;TCC_5.c,658 :: 		if(!un2) LCD_Out(2,5,hora);                     //se un2 for zero, exibe "hora"
+	BTFSC       _un2+0, BitPos(_un2+0) 
+	GOTO        L_num_un131
+	MOVLW       2
+	MOVWF       FARG_Lcd_Out_row+0 
+	MOVLW       5
+	MOVWF       FARG_Lcd_Out_column+0 
+	MOVLW       _hora+0
+	MOVWF       FARG_Lcd_Out_text+0 
+	MOVLW       hi_addr(_hora+0)
+	MOVWF       FARG_Lcd_Out_text+1 
+	CALL        _Lcd_Out+0, 0
+L_num_un131:
+;TCC_5.c,660 :: 		if(un2) LCD_Out(2,5,dia);                       //se un2 for um, exibe "dia"
+	BTFSS       _un2+0, BitPos(_un2+0) 
+	GOTO        L_num_un132
+	MOVLW       2
+	MOVWF       FARG_Lcd_Out_row+0 
+	MOVLW       5
+	MOVWF       FARG_Lcd_Out_column+0 
+	MOVLW       _dia+0
+	MOVWF       FARG_Lcd_Out_text+0 
+	MOVLW       hi_addr(_dia+0)
+	MOVWF       FARG_Lcd_Out_text+1 
+	CALL        _Lcd_Out+0, 0
+L_num_un132:
+;TCC_5.c,662 :: 		}                                                //end if option==1
+L_num_un130:
+;TCC_5.c,664 :: 		if(option==2)                                    //se option for 1 (dispenser n°2 selecionado)
+	MOVLW       0
+	XORWF       _option+1, 0 
+	BTFSS       STATUS+0, 2 
+	GOTO        L__num_un378
+	MOVLW       2
+	XORWF       _option+0, 0 
+L__num_un378:
+	BTFSS       STATUS+0, 2 
+	GOTO        L_num_un133
+;TCC_5.c,666 :: 		dig2 = num3/10;                                 //digito 2 é igual a num3 dividido por 10
+	MOVLW       10
+	MOVWF       R4 
+	MOVLW       0
+	MOVWF       R5 
+	MOVF        _num3+0, 0 
+	MOVWF       R0 
+	MOVF        _num3+1, 0 
+	MOVWF       R1 
+	CALL        _Div_16X16_U+0, 0
+	MOVF        R0, 0 
+	MOVWF       FLOC__num_un+0 
+	MOVF        R1, 0 
+	MOVWF       FLOC__num_un+1 
+	MOVLW       10
+	MOVWF       R4 
+	MOVLW       0
+	MOVWF       R5 
+	MOVF        _num3+0, 0 
+	MOVWF       R0 
+	MOVF        _num3+1, 0 
+	MOVWF       R1 
+	CALL        _Div_16X16_U+0, 0
+	MOVF        R8, 0 
+	MOVWF       R0 
+	MOVF        R9, 0 
+	MOVWF       R1 
+;TCC_5.c,667 :: 		dig1 = num3%10;                                 //digito 1 é igual a sobra da divisão de num3 por 10
+	MOVF        R0, 0 
+	MOVWF       num_un_dig1_L0+0 
+;TCC_5.c,669 :: 		LCD_Chr(2,2,dig2+0x30);                         //soma digito 2 com 30 hexa para exibição no display
+	MOVLW       2
+	MOVWF       FARG_Lcd_Chr_row+0 
+	MOVLW       2
+	MOVWF       FARG_Lcd_Chr_column+0 
+	MOVLW       48
+	ADDWF       FLOC__num_un+0, 0 
+	MOVWF       FARG_Lcd_Chr_out_char+0 
+	CALL        _Lcd_Chr+0, 0
+;TCC_5.c,670 :: 		LCD_Chr_Cp (dig1+0x30);                         //soma digito 1 com 30 hexa para exibição no display
+	MOVLW       48
+	ADDWF       num_un_dig1_L0+0, 0 
+	MOVWF       FARG_Lcd_Chr_CP_out_char+0 
+	CALL        _Lcd_Chr_CP+0, 0
+;TCC_5.c,672 :: 		if(!un3) LCD_Out(2,5,hora);                     //se un3 for zero, exibe "hora"
+	BTFSC       _un3+0, BitPos(_un3+0) 
+	GOTO        L_num_un134
+	MOVLW       2
+	MOVWF       FARG_Lcd_Out_row+0 
+	MOVLW       5
+	MOVWF       FARG_Lcd_Out_column+0 
+	MOVLW       _hora+0
+	MOVWF       FARG_Lcd_Out_text+0 
+	MOVLW       hi_addr(_hora+0)
+	MOVWF       FARG_Lcd_Out_text+1 
+	CALL        _Lcd_Out+0, 0
+L_num_un134:
+;TCC_5.c,674 :: 		if(un3) LCD_Out(2,5,dia);                       //se un3 for um, exibe "dia"
+	BTFSS       _un3+0, BitPos(_un3+0) 
+	GOTO        L_num_un135
+	MOVLW       2
+	MOVWF       FARG_Lcd_Out_row+0 
+	MOVLW       5
+	MOVWF       FARG_Lcd_Out_column+0 
+	MOVLW       _dia+0
+	MOVWF       FARG_Lcd_Out_text+0 
+	MOVLW       hi_addr(_dia+0)
+	MOVWF       FARG_Lcd_Out_text+1 
+	CALL        _Lcd_Out+0, 0
+L_num_un135:
+;TCC_5.c,676 :: 		}                                                //end if option==2
+L_num_un133:
+;TCC_5.c,678 :: 		}                                                 //end num_un()
 L_end_num_un:
 	RETURN      0
 ; end of _num_un
 
 _piscaLED:
 
-;TCC_5.c,671 :: 		void piscaLED()
-;TCC_5.c,674 :: 		if(ligar && !toque && num!=0)                   //se ligar for um(ligado), toque for zero e num diferente de zero...
+;TCC_5.c,684 :: 		void piscaLED()
+;TCC_5.c,687 :: 		if(ligar && !toque && num!=0)                   //se ligar for um(ligado), toque for zero e num diferente de zero...
 	BTFSS       _ligar+0, BitPos(_ligar+0) 
-	GOTO        L_piscaLED132
+	GOTO        L_piscaLED138
 	BTFSC       _toque+0, BitPos(_toque+0) 
-	GOTO        L_piscaLED132
+	GOTO        L_piscaLED138
 	MOVLW       0
 	XORWF       _num+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__piscaLED373
+	GOTO        L__piscaLED380
 	MOVLW       0
 	XORWF       _num+0, 0 
-L__piscaLED373:
-	BTFSC       STATUS+0, 2 
-	GOTO        L_piscaLED132
-L__piscaLED280:
-;TCC_5.c,676 :: 		if(temp_led>=10)                               //conta 1 segundo
-	MOVLW       0
-	SUBWF       _temp_led+1, 0 
-	BTFSS       STATUS+0, 2 
-	GOTO        L__piscaLED374
-	MOVLW       10
-	SUBWF       _temp_led+0, 0 
-L__piscaLED374:
-	BTFSS       STATUS+0, 0 
-	GOTO        L_piscaLED133
-;TCC_5.c,678 :: 		temp_led = 0x00;                      //zera temp_led
-	CLRF        _temp_led+0 
-	CLRF        _temp_led+1 
-;TCC_5.c,679 :: 		LED  = ~LED;                          //inverte LED de indicação do dispenser n°1
-	BTG         PORTA+0, 0 
-;TCC_5.c,680 :: 		}                                              //end if temp_led>=10
-L_piscaLED133:
-;TCC_5.c,682 :: 		}                                               //end if ligar && !toque && num!=0
-	GOTO        L_piscaLED134
-L_piscaLED132:
-;TCC_5.c,686 :: 		if(ligar && toque)                             //se ligar for 1 e toque for 1
-	BTFSS       _ligar+0, BitPos(_ligar+0) 
-	GOTO        L_piscaLED137
-	BTFSS       _toque+0, BitPos(_toque+0) 
-	GOTO        L_piscaLED137
-L__piscaLED279:
-;TCC_5.c,688 :: 		if(temp_led>=2)                               //conta 200ms
-	MOVLW       0
-	SUBWF       _temp_led+1, 0 
-	BTFSS       STATUS+0, 2 
-	GOTO        L__piscaLED375
-	MOVLW       2
-	SUBWF       _temp_led+0, 0 
-L__piscaLED375:
-	BTFSS       STATUS+0, 0 
-	GOTO        L_piscaLED138
-;TCC_5.c,690 :: 		temp_led=0x00;                               //zera temp_led
-	CLRF        _temp_led+0 
-	CLRF        _temp_led+1 
-;TCC_5.c,691 :: 		LED = ~LED;                                  //inverte LED de indicação do dispenser n°1
-	BTG         PORTA+0, 0 
-;TCC_5.c,693 :: 		}                                             //end if temp_led>=2
-L_piscaLED138:
-;TCC_5.c,695 :: 		}                                              //end if ligar && toque
-	GOTO        L_piscaLED139
-L_piscaLED137:
-;TCC_5.c,698 :: 		if(prog>0 && option==0)                       //se estiver em programação e dispenser n°1 selecionado
-	MOVLW       0
-	MOVWF       R0 
-	MOVF        _prog+1, 0 
-	SUBWF       R0, 0 
-	BTFSS       STATUS+0, 2 
-	GOTO        L__piscaLED376
-	MOVF        _prog+0, 0 
-	SUBLW       0
-L__piscaLED376:
-	BTFSC       STATUS+0, 0 
-	GOTO        L_piscaLED142
-	MOVLW       0
-	XORWF       _option+1, 0 
-	BTFSS       STATUS+0, 2 
-	GOTO        L__piscaLED377
-	MOVLW       0
-	XORWF       _option+0, 0 
-L__piscaLED377:
-	BTFSS       STATUS+0, 2 
-	GOTO        L_piscaLED142
-L__piscaLED278:
-;TCC_5.c,700 :: 		LED = 0x01;                                  //LED do dispenser n°1 aceso
-	BSF         PORTA+0, 0 
-;TCC_5.c,701 :: 		}                                             //end if prog>0 && option==0
-	GOTO        L_piscaLED143
-L_piscaLED142:
-;TCC_5.c,703 :: 		else LED = 0x00;                              //senão, LED do dispenser n°1 desligado
-	BCF         PORTA+0, 0 
-L_piscaLED143:
-;TCC_5.c,705 :: 		}                                              //end else
-L_piscaLED139:
-;TCC_5.c,707 :: 		}                                               //end else
-L_piscaLED134:
-;TCC_5.c,711 :: 		if(temp_led2 ==5)                                //conta 500ms
-	MOVLW       0
-	XORWF       _temp_led2+1, 0 
-	BTFSS       STATUS+0, 2 
-	GOTO        L__piscaLED378
-	MOVLW       5
-	XORWF       _temp_led2+0, 0 
-L__piscaLED378:
-	BTFSS       STATUS+0, 2 
-	GOTO        L_piscaLED144
-;TCC_5.c,713 :: 		temp_led2=0x00;                                 //zera temp_led2
-	CLRF        _temp_led2+0 
-	CLRF        _temp_led2+1 
-;TCC_5.c,714 :: 		LED2 = ~LED2;                                   //inverte estado do LED de indicação geral
-	BTG         PORTA+0, 3 
-;TCC_5.c,716 :: 		}                                                //end if temp_led==5
-L_piscaLED144:
-;TCC_5.c,718 :: 		if(ligar && !toque2 && num2!=0)                  //se ligar for 1, toque 2 for 0 e num2 diferente de 0...
-	BTFSS       _ligar+0, BitPos(_ligar+0) 
-	GOTO        L_piscaLED147
-	BTFSC       _toque2+0, BitPos(_toque2+0) 
-	GOTO        L_piscaLED147
-	MOVLW       0
-	XORWF       _num2+1, 0 
-	BTFSS       STATUS+0, 2 
-	GOTO        L__piscaLED379
-	MOVLW       0
-	XORWF       _num2+0, 0 
-L__piscaLED379:
-	BTFSC       STATUS+0, 2 
-	GOTO        L_piscaLED147
-L__piscaLED277:
-;TCC_5.c,720 :: 		if(temp_led3>=10)                               //conta 1 segundo
-	MOVLW       0
-	SUBWF       _temp_led3+1, 0 
-	BTFSS       STATUS+0, 2 
-	GOTO        L__piscaLED380
-	MOVLW       10
-	SUBWF       _temp_led3+0, 0 
 L__piscaLED380:
-	BTFSS       STATUS+0, 0 
-	GOTO        L_piscaLED148
-;TCC_5.c,722 :: 		temp_led3 = 0x00;                              //zera temp_led3
-	CLRF        _temp_led3+0 
-	CLRF        _temp_led3+1 
-;TCC_5.c,723 :: 		LED3 = ~LED3;                                  //inverte estado do LED de indicação do dispenser n°2
-	BTG         PORTB+0, 0 
-;TCC_5.c,725 :: 		}                                               //end if temp_led3>=10
-L_piscaLED148:
-;TCC_5.c,727 :: 		}                                                //end if ligar && !toque2 && num2!=0
-	GOTO        L_piscaLED149
-L_piscaLED147:
-;TCC_5.c,731 :: 		if(ligar && toque2)                             //se ligar e toque2 for 1
-	BTFSS       _ligar+0, BitPos(_ligar+0) 
-	GOTO        L_piscaLED152
-	BTFSS       _toque2+0, BitPos(_toque2+0) 
-	GOTO        L_piscaLED152
-L__piscaLED276:
-;TCC_5.c,733 :: 		if(temp_led3>=2)                               //conta 200 milisegundos
+	BTFSC       STATUS+0, 2 
+	GOTO        L_piscaLED138
+L__piscaLED287:
+;TCC_5.c,689 :: 		if(temp_led>=10)                               //conta 1 segundo
 	MOVLW       0
-	SUBWF       _temp_led3+1, 0 
+	SUBWF       _temp_led+1, 0 
 	BTFSS       STATUS+0, 2 
 	GOTO        L__piscaLED381
-	MOVLW       2
-	SUBWF       _temp_led3+0, 0 
+	MOVLW       10
+	SUBWF       _temp_led+0, 0 
 L__piscaLED381:
 	BTFSS       STATUS+0, 0 
-	GOTO        L_piscaLED153
-;TCC_5.c,735 :: 		temp_led3=0x00;                               //zera temp_led3
-	CLRF        _temp_led3+0 
-	CLRF        _temp_led3+1 
-;TCC_5.c,736 :: 		LED3 = ~LED3;                                 //inverte estado do LED de indicação do dispenser n°2
-	BTG         PORTB+0, 0 
-;TCC_5.c,738 :: 		}                                              //end if temp_led3>=2
-L_piscaLED153:
-;TCC_5.c,740 :: 		}                                               //end if ligar && toque2
-	GOTO        L_piscaLED154
-L_piscaLED152:
-;TCC_5.c,744 :: 		if(prog>0 && option==1)                        //se estiver em programação e dispenser n°2 selecionado
+	GOTO        L_piscaLED139
+;TCC_5.c,691 :: 		temp_led = 0x00;                      //zera temp_led
+	CLRF        _temp_led+0 
+	CLRF        _temp_led+1 
+;TCC_5.c,692 :: 		LED  = ~LED;                          //inverte LED de indicação do dispenser n°1
+	BTG         PORTA+0, 0 
+;TCC_5.c,693 :: 		}                                              //end if temp_led>=10
+L_piscaLED139:
+;TCC_5.c,695 :: 		}                                               //end if ligar && !toque && num!=0
+	GOTO        L_piscaLED140
+L_piscaLED138:
+;TCC_5.c,699 :: 		if(ligar && toque)                             //se ligar for 1 e toque for 1
+	BTFSS       _ligar+0, BitPos(_ligar+0) 
+	GOTO        L_piscaLED143
+	BTFSS       _toque+0, BitPos(_toque+0) 
+	GOTO        L_piscaLED143
+L__piscaLED286:
+;TCC_5.c,701 :: 		if(temp_led>=2)                               //conta 200ms
+	MOVLW       0
+	SUBWF       _temp_led+1, 0 
+	BTFSS       STATUS+0, 2 
+	GOTO        L__piscaLED382
+	MOVLW       2
+	SUBWF       _temp_led+0, 0 
+L__piscaLED382:
+	BTFSS       STATUS+0, 0 
+	GOTO        L_piscaLED144
+;TCC_5.c,703 :: 		temp_led=0x00;                               //zera temp_led
+	CLRF        _temp_led+0 
+	CLRF        _temp_led+1 
+;TCC_5.c,704 :: 		LED = ~LED;                                  //inverte LED de indicação do dispenser n°1
+	BTG         PORTA+0, 0 
+;TCC_5.c,706 :: 		}                                             //end if temp_led>=2
+L_piscaLED144:
+;TCC_5.c,708 :: 		}                                              //end if ligar && toque
+	GOTO        L_piscaLED145
+L_piscaLED143:
+;TCC_5.c,711 :: 		if(prog>0 && option==0)                       //se estiver em programação e dispenser n°1 selecionado
 	MOVLW       0
 	MOVWF       R0 
 	MOVF        _prog+1, 0 
 	SUBWF       R0, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__piscaLED382
+	GOTO        L__piscaLED383
 	MOVF        _prog+0, 0 
 	SUBLW       0
-L__piscaLED382:
+L__piscaLED383:
 	BTFSC       STATUS+0, 0 
-	GOTO        L_piscaLED157
+	GOTO        L_piscaLED148
 	MOVLW       0
 	XORWF       _option+1, 0 
-	BTFSS       STATUS+0, 2 
-	GOTO        L__piscaLED383
-	MOVLW       1
-	XORWF       _option+0, 0 
-L__piscaLED383:
-	BTFSS       STATUS+0, 2 
-	GOTO        L_piscaLED157
-L__piscaLED275:
-;TCC_5.c,746 :: 		LED3 = 0x01;                                  //LED do dispenser n°2 aceso
-	BSF         PORTB+0, 0 
-;TCC_5.c,747 :: 		}                                              //end if prog>0 && option==1
-	GOTO        L_piscaLED158
-L_piscaLED157:
-;TCC_5.c,749 :: 		else LED3 = 0x00;                               //senão, LED do dispenser n°2 desligado
-	BCF         PORTB+0, 0 
-L_piscaLED158:
-;TCC_5.c,751 :: 		}                                               //end else
-L_piscaLED154:
-;TCC_5.c,753 :: 		}                                                //end else
-L_piscaLED149:
-;TCC_5.c,755 :: 		if(ligar && !toque3 && num3!=0)                  //se ligar for 1, toque3 for 0 e num3 diferente de 0...
-	BTFSS       _ligar+0, BitPos(_ligar+0) 
-	GOTO        L_piscaLED161
-	BTFSC       _toque3+0, BitPos(_toque3+0) 
-	GOTO        L_piscaLED161
-	MOVLW       0
-	XORWF       _num3+1, 0 
 	BTFSS       STATUS+0, 2 
 	GOTO        L__piscaLED384
 	MOVLW       0
-	XORWF       _num3+0, 0 
+	XORWF       _option+0, 0 
 L__piscaLED384:
-	BTFSC       STATUS+0, 2 
-	GOTO        L_piscaLED161
-L__piscaLED274:
-;TCC_5.c,757 :: 		if(temp_led4>=10)                               //conta 1 segundo
+	BTFSS       STATUS+0, 2 
+	GOTO        L_piscaLED148
+L__piscaLED285:
+;TCC_5.c,713 :: 		LED = 0x01;                                  //LED do dispenser n°1 aceso
+	BSF         PORTA+0, 0 
+;TCC_5.c,714 :: 		}                                             //end if prog>0 && option==0
+	GOTO        L_piscaLED149
+L_piscaLED148:
+;TCC_5.c,716 :: 		else LED = 0x00;                              //senão, LED do dispenser n°1 desligado
+	BCF         PORTA+0, 0 
+L_piscaLED149:
+;TCC_5.c,718 :: 		}                                              //end else
+L_piscaLED145:
+;TCC_5.c,720 :: 		}                                               //end else
+L_piscaLED140:
+;TCC_5.c,724 :: 		if(temp_led2 ==5)                                //conta 500ms
 	MOVLW       0
-	SUBWF       _temp_led4+1, 0 
+	XORWF       _temp_led2+1, 0 
 	BTFSS       STATUS+0, 2 
 	GOTO        L__piscaLED385
-	MOVLW       10
-	SUBWF       _temp_led4+0, 0 
+	MOVLW       5
+	XORWF       _temp_led2+0, 0 
 L__piscaLED385:
-	BTFSS       STATUS+0, 0 
-	GOTO        L_piscaLED162
-;TCC_5.c,759 :: 		temp_led4 = 0x00;                              //zera temp_led4
-	CLRF        _temp_led4+0 
-	CLRF        _temp_led4+1 
-;TCC_5.c,760 :: 		LED4 = ~LED4;                                  //inverte estado do LED de indicação do dispenser n°3
-	BTG         PORTB+0, 1 
-;TCC_5.c,762 :: 		}                                               //end if temp_led4>=10
-L_piscaLED162:
-;TCC_5.c,764 :: 		}                                                //end if ligar && !toque3 && num3!=0
-	GOTO        L_piscaLED163
-L_piscaLED161:
-;TCC_5.c,768 :: 		if(ligar && toque3)                             //se ligar e toque3 for 1
+	BTFSS       STATUS+0, 2 
+	GOTO        L_piscaLED150
+;TCC_5.c,726 :: 		temp_led2=0x00;                                 //zera temp_led2
+	CLRF        _temp_led2+0 
+	CLRF        _temp_led2+1 
+;TCC_5.c,727 :: 		LED2 = ~LED2;                                   //inverte estado do LED de indicação geral
+	BTG         PORTA+0, 3 
+;TCC_5.c,729 :: 		}                                                //end if temp_led==5
+L_piscaLED150:
+;TCC_5.c,731 :: 		if(ligar && !toque2 && num2!=0)                  //se ligar for 1, toque 2 for 0 e num2 diferente de 0...
 	BTFSS       _ligar+0, BitPos(_ligar+0) 
-	GOTO        L_piscaLED166
-	BTFSS       _toque3+0, BitPos(_toque3+0) 
-	GOTO        L_piscaLED166
-L__piscaLED273:
-;TCC_5.c,770 :: 		if(temp_led4>=2)                               //conta 200 milisegundos
+	GOTO        L_piscaLED153
+	BTFSC       _toque2+0, BitPos(_toque2+0) 
+	GOTO        L_piscaLED153
 	MOVLW       0
-	SUBWF       _temp_led4+1, 0 
+	XORWF       _num2+1, 0 
 	BTFSS       STATUS+0, 2 
 	GOTO        L__piscaLED386
-	MOVLW       2
-	SUBWF       _temp_led4+0, 0 
+	MOVLW       0
+	XORWF       _num2+0, 0 
 L__piscaLED386:
+	BTFSC       STATUS+0, 2 
+	GOTO        L_piscaLED153
+L__piscaLED284:
+;TCC_5.c,733 :: 		if(temp_led3>=10)                               //conta 1 segundo
+	MOVLW       0
+	SUBWF       _temp_led3+1, 0 
+	BTFSS       STATUS+0, 2 
+	GOTO        L__piscaLED387
+	MOVLW       10
+	SUBWF       _temp_led3+0, 0 
+L__piscaLED387:
 	BTFSS       STATUS+0, 0 
-	GOTO        L_piscaLED167
-;TCC_5.c,772 :: 		temp_led4=0x00;                               //zera temp_led4
-	CLRF        _temp_led4+0 
-	CLRF        _temp_led4+1 
-;TCC_5.c,773 :: 		LED4 = ~LED4;                                 //inverte estado do LED de indicação do dispenser n°3
-	BTG         PORTB+0, 1 
-;TCC_5.c,775 :: 		}                                              //end if temp_led4>=2
-L_piscaLED167:
-;TCC_5.c,777 :: 		}                                               //end if ligar && toque3
-	GOTO        L_piscaLED168
-L_piscaLED166:
-;TCC_5.c,781 :: 		if(prog>0 && option==2)                        //se estiver em programação e dispenser n°3 selecionado
+	GOTO        L_piscaLED154
+;TCC_5.c,735 :: 		temp_led3 = 0x00;                              //zera temp_led3
+	CLRF        _temp_led3+0 
+	CLRF        _temp_led3+1 
+;TCC_5.c,736 :: 		LED3 = ~LED3;                                  //inverte estado do LED de indicação do dispenser n°2
+	BTG         PORTB+0, 0 
+;TCC_5.c,738 :: 		}                                               //end if temp_led3>=10
+L_piscaLED154:
+;TCC_5.c,740 :: 		}                                                //end if ligar && !toque2 && num2!=0
+	GOTO        L_piscaLED155
+L_piscaLED153:
+;TCC_5.c,744 :: 		if(ligar && toque2)                             //se ligar e toque2 for 1
+	BTFSS       _ligar+0, BitPos(_ligar+0) 
+	GOTO        L_piscaLED158
+	BTFSS       _toque2+0, BitPos(_toque2+0) 
+	GOTO        L_piscaLED158
+L__piscaLED283:
+;TCC_5.c,746 :: 		if(temp_led3>=2)                               //conta 200 milisegundos
+	MOVLW       0
+	SUBWF       _temp_led3+1, 0 
+	BTFSS       STATUS+0, 2 
+	GOTO        L__piscaLED388
+	MOVLW       2
+	SUBWF       _temp_led3+0, 0 
+L__piscaLED388:
+	BTFSS       STATUS+0, 0 
+	GOTO        L_piscaLED159
+;TCC_5.c,748 :: 		temp_led3=0x00;                               //zera temp_led3
+	CLRF        _temp_led3+0 
+	CLRF        _temp_led3+1 
+;TCC_5.c,749 :: 		LED3 = ~LED3;                                 //inverte estado do LED de indicação do dispenser n°2
+	BTG         PORTB+0, 0 
+;TCC_5.c,751 :: 		}                                              //end if temp_led3>=2
+L_piscaLED159:
+;TCC_5.c,753 :: 		}                                               //end if ligar && toque2
+	GOTO        L_piscaLED160
+L_piscaLED158:
+;TCC_5.c,757 :: 		if(prog>0 && option==1)                        //se estiver em programação e dispenser n°2 selecionado
 	MOVLW       0
 	MOVWF       R0 
 	MOVF        _prog+1, 0 
 	SUBWF       R0, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__piscaLED387
+	GOTO        L__piscaLED389
 	MOVF        _prog+0, 0 
 	SUBLW       0
-L__piscaLED387:
+L__piscaLED389:
 	BTFSC       STATUS+0, 0 
-	GOTO        L_piscaLED171
+	GOTO        L_piscaLED163
 	MOVLW       0
 	XORWF       _option+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__piscaLED388
+	GOTO        L__piscaLED390
+	MOVLW       1
+	XORWF       _option+0, 0 
+L__piscaLED390:
+	BTFSS       STATUS+0, 2 
+	GOTO        L_piscaLED163
+L__piscaLED282:
+;TCC_5.c,759 :: 		LED3 = 0x01;                                  //LED do dispenser n°2 aceso
+	BSF         PORTB+0, 0 
+;TCC_5.c,760 :: 		}                                              //end if prog>0 && option==1
+	GOTO        L_piscaLED164
+L_piscaLED163:
+;TCC_5.c,762 :: 		else LED3 = 0x00;                               //senão, LED do dispenser n°2 desligado
+	BCF         PORTB+0, 0 
+L_piscaLED164:
+;TCC_5.c,764 :: 		}                                               //end else
+L_piscaLED160:
+;TCC_5.c,766 :: 		}                                                //end else
+L_piscaLED155:
+;TCC_5.c,768 :: 		if(ligar && !toque3 && num3!=0)                  //se ligar for 1, toque3 for 0 e num3 diferente de 0...
+	BTFSS       _ligar+0, BitPos(_ligar+0) 
+	GOTO        L_piscaLED167
+	BTFSC       _toque3+0, BitPos(_toque3+0) 
+	GOTO        L_piscaLED167
+	MOVLW       0
+	XORWF       _num3+1, 0 
+	BTFSS       STATUS+0, 2 
+	GOTO        L__piscaLED391
+	MOVLW       0
+	XORWF       _num3+0, 0 
+L__piscaLED391:
+	BTFSC       STATUS+0, 2 
+	GOTO        L_piscaLED167
+L__piscaLED281:
+;TCC_5.c,770 :: 		if(temp_led4>=10)                               //conta 1 segundo
+	MOVLW       0
+	SUBWF       _temp_led4+1, 0 
+	BTFSS       STATUS+0, 2 
+	GOTO        L__piscaLED392
+	MOVLW       10
+	SUBWF       _temp_led4+0, 0 
+L__piscaLED392:
+	BTFSS       STATUS+0, 0 
+	GOTO        L_piscaLED168
+;TCC_5.c,772 :: 		temp_led4 = 0x00;                              //zera temp_led4
+	CLRF        _temp_led4+0 
+	CLRF        _temp_led4+1 
+;TCC_5.c,773 :: 		LED4 = ~LED4;                                  //inverte estado do LED de indicação do dispenser n°3
+	BTG         PORTB+0, 1 
+;TCC_5.c,775 :: 		}                                               //end if temp_led4>=10
+L_piscaLED168:
+;TCC_5.c,777 :: 		}                                                //end if ligar && !toque3 && num3!=0
+	GOTO        L_piscaLED169
+L_piscaLED167:
+;TCC_5.c,781 :: 		if(ligar && toque3)                             //se ligar e toque3 for 1
+	BTFSS       _ligar+0, BitPos(_ligar+0) 
+	GOTO        L_piscaLED172
+	BTFSS       _toque3+0, BitPos(_toque3+0) 
+	GOTO        L_piscaLED172
+L__piscaLED280:
+;TCC_5.c,783 :: 		if(temp_led4>=2)                               //conta 200 milisegundos
+	MOVLW       0
+	SUBWF       _temp_led4+1, 0 
+	BTFSS       STATUS+0, 2 
+	GOTO        L__piscaLED393
+	MOVLW       2
+	SUBWF       _temp_led4+0, 0 
+L__piscaLED393:
+	BTFSS       STATUS+0, 0 
+	GOTO        L_piscaLED173
+;TCC_5.c,785 :: 		temp_led4=0x00;                               //zera temp_led4
+	CLRF        _temp_led4+0 
+	CLRF        _temp_led4+1 
+;TCC_5.c,786 :: 		LED4 = ~LED4;                                 //inverte estado do LED de indicação do dispenser n°3
+	BTG         PORTB+0, 1 
+;TCC_5.c,788 :: 		}                                              //end if temp_led4>=2
+L_piscaLED173:
+;TCC_5.c,790 :: 		}                                               //end if ligar && toque3
+	GOTO        L_piscaLED174
+L_piscaLED172:
+;TCC_5.c,794 :: 		if(prog>0 && option==2)                        //se estiver em programação e dispenser n°3 selecionado
+	MOVLW       0
+	MOVWF       R0 
+	MOVF        _prog+1, 0 
+	SUBWF       R0, 0 
+	BTFSS       STATUS+0, 2 
+	GOTO        L__piscaLED394
+	MOVF        _prog+0, 0 
+	SUBLW       0
+L__piscaLED394:
+	BTFSC       STATUS+0, 0 
+	GOTO        L_piscaLED177
+	MOVLW       0
+	XORWF       _option+1, 0 
+	BTFSS       STATUS+0, 2 
+	GOTO        L__piscaLED395
 	MOVLW       2
 	XORWF       _option+0, 0 
-L__piscaLED388:
+L__piscaLED395:
 	BTFSS       STATUS+0, 2 
-	GOTO        L_piscaLED171
-L__piscaLED272:
-;TCC_5.c,783 :: 		LED4 = 0x01;                                  //LED do dispenser n°3 aceso
+	GOTO        L_piscaLED177
+L__piscaLED279:
+;TCC_5.c,796 :: 		LED4 = 0x01;                                  //LED do dispenser n°3 aceso
 	BSF         PORTB+0, 1 
-;TCC_5.c,784 :: 		}                                              //end if prog>0 && option==2
-	GOTO        L_piscaLED172
-L_piscaLED171:
-;TCC_5.c,786 :: 		else LED4 = 0x00;                               //senão, LED do dispenser n°3 desligado
+;TCC_5.c,797 :: 		}                                              //end if prog>0 && option==2
+	GOTO        L_piscaLED178
+L_piscaLED177:
+;TCC_5.c,799 :: 		else LED4 = 0x00;                               //senão, LED do dispenser n°3 desligado
 	BCF         PORTB+0, 1 
-L_piscaLED172:
-;TCC_5.c,788 :: 		}                                               //end else
-L_piscaLED168:
-;TCC_5.c,790 :: 		}                                                //end else
-L_piscaLED163:
-;TCC_5.c,792 :: 		}                                                 //end piscaLED()
+L_piscaLED178:
+;TCC_5.c,801 :: 		}                                               //end else
+L_piscaLED174:
+;TCC_5.c,803 :: 		}                                                //end else
+L_piscaLED169:
+;TCC_5.c,805 :: 		}                                                 //end piscaLED()
 L_end_piscaLED:
 	RETURN      0
 ; end of _piscaLED
 
 _timebase:
 
-;TCC_5.c,799 :: 		void timebase()
-;TCC_5.c,801 :: 		if(!ligar)                                      //se ligar for 0
+;TCC_5.c,812 :: 		void timebase()
+;TCC_5.c,814 :: 		if(!ligar)                                      //se ligar for 0
 	BTFSC       _ligar+0, BitPos(_ligar+0) 
-	GOTO        L_timebase173
-;TCC_5.c,803 :: 		temp_ligado = 0x00;                            //zera temp_ligado
+	GOTO        L_timebase179
+;TCC_5.c,816 :: 		temp_ligado = 0x00;                            //zera temp_ligado
 	CLRF        _temp_ligado+0 
 	CLRF        _temp_ligado+1 
-;TCC_5.c,804 :: 		}
-L_timebase173:
-;TCC_5.c,805 :: 		if(ligar && num!=0)                             //se ligar for 1 e num diferente de 0...
+;TCC_5.c,817 :: 		}
+L_timebase179:
+;TCC_5.c,818 :: 		if(ligar && num!=0)                             //se ligar for 1 e num diferente de 0...
 	BTFSS       _ligar+0, BitPos(_ligar+0) 
-	GOTO        L_timebase176
+	GOTO        L_timebase182
 	MOVLW       0
 	XORWF       _num+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__timebase390
+	GOTO        L__timebase397
 	MOVLW       0
 	XORWF       _num+0, 0 
-L__timebase390:
+L__timebase397:
 	BTFSC       STATUS+0, 2 
-	GOTO        L_timebase176
-L__timebase281:
-;TCC_5.c,807 :: 		if(temp==10)                                   //conta 1 segundo
+	GOTO        L_timebase182
+L__timebase288:
+;TCC_5.c,820 :: 		if(temp==10)                                   //conta 1 segundo
 	MOVLW       0
 	XORWF       _temp+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__timebase391
+	GOTO        L__timebase398
 	MOVLW       10
 	XORWF       _temp+0, 0 
-L__timebase391:
+L__timebase398:
 	BTFSS       STATUS+0, 2 
-	GOTO        L_timebase177
-;TCC_5.c,809 :: 		temp = 0x00;                                  //zera temp
+	GOTO        L_timebase183
+;TCC_5.c,822 :: 		temp = 0x00;                                  //zera temp
 	CLRF        _temp+0 
 	CLRF        _temp+1 
-;TCC_5.c,810 :: 		temp_ligado++;                                //incrementa temp_ligado a cada 1 segundo
+;TCC_5.c,823 :: 		temp_ligado++;                                //incrementa temp_ligado a cada 1 segundo
 	INFSNZ      _temp_ligado+0, 1 
 	INCF        _temp_ligado+1, 1 
-;TCC_5.c,812 :: 		}                                              //end if temp==10
-L_timebase177:
-;TCC_5.c,814 :: 		if(temp_ligado==mult)                          //compara a igualdade de temp_ligado com mult
+;TCC_5.c,825 :: 		}                                              //end if temp==10
+L_timebase183:
+;TCC_5.c,827 :: 		if(temp_ligado==mult)                          //compara a igualdade de temp_ligado com mult
 	MOVF        _temp_ligado+1, 0 
 	XORWF       _mult+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__timebase392
+	GOTO        L__timebase399
 	MOVF        _mult+0, 0 
 	XORWF       _temp_ligado+0, 0 
-L__timebase392:
+L__timebase399:
 	BTFSS       STATUS+0, 2 
-	GOTO        L_timebase178
-;TCC_5.c,816 :: 		toque = 0x01;                                 //liga o bit toque
+	GOTO        L_timebase184
+;TCC_5.c,829 :: 		toque = 0x01;                                 //liga o bit toque
 	BSF         _toque+0, BitPos(_toque+0) 
-;TCC_5.c,817 :: 		atv_mot = 0x01;                               //liga o bit de ativação do motor
+;TCC_5.c,830 :: 		atv_mot = 0x01;                               //liga o bit de ativação do motor
 	BSF         _atv_mot+0, BitPos(_atv_mot+0) 
-;TCC_5.c,818 :: 		abre_mot();                                   //define os bits de controle do motor para abri-lo
+;TCC_5.c,831 :: 		abre_mot();                                   //define os bits de controle do motor para abri-lo
 	CALL        _abre_mot+0, 0
-;TCC_5.c,820 :: 		}                                              //end if temp_ligado==mult
-L_timebase178:
-;TCC_5.c,822 :: 		if(atv_mot)                                    //se ativação do motor for ligada...
+;TCC_5.c,833 :: 		}                                              //end if temp_ligado==mult
+L_timebase184:
+;TCC_5.c,835 :: 		if(atv_mot)                                    //se ativação do motor for ligada...
 	BTFSS       _atv_mot+0, BitPos(_atv_mot+0) 
-	GOTO        L_timebase179
-;TCC_5.c,824 :: 		read_motbits();                               //executa a leitura dos bits de controle dos motores
+	GOTO        L_timebase185
+;TCC_5.c,837 :: 		read_motbits();                               //executa a leitura dos bits de controle dos motores
 	CALL        _read_motbits+0, 0
-;TCC_5.c,826 :: 		}                                              //end if atv_mot
-	GOTO        L_timebase180
-L_timebase179:
-;TCC_5.c,830 :: 		alarme();                                     //executa o alarme
+;TCC_5.c,839 :: 		}                                              //end if atv_mot
+	GOTO        L_timebase186
+L_timebase185:
+;TCC_5.c,843 :: 		alarme();                                     //executa o alarme
 	CALL        _alarme+0, 0
-;TCC_5.c,831 :: 		}
-L_timebase180:
-;TCC_5.c,832 :: 		}                                               //end if ligar
-L_timebase176:
-;TCC_5.c,834 :: 		}                                                 //end timebase()
+;TCC_5.c,844 :: 		}
+L_timebase186:
+;TCC_5.c,845 :: 		}                                               //end if ligar
+L_timebase182:
+;TCC_5.c,847 :: 		}                                                 //end timebase()
 L_end_timebase:
 	RETURN      0
 ; end of _timebase
 
 _timebase2:
 
-;TCC_5.c,841 :: 		void timebase2()
-;TCC_5.c,843 :: 		if(!ligar)                                      //se ligar for 0
+;TCC_5.c,854 :: 		void timebase2()
+;TCC_5.c,856 :: 		if(!ligar)                                      //se ligar for 0
 	BTFSC       _ligar+0, BitPos(_ligar+0) 
-	GOTO        L_timebase2181
-;TCC_5.c,845 :: 		temp_ligado2 = 0x00;                           //zera temp_ligado2
+	GOTO        L_timebase2187
+;TCC_5.c,858 :: 		temp_ligado2 = 0x00;                           //zera temp_ligado2
 	CLRF        _temp_ligado2+0 
 	CLRF        _temp_ligado2+1 
-;TCC_5.c,846 :: 		}
-L_timebase2181:
-;TCC_5.c,848 :: 		if(ligar && num2!=0)                            //se ligar for 1 e num2 diferente de 0
+;TCC_5.c,859 :: 		}
+L_timebase2187:
+;TCC_5.c,861 :: 		if(ligar && num2!=0)                            //se ligar for 1 e num2 diferente de 0
 	BTFSS       _ligar+0, BitPos(_ligar+0) 
-	GOTO        L_timebase2184
+	GOTO        L_timebase2190
 	MOVLW       0
 	XORWF       _num2+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__timebase2394
+	GOTO        L__timebase2401
 	MOVLW       0
 	XORWF       _num2+0, 0 
-L__timebase2394:
+L__timebase2401:
 	BTFSC       STATUS+0, 2 
-	GOTO        L_timebase2184
-L__timebase2282:
-;TCC_5.c,850 :: 		if(temp2==10)                                  //conta 1 segundo
+	GOTO        L_timebase2190
+L__timebase2289:
+;TCC_5.c,863 :: 		if(temp2==10)                                  //conta 1 segundo
 	MOVLW       0
 	XORWF       _temp2+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__timebase2395
+	GOTO        L__timebase2402
 	MOVLW       10
 	XORWF       _temp2+0, 0 
-L__timebase2395:
+L__timebase2402:
 	BTFSS       STATUS+0, 2 
-	GOTO        L_timebase2185
-;TCC_5.c,852 :: 		temp2 = 0x00;                                 //zera temp2
+	GOTO        L_timebase2191
+;TCC_5.c,865 :: 		temp2 = 0x00;                                 //zera temp2
 	CLRF        _temp2+0 
 	CLRF        _temp2+1 
-;TCC_5.c,853 :: 		temp_ligado2++;                               //incrementa temp_ligado2 a cada 1 segundo
+;TCC_5.c,866 :: 		temp_ligado2++;                               //incrementa temp_ligado2 a cada 1 segundo
 	INFSNZ      _temp_ligado2+0, 1 
 	INCF        _temp_ligado2+1, 1 
-;TCC_5.c,855 :: 		}                                              //end if temp2==10
-L_timebase2185:
-;TCC_5.c,857 :: 		if(temp_ligado2==mult2)                        //compara igualdade entre temp_ligado2 e mult2
+;TCC_5.c,868 :: 		}                                              //end if temp2==10
+L_timebase2191:
+;TCC_5.c,870 :: 		if(temp_ligado2==mult2)                        //compara igualdade entre temp_ligado2 e mult2
 	MOVF        _temp_ligado2+1, 0 
 	XORWF       _mult2+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__timebase2396
+	GOTO        L__timebase2403
 	MOVF        _mult2+0, 0 
 	XORWF       _temp_ligado2+0, 0 
-L__timebase2396:
+L__timebase2403:
 	BTFSS       STATUS+0, 2 
-	GOTO        L_timebase2186
-;TCC_5.c,859 :: 		toque2 = 0x01;                                //liga o bit toque2
+	GOTO        L_timebase2192
+;TCC_5.c,872 :: 		toque2 = 0x01;                                //liga o bit toque2
 	BSF         _toque2+0, BitPos(_toque2+0) 
-;TCC_5.c,860 :: 		atv_mot2 = 0x01;                              //liga o bit de aativação do motor 2
+;TCC_5.c,873 :: 		atv_mot2 = 0x01;                              //liga o bit de aativação do motor 2
 	BSF         _atv_mot2+0, BitPos(_atv_mot2+0) 
-;TCC_5.c,861 :: 		abre_mot2();                                  //define os bits de controle do motor 2 para abrir
+;TCC_5.c,874 :: 		abre_mot2();                                  //define os bits de controle do motor 2 para abrir
 	CALL        _abre_mot2+0, 0
-;TCC_5.c,863 :: 		}                                              //end if temp_ligado2==mult2
-L_timebase2186:
-;TCC_5.c,865 :: 		if(atv_mot2)                                   //se ativação do motor 2 ligada...
+;TCC_5.c,876 :: 		}                                              //end if temp_ligado2==mult2
+L_timebase2192:
+;TCC_5.c,878 :: 		if(atv_mot2)                                   //se ativação do motor 2 ligada...
 	BTFSS       _atv_mot2+0, BitPos(_atv_mot2+0) 
-	GOTO        L_timebase2187
-;TCC_5.c,867 :: 		read_motbits();                               //executa a leitura dos bits de controle dos motores
+	GOTO        L_timebase2193
+;TCC_5.c,880 :: 		read_motbits();                               //executa a leitura dos bits de controle dos motores
 	CALL        _read_motbits+0, 0
-;TCC_5.c,869 :: 		}                                              //end if atv_mot2
-	GOTO        L_timebase2188
-L_timebase2187:
-;TCC_5.c,873 :: 		alarme();                                     //aciona o alarme
+;TCC_5.c,882 :: 		}                                              //end if atv_mot2
+	GOTO        L_timebase2194
+L_timebase2193:
+;TCC_5.c,886 :: 		alarme();                                     //aciona o alarme
 	CALL        _alarme+0, 0
-;TCC_5.c,875 :: 		}                                              //end else
-L_timebase2188:
-;TCC_5.c,877 :: 		}                                               //end if ligar && num2!=0
-L_timebase2184:
-;TCC_5.c,879 :: 		}                                                 //end timebase2()
+;TCC_5.c,888 :: 		}                                              //end else
+L_timebase2194:
+;TCC_5.c,890 :: 		}                                               //end if ligar && num2!=0
+L_timebase2190:
+;TCC_5.c,892 :: 		}                                                 //end timebase2()
 L_end_timebase2:
 	RETURN      0
 ; end of _timebase2
 
 _timebase3:
 
-;TCC_5.c,886 :: 		void timebase3()
-;TCC_5.c,888 :: 		if(!ligar)                                      //se ligar for 0
+;TCC_5.c,899 :: 		void timebase3()
+;TCC_5.c,901 :: 		if(!ligar)                                      //se ligar for 0
 	BTFSC       _ligar+0, BitPos(_ligar+0) 
-	GOTO        L_timebase3189
-;TCC_5.c,890 :: 		temp_ligado3 = 0x00;                           //zera temp_ligado3
+	GOTO        L_timebase3195
+;TCC_5.c,903 :: 		temp_ligado3 = 0x00;                           //zera temp_ligado3
 	CLRF        _temp_ligado3+0 
 	CLRF        _temp_ligado3+1 
-;TCC_5.c,891 :: 		}
-L_timebase3189:
-;TCC_5.c,893 :: 		if(ligar && num3!=0)                            //se ligar for 1 e num3 diferente de 0
+;TCC_5.c,904 :: 		}
+L_timebase3195:
+;TCC_5.c,906 :: 		if(ligar && num3!=0)                            //se ligar for 1 e num3 diferente de 0
 	BTFSS       _ligar+0, BitPos(_ligar+0) 
-	GOTO        L_timebase3192
+	GOTO        L_timebase3198
 	MOVLW       0
 	XORWF       _num3+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__timebase3398
+	GOTO        L__timebase3405
 	MOVLW       0
 	XORWF       _num3+0, 0 
-L__timebase3398:
+L__timebase3405:
 	BTFSC       STATUS+0, 2 
-	GOTO        L_timebase3192
-L__timebase3283:
-;TCC_5.c,895 :: 		if(temp3==10)                                  //conta 1 segundo
+	GOTO        L_timebase3198
+L__timebase3290:
+;TCC_5.c,908 :: 		if(temp3==10)                                  //conta 1 segundo
 	MOVLW       0
 	XORWF       _temp3+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__timebase3399
+	GOTO        L__timebase3406
 	MOVLW       10
 	XORWF       _temp3+0, 0 
-L__timebase3399:
+L__timebase3406:
 	BTFSS       STATUS+0, 2 
-	GOTO        L_timebase3193
-;TCC_5.c,897 :: 		temp3 = 0x00;                                 //zera temp3
+	GOTO        L_timebase3199
+;TCC_5.c,910 :: 		temp3 = 0x00;                                 //zera temp3
 	CLRF        _temp3+0 
 	CLRF        _temp3+1 
-;TCC_5.c,898 :: 		temp_ligado3++;                               //incrementa temp_ligado3 a cada 1 segundo
+;TCC_5.c,911 :: 		temp_ligado3++;                               //incrementa temp_ligado3 a cada 1 segundo
 	INFSNZ      _temp_ligado3+0, 1 
 	INCF        _temp_ligado3+1, 1 
-;TCC_5.c,900 :: 		}                                              //end if temp3==10
-L_timebase3193:
-;TCC_5.c,902 :: 		if(temp_ligado3==mult3)                        //compara igualdade entre temp_ligado3 e mult3
+;TCC_5.c,913 :: 		}                                              //end if temp3==10
+L_timebase3199:
+;TCC_5.c,915 :: 		if(temp_ligado3==mult3)                        //compara igualdade entre temp_ligado3 e mult3
 	MOVF        _temp_ligado3+1, 0 
 	XORWF       _mult3+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__timebase3400
+	GOTO        L__timebase3407
 	MOVF        _mult3+0, 0 
 	XORWF       _temp_ligado3+0, 0 
-L__timebase3400:
+L__timebase3407:
 	BTFSS       STATUS+0, 2 
-	GOTO        L_timebase3194
-;TCC_5.c,904 :: 		toque3 = 0x01;                                //liga o bit toque3
+	GOTO        L_timebase3200
+;TCC_5.c,917 :: 		toque3 = 0x01;                                //liga o bit toque3
 	BSF         _toque3+0, BitPos(_toque3+0) 
-;TCC_5.c,905 :: 		atv_mot3 = 0x01;                              //liga o bit de aativação do motor 3
+;TCC_5.c,918 :: 		atv_mot3 = 0x01;                              //liga o bit de aativação do motor 3
 	BSF         _atv_mot3+0, BitPos(_atv_mot3+0) 
-;TCC_5.c,906 :: 		abre_mot3();                                  //define os bits de controle do motor 3 para abrir
+;TCC_5.c,919 :: 		abre_mot3();                                  //define os bits de controle do motor 3 para abrir
 	CALL        _abre_mot3+0, 0
-;TCC_5.c,908 :: 		}                                              //end if temp_ligado3==mult3
-L_timebase3194:
-;TCC_5.c,910 :: 		if(atv_mot3)                                   //se ativação do motor 3 ligada...
+;TCC_5.c,921 :: 		}                                              //end if temp_ligado3==mult3
+L_timebase3200:
+;TCC_5.c,923 :: 		if(atv_mot3)                                   //se ativação do motor 3 ligada...
 	BTFSS       _atv_mot3+0, BitPos(_atv_mot3+0) 
-	GOTO        L_timebase3195
-;TCC_5.c,912 :: 		read_motbits();                               //executa a leitura dos bits de controle dos motores
+	GOTO        L_timebase3201
+;TCC_5.c,925 :: 		read_motbits();                               //executa a leitura dos bits de controle dos motores
 	CALL        _read_motbits+0, 0
-;TCC_5.c,914 :: 		}                                              //end if atv_mot3
-	GOTO        L_timebase3196
-L_timebase3195:
-;TCC_5.c,918 :: 		alarme();                                     //aciona o alarme
+;TCC_5.c,927 :: 		}                                              //end if atv_mot3
+	GOTO        L_timebase3202
+L_timebase3201:
+;TCC_5.c,931 :: 		alarme();                                     //aciona o alarme
 	CALL        _alarme+0, 0
-;TCC_5.c,920 :: 		}                                              //end else
-L_timebase3196:
-;TCC_5.c,922 :: 		}                                               //end if ligar && num3!=0
-L_timebase3192:
-;TCC_5.c,924 :: 		}                                                 //end timebase3()
+;TCC_5.c,933 :: 		}                                              //end else
+L_timebase3202:
+;TCC_5.c,935 :: 		}                                               //end if ligar && num3!=0
+L_timebase3198:
+;TCC_5.c,937 :: 		}                                                 //end timebase3()
 L_end_timebase3:
 	RETURN      0
 ; end of _timebase3
 
 _alarme:
 
-;TCC_5.c,930 :: 		void alarme()
-;TCC_5.c,932 :: 		if(toque || toque2 || toque3)                    //se toque, toque2 ou toque3 for 1
+;TCC_5.c,943 :: 		void alarme()
+;TCC_5.c,945 :: 		if(toque || toque2 || toque3)                    //se toque, toque2 ou toque3 for 1
 	BTFSC       _toque+0, BitPos(_toque+0) 
-	GOTO        L__alarme284
+	GOTO        L__alarme291
 	BTFSC       _toque2+0, BitPos(_toque2+0) 
-	GOTO        L__alarme284
+	GOTO        L__alarme291
 	BTFSC       _toque3+0, BitPos(_toque3+0) 
-	GOTO        L__alarme284
-	GOTO        L_alarme199
-L__alarme284:
-;TCC_5.c,934 :: 		if(vezes <10)                                  //se vezes for menor que 10
+	GOTO        L__alarme291
+	GOTO        L_alarme205
+L__alarme291:
+;TCC_5.c,947 :: 		if(vezes <200)                                 //se vezes for menor que 200 (toca por 1 minuto)
 	MOVLW       0
 	SUBWF       _vezes+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__alarme402
-	MOVLW       10
+	GOTO        L__alarme409
+	MOVLW       200
 	SUBWF       _vezes+0, 0 
-L__alarme402:
+L__alarme409:
 	BTFSC       STATUS+0, 0 
-	GOTO        L_alarme200
-;TCC_5.c,936 :: 		toca_som();                                   //executa a toca do SOM
+	GOTO        L_alarme206
+;TCC_5.c,949 :: 		toca_som();                                   //executa a toca do SOM
 	CALL        _toca_som+0, 0
-;TCC_5.c,938 :: 		}                                              //end if vezes<10
-	GOTO        L_alarme201
-L_alarme200:
-;TCC_5.c,942 :: 		if(toque)                                     //se toque for 1
+;TCC_5.c,950 :: 		}                                              //end if vezes<10
+	GOTO        L_alarme207
+L_alarme206:
+;TCC_5.c,954 :: 		if(toque)                                     //se toque for 1
 	BTFSS       _toque+0, BitPos(_toque+0) 
-	GOTO        L_alarme202
-;TCC_5.c,944 :: 		toque=0x00;                                  //limpa o bit toque
+	GOTO        L_alarme208
+;TCC_5.c,956 :: 		toque=0x00;                                  //limpa o bit toque
 	BCF         _toque+0, BitPos(_toque+0) 
-;TCC_5.c,945 :: 		temp_ligado=0x00;                            //zera temp_ligado para recomeçar a contagem
+;TCC_5.c,957 :: 		temp_ligado=0x00;                            //zera temp_ligado para recomeçar a contagem
 	CLRF        _temp_ligado+0 
 	CLRF        _temp_ligado+1 
-;TCC_5.c,947 :: 		}                                             //end if toque
-L_alarme202:
-;TCC_5.c,949 :: 		if(toque2)                                    //se toque2 for 1
+;TCC_5.c,959 :: 		}                                             //end if toque
+L_alarme208:
+;TCC_5.c,961 :: 		if(toque2)                                    //se toque2 for 1
 	BTFSS       _toque2+0, BitPos(_toque2+0) 
-	GOTO        L_alarme203
-;TCC_5.c,951 :: 		toque2=0x00;                                 //limpa o bit toque 2
+	GOTO        L_alarme209
+;TCC_5.c,963 :: 		toque2=0x00;                                 //limpa o bit toque 2
 	BCF         _toque2+0, BitPos(_toque2+0) 
-;TCC_5.c,952 :: 		temp_ligado2=0x00;                           //zera temp_ligado2 para recomeçar a contagem
+;TCC_5.c,964 :: 		temp_ligado2=0x00;                           //zera temp_ligado2 para recomeçar a contagem
 	CLRF        _temp_ligado2+0 
 	CLRF        _temp_ligado2+1 
-;TCC_5.c,954 :: 		}                                             //end if toque2
-L_alarme203:
-;TCC_5.c,956 :: 		if(toque3)                                    //se toque2 for 1
+;TCC_5.c,966 :: 		}                                             //end if toque2
+L_alarme209:
+;TCC_5.c,968 :: 		if(toque3)                                    //se toque2 for 1
 	BTFSS       _toque3+0, BitPos(_toque3+0) 
-	GOTO        L_alarme204
-;TCC_5.c,958 :: 		toque3=0x00;                                 //limpa o bit toque3
+	GOTO        L_alarme210
+;TCC_5.c,970 :: 		toque3=0x00;                                 //limpa o bit toque3
 	BCF         _toque3+0, BitPos(_toque3+0) 
-;TCC_5.c,959 :: 		temp_ligado3=0x00;                           //zera temp_ligado3 para recomeçar a contagem
+;TCC_5.c,971 :: 		temp_ligado3=0x00;                           //zera temp_ligado3 para recomeçar a contagem
 	CLRF        _temp_ligado3+0 
 	CLRF        _temp_ligado3+1 
-;TCC_5.c,961 :: 		}                                             //end if toque3
-L_alarme204:
-;TCC_5.c,963 :: 		vezes=0x00;                                  //zera vezes
+;TCC_5.c,973 :: 		}                                             //end if toque3
+L_alarme210:
+;TCC_5.c,975 :: 		vezes=0x00;                                  //zera vezes
 	CLRF        _vezes+0 
 	CLRF        _vezes+1 
-;TCC_5.c,964 :: 		SOM = 0x00;                                  //desliga o som
+;TCC_5.c,976 :: 		SOM = 0x00;                                  //desliga o som
 	BCF         PORTA+0, 2 
-;TCC_5.c,966 :: 		}                                              //end else
-L_alarme201:
-;TCC_5.c,968 :: 		}                                                //end if toque || toque2 || toque3
-L_alarme199:
-;TCC_5.c,970 :: 		}                                                 //end alarme()
+;TCC_5.c,978 :: 		}                                              //end else
+L_alarme207:
+;TCC_5.c,980 :: 		}                                                //end if toque || toque2 || toque3
+L_alarme205:
+;TCC_5.c,982 :: 		}                                                 //end alarme()
 L_end_alarme:
 	RETURN      0
 ; end of _alarme
 
 _toca_som:
 
-;TCC_5.c,976 :: 		void toca_som()
-;TCC_5.c,978 :: 		if(temp_som>3) temp_som=0x00;                    //se temp_som for maior que 3, zera temp_som
+;TCC_5.c,988 :: 		void toca_som()
+;TCC_5.c,990 :: 		if(temp_som>3) temp_som=0x00;                    //se temp_som for maior que 3, zera temp_som
 	MOVLW       0
 	MOVWF       R0 
 	MOVF        _temp_som+1, 0 
 	SUBWF       R0, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__toca_som404
+	GOTO        L__toca_som411
 	MOVF        _temp_som+0, 0 
 	SUBLW       3
-L__toca_som404:
+L__toca_som411:
 	BTFSC       STATUS+0, 0 
-	GOTO        L_toca_som205
+	GOTO        L_toca_som211
 	CLRF        _temp_som+0 
 	CLRF        _temp_som+1 
-L_toca_som205:
-;TCC_5.c,979 :: 		if(temp_som==3)                               //conta 300 milisegundos...
+L_toca_som211:
+;TCC_5.c,991 :: 		if(temp_som==3)                               //conta 300 milisegundos...
 	MOVLW       0
 	XORWF       _temp_som+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__toca_som405
+	GOTO        L__toca_som412
 	MOVLW       3
 	XORWF       _temp_som+0, 0 
-L__toca_som405:
+L__toca_som412:
 	BTFSS       STATUS+0, 2 
-	GOTO        L_toca_som206
-;TCC_5.c,981 :: 		temp_som = 0x00;                             //zera temp_som
+	GOTO        L_toca_som212
+;TCC_5.c,993 :: 		temp_som = 0x00;                             //zera temp_som
 	CLRF        _temp_som+0 
 	CLRF        _temp_som+1 
-;TCC_5.c,982 :: 		SOM = ~SOM;                                  //inverte o estado do buzzer
+;TCC_5.c,994 :: 		SOM = ~SOM;                                  //inverte o estado do buzzer
 	BTG         PORTA+0, 2 
-;TCC_5.c,983 :: 		vezes++;                                     //incrementa vezes
+;TCC_5.c,995 :: 		vezes++;                                     //incrementa vezes
 	INFSNZ      _vezes+0, 1 
 	INCF        _vezes+1, 1 
-;TCC_5.c,985 :: 		if(!ligar)                                   //se ligar for 0 (desligado)
+;TCC_5.c,997 :: 		if(!ligar)                                   //se ligar for 0 (desligado)
 	BTFSC       _ligar+0, BitPos(_ligar+0) 
-	GOTO        L_toca_som207
-;TCC_5.c,987 :: 		vezes = 0x00;                               //zera vezes
+	GOTO        L_toca_som213
+;TCC_5.c,999 :: 		vezes = 0x00;                               //zera vezes
 	CLRF        _vezes+0 
 	CLRF        _vezes+1 
-;TCC_5.c,988 :: 		SOM   = 0x00;                               //desliga o buzzer
+;TCC_5.c,1000 :: 		SOM   = 0x00;                               //desliga o buzzer
 	BCF         PORTA+0, 2 
-;TCC_5.c,990 :: 		}                                            //end if !ligar
-L_toca_som207:
-;TCC_5.c,992 :: 		}                                             //end if temp_som==3
-L_toca_som206:
-;TCC_5.c,994 :: 		}                                                 //end toca_som()
+;TCC_5.c,1002 :: 		}                                            //end if !ligar
+L_toca_som213:
+;TCC_5.c,1004 :: 		}                                             //end if temp_som==3
+L_toca_som212:
+;TCC_5.c,1006 :: 		}                                                 //end toca_som()
 L_end_toca_som:
 	RETURN      0
 ; end of _toca_som
 
 _abre_mot:
 
-;TCC_5.c,1001 :: 		void abre_mot()
-;TCC_5.c,1003 :: 		open_bit  = 0x01;                                //seta bit de abertura
+;TCC_5.c,1013 :: 		void abre_mot()
+;TCC_5.c,1015 :: 		open_bit  = 0x01;                                //seta bit de abertura
 	BSF         _open_bit+0, BitPos(_open_bit+0) 
-;TCC_5.c,1004 :: 		close_bit = 0x00;                                //limpa bit de fechamento
+;TCC_5.c,1016 :: 		close_bit = 0x00;                                //limpa bit de fechamento
 	BCF         _close_bit+0, BitPos(_close_bit+0) 
-;TCC_5.c,1005 :: 		x_mot     = 0x00;                                //zera x_mot
+;TCC_5.c,1017 :: 		x_mot     = 0x00;                                //zera x_mot
 	CLRF        _x_mot+0 
 	CLRF        _x_mot+1 
-;TCC_5.c,1007 :: 		}                                                 //end abre_mot()
+;TCC_5.c,1019 :: 		}                                                 //end abre_mot()
 L_end_abre_mot:
 	RETURN      0
 ; end of _abre_mot
 
 _abre_mot2:
 
-;TCC_5.c,1014 :: 		void abre_mot2()
-;TCC_5.c,1016 :: 		open_bit2  = 0x01;                               //seta bit de abertura
+;TCC_5.c,1026 :: 		void abre_mot2()
+;TCC_5.c,1028 :: 		open_bit2  = 0x01;                               //seta bit de abertura
 	BSF         _open_bit2+0, BitPos(_open_bit2+0) 
-;TCC_5.c,1017 :: 		close_bit2 = 0x00;                               //limpa bit de fechamento
+;TCC_5.c,1029 :: 		close_bit2 = 0x00;                               //limpa bit de fechamento
 	BCF         _close_bit2+0, BitPos(_close_bit2+0) 
-;TCC_5.c,1018 :: 		x_mot2     = 0x00;                               //zera x_mot
+;TCC_5.c,1030 :: 		x_mot2     = 0x00;                               //zera x_mot
 	CLRF        _x_mot2+0 
 	CLRF        _x_mot2+1 
-;TCC_5.c,1020 :: 		}                                                 //end abre_mot2()
+;TCC_5.c,1032 :: 		}                                                 //end abre_mot2()
 L_end_abre_mot2:
 	RETURN      0
 ; end of _abre_mot2
 
 _abre_mot3:
 
-;TCC_5.c,1027 :: 		void abre_mot3()
-;TCC_5.c,1029 :: 		open_bit3  = 0x01;                               //seta bit de abertura
+;TCC_5.c,1039 :: 		void abre_mot3()
+;TCC_5.c,1041 :: 		open_bit3  = 0x01;                               //seta bit de abertura
 	BSF         _open_bit3+0, BitPos(_open_bit3+0) 
-;TCC_5.c,1030 :: 		close_bit3 = 0x00;                               //limpa bit de fechamento
+;TCC_5.c,1042 :: 		close_bit3 = 0x00;                               //limpa bit de fechamento
 	BCF         _close_bit3+0, BitPos(_close_bit3+0) 
-;TCC_5.c,1031 :: 		x_mot3     = 0x00;                               //zera x_mot
+;TCC_5.c,1043 :: 		x_mot3     = 0x00;                               //zera x_mot
 	CLRF        _x_mot3+0 
 	CLRF        _x_mot3+1 
-;TCC_5.c,1033 :: 		}                                                 //end abre_mot3()
+;TCC_5.c,1045 :: 		}                                                 //end abre_mot3()
 L_end_abre_mot3:
 	RETURN      0
 ; end of _abre_mot3
 
 _mot_aberto:
 
-;TCC_5.c,1039 :: 		void mot_aberto()
-;TCC_5.c,1041 :: 		if(x_mot<10)                                     //se x_mot for menor que 10...
+;TCC_5.c,1051 :: 		void mot_aberto()
+;TCC_5.c,1053 :: 		if(x_mot<10)                                     //se x_mot for menor que 10...
 	MOVLW       0
 	SUBWF       _x_mot+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__mot_aberto410
+	GOTO        L__mot_aberto417
 	MOVLW       10
 	SUBWF       _x_mot+0, 0 
-L__mot_aberto410:
+L__mot_aberto417:
 	BTFSC       STATUS+0, 0 
-	GOTO        L_mot_aberto208
-;TCC_5.c,1043 :: 		SM=0;                                         //  ||
+	GOTO        L_mot_aberto214
+;TCC_5.c,1055 :: 		SM=0;                                         //  ||
 	BCF         PORTA+0, 1 
-;TCC_5.c,1044 :: 		delay_us(18000);                              //  ||
+;TCC_5.c,1056 :: 		delay_us(18000);                              //  ||
 	MOVLW       47
 	MOVWF       R12, 0
 	MOVLW       191
 	MOVWF       R13, 0
-L_mot_aberto209:
+L_mot_aberto215:
 	DECFSZ      R13, 1, 1
-	BRA         L_mot_aberto209
+	BRA         L_mot_aberto215
 	DECFSZ      R12, 1, 1
-	BRA         L_mot_aberto209
+	BRA         L_mot_aberto215
 	NOP
 	NOP
-;TCC_5.c,1045 :: 		SM=1;                                         //  ||
+;TCC_5.c,1057 :: 		SM=1;                                         //  ||
 	BSF         PORTA+0, 1 
-;TCC_5.c,1046 :: 		delay_us(2000);                               //  \/
+;TCC_5.c,1058 :: 		delay_us(2000);                               //  \/
 	MOVLW       6
 	MOVWF       R12, 0
 	MOVLW       48
 	MOVWF       R13, 0
-L_mot_aberto210:
+L_mot_aberto216:
 	DECFSZ      R13, 1, 1
-	BRA         L_mot_aberto210
+	BRA         L_mot_aberto216
 	DECFSZ      R12, 1, 1
-	BRA         L_mot_aberto210
+	BRA         L_mot_aberto216
 	NOP
-;TCC_5.c,1047 :: 		SM=0;                                         // liga motor 1 no sentido horário
+;TCC_5.c,1059 :: 		SM=0;                                         // liga motor 1 no sentido horário
 	BCF         PORTA+0, 1 
-;TCC_5.c,1048 :: 		x_mot ++;                                     //incrementa x_mot
+;TCC_5.c,1060 :: 		x_mot ++;                                     //incrementa x_mot
 	INFSNZ      _x_mot+0, 1 
 	INCF        _x_mot+1, 1 
-;TCC_5.c,1050 :: 		}                                               //end if x_mot<10
-L_mot_aberto208:
-;TCC_5.c,1052 :: 		if(x_mot == 10)                                 //se x_mot for 10...
+;TCC_5.c,1062 :: 		}                                               //end if x_mot<10
+L_mot_aberto214:
+;TCC_5.c,1064 :: 		if(x_mot == 10)                                 //se x_mot for 10...
 	MOVLW       0
 	XORWF       _x_mot+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__mot_aberto411
+	GOTO        L__mot_aberto418
 	MOVLW       10
 	XORWF       _x_mot+0, 0 
-L__mot_aberto411:
+L__mot_aberto418:
 	BTFSS       STATUS+0, 2 
-	GOTO        L_mot_aberto211
-;TCC_5.c,1054 :: 		fecha_mot();                                  //executa a configuração dos bits de controle do motor 1 para fechar
+	GOTO        L_mot_aberto217
+;TCC_5.c,1066 :: 		fecha_mot();                                  //executa a configuração dos bits de controle do motor 1 para fechar
 	CALL        _fecha_mot+0, 0
-;TCC_5.c,1056 :: 		}                                              //end if x_mot==10
-L_mot_aberto211:
-;TCC_5.c,1058 :: 		}                                                 //end mot_aberto()
+;TCC_5.c,1068 :: 		}                                              //end if x_mot==10
+L_mot_aberto217:
+;TCC_5.c,1070 :: 		}                                                 //end mot_aberto()
 L_end_mot_aberto:
 	RETURN      0
 ; end of _mot_aberto
 
 _mot_aberto2:
 
-;TCC_5.c,1064 :: 		void mot_aberto2()
-;TCC_5.c,1066 :: 		if(x_mot2<10)                                    //se x_mot2 for menor que 10...
+;TCC_5.c,1076 :: 		void mot_aberto2()
+;TCC_5.c,1078 :: 		if(x_mot2<10)                                    //se x_mot2 for menor que 10...
 	MOVLW       0
 	SUBWF       _x_mot2+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__mot_aberto2413
+	GOTO        L__mot_aberto2420
 	MOVLW       10
 	SUBWF       _x_mot2+0, 0 
-L__mot_aberto2413:
+L__mot_aberto2420:
 	BTFSC       STATUS+0, 0 
-	GOTO        L_mot_aberto2212
-;TCC_5.c,1068 :: 		SM2=0;                                        //  ||
+	GOTO        L_mot_aberto2218
+;TCC_5.c,1080 :: 		SM2=0;                                        //  ||
 	BCF         PORTA+0, 4 
-;TCC_5.c,1069 :: 		delay_us(18000);                              //  ||
+;TCC_5.c,1081 :: 		delay_us(18000);                              //  ||
 	MOVLW       47
 	MOVWF       R12, 0
 	MOVLW       191
 	MOVWF       R13, 0
-L_mot_aberto2213:
+L_mot_aberto2219:
 	DECFSZ      R13, 1, 1
-	BRA         L_mot_aberto2213
+	BRA         L_mot_aberto2219
 	DECFSZ      R12, 1, 1
-	BRA         L_mot_aberto2213
+	BRA         L_mot_aberto2219
 	NOP
 	NOP
-;TCC_5.c,1070 :: 		SM2=1;                                        //  ||
+;TCC_5.c,1082 :: 		SM2=1;                                        //  ||
 	BSF         PORTA+0, 4 
-;TCC_5.c,1071 :: 		delay_us(2000);                               //  \/
+;TCC_5.c,1083 :: 		delay_us(2000);                               //  \/
 	MOVLW       6
 	MOVWF       R12, 0
 	MOVLW       48
 	MOVWF       R13, 0
-L_mot_aberto2214:
+L_mot_aberto2220:
 	DECFSZ      R13, 1, 1
-	BRA         L_mot_aberto2214
+	BRA         L_mot_aberto2220
 	DECFSZ      R12, 1, 1
-	BRA         L_mot_aberto2214
+	BRA         L_mot_aberto2220
 	NOP
-;TCC_5.c,1072 :: 		SM2=0;                                        //liga motor 2 no sentido horário
+;TCC_5.c,1084 :: 		SM2=0;                                        //liga motor 2 no sentido horário
 	BCF         PORTA+0, 4 
-;TCC_5.c,1073 :: 		x_mot2 ++;                                    //incrementa x_mot2
+;TCC_5.c,1085 :: 		x_mot2 ++;                                    //incrementa x_mot2
 	INFSNZ      _x_mot2+0, 1 
 	INCF        _x_mot2+1, 1 
-;TCC_5.c,1075 :: 		}                                               //end if x_mot2<10
-L_mot_aberto2212:
-;TCC_5.c,1077 :: 		if(x_mot2 == 10)                                //se x_mot2 for 10...
+;TCC_5.c,1087 :: 		}                                               //end if x_mot2<10
+L_mot_aberto2218:
+;TCC_5.c,1089 :: 		if(x_mot2 == 10)                                //se x_mot2 for 10...
 	MOVLW       0
 	XORWF       _x_mot2+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__mot_aberto2414
+	GOTO        L__mot_aberto2421
 	MOVLW       10
 	XORWF       _x_mot2+0, 0 
-L__mot_aberto2414:
+L__mot_aberto2421:
 	BTFSS       STATUS+0, 2 
-	GOTO        L_mot_aberto2215
-;TCC_5.c,1079 :: 		fecha_mot2();                                 //executa a configuração dos bits de controle do motor 2 para fechar
+	GOTO        L_mot_aberto2221
+;TCC_5.c,1091 :: 		fecha_mot2();                                 //executa a configuração dos bits de controle do motor 2 para fechar
 	CALL        _fecha_mot2+0, 0
-;TCC_5.c,1081 :: 		}                                              //end if x_mot2==10
-L_mot_aberto2215:
-;TCC_5.c,1083 :: 		}                                                 //end mot_aberto2()
+;TCC_5.c,1093 :: 		}                                              //end if x_mot2==10
+L_mot_aberto2221:
+;TCC_5.c,1095 :: 		}                                                 //end mot_aberto2()
 L_end_mot_aberto2:
 	RETURN      0
 ; end of _mot_aberto2
 
 _mot_aberto3:
 
-;TCC_5.c,1089 :: 		void mot_aberto3()
-;TCC_5.c,1091 :: 		if(x_mot3<10)                                    //se x_mot3 for menor que 10...
+;TCC_5.c,1101 :: 		void mot_aberto3()
+;TCC_5.c,1103 :: 		if(x_mot3<10)                                    //se x_mot3 for menor que 10...
 	MOVLW       0
 	SUBWF       _x_mot3+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__mot_aberto3416
+	GOTO        L__mot_aberto3423
 	MOVLW       10
 	SUBWF       _x_mot3+0, 0 
-L__mot_aberto3416:
+L__mot_aberto3423:
 	BTFSC       STATUS+0, 0 
-	GOTO        L_mot_aberto3216
-;TCC_5.c,1093 :: 		SM3=0;                                        //  ||
+	GOTO        L_mot_aberto3222
+;TCC_5.c,1105 :: 		SM3=0;                                        //  ||
 	BCF         PORTA+0, 5 
-;TCC_5.c,1094 :: 		delay_us(18000);                              //  ||
+;TCC_5.c,1106 :: 		delay_us(18000);                              //  ||
 	MOVLW       47
 	MOVWF       R12, 0
 	MOVLW       191
 	MOVWF       R13, 0
-L_mot_aberto3217:
+L_mot_aberto3223:
 	DECFSZ      R13, 1, 1
-	BRA         L_mot_aberto3217
+	BRA         L_mot_aberto3223
 	DECFSZ      R12, 1, 1
-	BRA         L_mot_aberto3217
+	BRA         L_mot_aberto3223
 	NOP
 	NOP
-;TCC_5.c,1095 :: 		SM3=1;                                        //  ||
+;TCC_5.c,1107 :: 		SM3=1;                                        //  ||
 	BSF         PORTA+0, 5 
-;TCC_5.c,1096 :: 		delay_us(2000);                               //  \/
+;TCC_5.c,1108 :: 		delay_us(2000);                               //  \/
 	MOVLW       6
 	MOVWF       R12, 0
 	MOVLW       48
 	MOVWF       R13, 0
-L_mot_aberto3218:
+L_mot_aberto3224:
 	DECFSZ      R13, 1, 1
-	BRA         L_mot_aberto3218
+	BRA         L_mot_aberto3224
 	DECFSZ      R12, 1, 1
-	BRA         L_mot_aberto3218
+	BRA         L_mot_aberto3224
 	NOP
-;TCC_5.c,1097 :: 		SM3=0;                                        // liga motor 1 no sentido horário
+;TCC_5.c,1109 :: 		SM3=0;                                        // liga motor 1 no sentido horário
 	BCF         PORTA+0, 5 
-;TCC_5.c,1098 :: 		x_mot3 ++;                                    //incrementa x_mot3
+;TCC_5.c,1110 :: 		x_mot3 ++;                                    //incrementa x_mot3
 	INFSNZ      _x_mot3+0, 1 
 	INCF        _x_mot3+1, 1 
-;TCC_5.c,1100 :: 		}                                               //end if x_mot3<10
-L_mot_aberto3216:
-;TCC_5.c,1102 :: 		if(x_mot3 == 10)                                //se x_mot3 for 10...
+;TCC_5.c,1112 :: 		}                                               //end if x_mot3<10
+L_mot_aberto3222:
+;TCC_5.c,1114 :: 		if(x_mot3 == 10)                                //se x_mot3 for 10...
 	MOVLW       0
 	XORWF       _x_mot3+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__mot_aberto3417
+	GOTO        L__mot_aberto3424
 	MOVLW       10
 	XORWF       _x_mot3+0, 0 
-L__mot_aberto3417:
+L__mot_aberto3424:
 	BTFSS       STATUS+0, 2 
-	GOTO        L_mot_aberto3219
-;TCC_5.c,1104 :: 		fecha_mot3();                                 //executa a configuração dos bits de controle do motor 3 para fechar
+	GOTO        L_mot_aberto3225
+;TCC_5.c,1116 :: 		fecha_mot3();                                 //executa a configuração dos bits de controle do motor 3 para fechar
 	CALL        _fecha_mot3+0, 0
-;TCC_5.c,1106 :: 		}                                              //end if x_mot3==10
-L_mot_aberto3219:
-;TCC_5.c,1108 :: 		}                                                 //end mot_aberto3()
+;TCC_5.c,1118 :: 		}                                              //end if x_mot3==10
+L_mot_aberto3225:
+;TCC_5.c,1120 :: 		}                                                 //end mot_aberto3()
 L_end_mot_aberto3:
 	RETURN      0
 ; end of _mot_aberto3
 
 _fecha_mot:
 
-;TCC_5.c,1115 :: 		void fecha_mot()
-;TCC_5.c,1117 :: 		open_bit  = 0x00;                                //limpa o bit de abertura
+;TCC_5.c,1127 :: 		void fecha_mot()
+;TCC_5.c,1129 :: 		open_bit  = 0x00;                                //limpa o bit de abertura
 	BCF         _open_bit+0, BitPos(_open_bit+0) 
-;TCC_5.c,1118 :: 		close_bit = 0x01;                                //seta o bit de fechamento
+;TCC_5.c,1130 :: 		close_bit = 0x01;                                //seta o bit de fechamento
 	BSF         _close_bit+0, BitPos(_close_bit+0) 
-;TCC_5.c,1119 :: 		x_mot     = 0x00;                                //zera x_mot
+;TCC_5.c,1131 :: 		x_mot     = 0x00;                                //zera x_mot
 	CLRF        _x_mot+0 
 	CLRF        _x_mot+1 
-;TCC_5.c,1121 :: 		}                                                 //end fecha_mot()
+;TCC_5.c,1133 :: 		}                                                 //end fecha_mot()
 L_end_fecha_mot:
 	RETURN      0
 ; end of _fecha_mot
 
 _fecha_mot2:
 
-;TCC_5.c,1128 :: 		void fecha_mot2()
-;TCC_5.c,1130 :: 		open_bit2  = 0x00;                               //limpa o bit de abertura
+;TCC_5.c,1140 :: 		void fecha_mot2()
+;TCC_5.c,1142 :: 		open_bit2  = 0x00;                               //limpa o bit de abertura
 	BCF         _open_bit2+0, BitPos(_open_bit2+0) 
-;TCC_5.c,1131 :: 		close_bit2 = 0x01;                               //seta o bit de fechamento
+;TCC_5.c,1143 :: 		close_bit2 = 0x01;                               //seta o bit de fechamento
 	BSF         _close_bit2+0, BitPos(_close_bit2+0) 
-;TCC_5.c,1132 :: 		x_mot2     = 0x00;                               //zera x_mot2
+;TCC_5.c,1144 :: 		x_mot2     = 0x00;                               //zera x_mot2
 	CLRF        _x_mot2+0 
 	CLRF        _x_mot2+1 
-;TCC_5.c,1134 :: 		}                                                 //end fecha_mot2()
+;TCC_5.c,1146 :: 		}                                                 //end fecha_mot2()
 L_end_fecha_mot2:
 	RETURN      0
 ; end of _fecha_mot2
 
 _fecha_mot3:
 
-;TCC_5.c,1141 :: 		void fecha_mot3()
-;TCC_5.c,1143 :: 		open_bit3  = 0x00;                               //limpa o bit de abertura
+;TCC_5.c,1153 :: 		void fecha_mot3()
+;TCC_5.c,1155 :: 		open_bit3  = 0x00;                               //limpa o bit de abertura
 	BCF         _open_bit3+0, BitPos(_open_bit3+0) 
-;TCC_5.c,1144 :: 		close_bit3 = 0x01;                               //seta o bit de fechamento
+;TCC_5.c,1156 :: 		close_bit3 = 0x01;                               //seta o bit de fechamento
 	BSF         _close_bit3+0, BitPos(_close_bit3+0) 
-;TCC_5.c,1145 :: 		x_mot3     = 0x00;                               //zera x_mot3
+;TCC_5.c,1157 :: 		x_mot3     = 0x00;                               //zera x_mot3
 	CLRF        _x_mot3+0 
 	CLRF        _x_mot3+1 
-;TCC_5.c,1147 :: 		}                                                 //end fecha_mot3()
+;TCC_5.c,1159 :: 		}                                                 //end fecha_mot3()
 L_end_fecha_mot3:
 	RETURN      0
 ; end of _fecha_mot3
 
 _mot_fechado:
 
-;TCC_5.c,1153 :: 		void mot_fechado()
-;TCC_5.c,1155 :: 		if(x_mot<10)                                     //se x_mot for menor que 10
+;TCC_5.c,1165 :: 		void mot_fechado()
+;TCC_5.c,1167 :: 		if(x_mot<10)                                     //se x_mot for menor que 10
 	MOVLW       0
 	SUBWF       _x_mot+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__mot_fechado422
+	GOTO        L__mot_fechado429
 	MOVLW       10
 	SUBWF       _x_mot+0, 0 
-L__mot_fechado422:
+L__mot_fechado429:
 	BTFSC       STATUS+0, 0 
-	GOTO        L_mot_fechado220
-;TCC_5.c,1157 :: 		SM=0;                                         //  ||
+	GOTO        L_mot_fechado226
+;TCC_5.c,1169 :: 		SM=0;                                         //  ||
 	BCF         PORTA+0, 1 
-;TCC_5.c,1158 :: 		delay_us(18500);                              //  ||
+;TCC_5.c,1170 :: 		delay_us(18500);                              //  ||
 	MOVLW       49
 	MOVWF       R12, 0
 	MOVLW       11
 	MOVWF       R13, 0
-L_mot_fechado221:
+L_mot_fechado227:
 	DECFSZ      R13, 1, 1
-	BRA         L_mot_fechado221
+	BRA         L_mot_fechado227
 	DECFSZ      R12, 1, 1
-	BRA         L_mot_fechado221
+	BRA         L_mot_fechado227
 	NOP
 	NOP
-;TCC_5.c,1159 :: 		SM=1;                                         //  ||
+;TCC_5.c,1171 :: 		SM=1;                                         //  ||
 	BSF         PORTA+0, 1 
-;TCC_5.c,1160 :: 		delay_us(1500);                               //  \/
+;TCC_5.c,1172 :: 		delay_us(1500);                               //  \/
 	MOVLW       4
 	MOVWF       R12, 0
 	MOVLW       228
 	MOVWF       R13, 0
-L_mot_fechado222:
+L_mot_fechado228:
 	DECFSZ      R13, 1, 1
-	BRA         L_mot_fechado222
+	BRA         L_mot_fechado228
 	DECFSZ      R12, 1, 1
-	BRA         L_mot_fechado222
+	BRA         L_mot_fechado228
 	NOP
-;TCC_5.c,1161 :: 		SM=0;                                         //leva o motor para a posição inicial
+;TCC_5.c,1173 :: 		SM=0;                                         //leva o motor para a posição inicial
 	BCF         PORTA+0, 1 
-;TCC_5.c,1162 :: 		x_mot++;                                      //incrementa x_mot
+;TCC_5.c,1174 :: 		x_mot++;                                      //incrementa x_mot
 	INFSNZ      _x_mot+0, 1 
 	INCF        _x_mot+1, 1 
-;TCC_5.c,1164 :: 		}                                               //end if x_mot<10
-L_mot_fechado220:
-;TCC_5.c,1166 :: 		if(x_mot==10)                                   //se x_mot for 10
+;TCC_5.c,1176 :: 		}                                               //end if x_mot<10
+L_mot_fechado226:
+;TCC_5.c,1178 :: 		if(x_mot==10)                                   //se x_mot for 10
 	MOVLW       0
 	XORWF       _x_mot+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__mot_fechado423
+	GOTO        L__mot_fechado430
 	MOVLW       10
 	XORWF       _x_mot+0, 0 
-L__mot_fechado423:
+L__mot_fechado430:
 	BTFSS       STATUS+0, 2 
-	GOTO        L_mot_fechado223
-;TCC_5.c,1168 :: 		close_bit = 0x00;                            //limpa o bit de fechamento
+	GOTO        L_mot_fechado229
+;TCC_5.c,1180 :: 		close_bit = 0x00;                            //limpa o bit de fechamento
 	BCF         _close_bit+0, BitPos(_close_bit+0) 
-;TCC_5.c,1170 :: 		}                                             //end if x_mot==10
-L_mot_fechado223:
-;TCC_5.c,1172 :: 		}                                                 //end mot_fechado
+;TCC_5.c,1182 :: 		}                                             //end if x_mot==10
+L_mot_fechado229:
+;TCC_5.c,1184 :: 		}                                                 //end mot_fechado
 L_end_mot_fechado:
 	RETURN      0
 ; end of _mot_fechado
 
 _mot_fechado2:
 
-;TCC_5.c,1178 :: 		void mot_fechado2()
-;TCC_5.c,1180 :: 		if(x_mot2<10)                                   //se x_mot2 for menor que 10
+;TCC_5.c,1190 :: 		void mot_fechado2()
+;TCC_5.c,1192 :: 		if(x_mot2<10)                                   //se x_mot2 for menor que 10
 	MOVLW       0
 	SUBWF       _x_mot2+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__mot_fechado2425
+	GOTO        L__mot_fechado2432
 	MOVLW       10
 	SUBWF       _x_mot2+0, 0 
-L__mot_fechado2425:
+L__mot_fechado2432:
 	BTFSC       STATUS+0, 0 
-	GOTO        L_mot_fechado2224
-;TCC_5.c,1182 :: 		SM2=0;                                        //  ||
+	GOTO        L_mot_fechado2230
+;TCC_5.c,1194 :: 		SM2=0;                                        //  ||
 	BCF         PORTA+0, 4 
-;TCC_5.c,1183 :: 		delay_us(18500);                              //  ||
+;TCC_5.c,1195 :: 		delay_us(18500);                              //  ||
 	MOVLW       49
 	MOVWF       R12, 0
 	MOVLW       11
 	MOVWF       R13, 0
-L_mot_fechado2225:
+L_mot_fechado2231:
 	DECFSZ      R13, 1, 1
-	BRA         L_mot_fechado2225
+	BRA         L_mot_fechado2231
 	DECFSZ      R12, 1, 1
-	BRA         L_mot_fechado2225
+	BRA         L_mot_fechado2231
 	NOP
 	NOP
-;TCC_5.c,1184 :: 		SM2=1;                                        //  ||
+;TCC_5.c,1196 :: 		SM2=1;                                        //  ||
 	BSF         PORTA+0, 4 
-;TCC_5.c,1185 :: 		delay_us(1500);                               //  \/
+;TCC_5.c,1197 :: 		delay_us(1500);                               //  \/
 	MOVLW       4
 	MOVWF       R12, 0
 	MOVLW       228
 	MOVWF       R13, 0
-L_mot_fechado2226:
+L_mot_fechado2232:
 	DECFSZ      R13, 1, 1
-	BRA         L_mot_fechado2226
+	BRA         L_mot_fechado2232
 	DECFSZ      R12, 1, 1
-	BRA         L_mot_fechado2226
+	BRA         L_mot_fechado2232
 	NOP
-;TCC_5.c,1186 :: 		SM2=0;                                        //leva o motor 2 para a posição inicial
+;TCC_5.c,1198 :: 		SM2=0;                                        //leva o motor 2 para a posição inicial
 	BCF         PORTA+0, 4 
-;TCC_5.c,1187 :: 		x_mot2++;                                     //incrementa x_mot2
+;TCC_5.c,1199 :: 		x_mot2++;                                     //incrementa x_mot2
 	INFSNZ      _x_mot2+0, 1 
 	INCF        _x_mot2+1, 1 
-;TCC_5.c,1189 :: 		}                                               //end if x_mot2<10
-L_mot_fechado2224:
-;TCC_5.c,1191 :: 		if(x_mot2==10)                                  //se x_mot2 for 10
+;TCC_5.c,1201 :: 		}                                               //end if x_mot2<10
+L_mot_fechado2230:
+;TCC_5.c,1203 :: 		if(x_mot2==10)                                  //se x_mot2 for 10
 	MOVLW       0
 	XORWF       _x_mot2+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__mot_fechado2426
+	GOTO        L__mot_fechado2433
 	MOVLW       10
 	XORWF       _x_mot2+0, 0 
-L__mot_fechado2426:
+L__mot_fechado2433:
 	BTFSS       STATUS+0, 2 
-	GOTO        L_mot_fechado2227
-;TCC_5.c,1193 :: 		close_bit2 = 0x00;                           //limpa o bit de fechamento
+	GOTO        L_mot_fechado2233
+;TCC_5.c,1205 :: 		close_bit2 = 0x00;                           //limpa o bit de fechamento
 	BCF         _close_bit2+0, BitPos(_close_bit2+0) 
-;TCC_5.c,1195 :: 		}                                             //end if x_mot2==10
-L_mot_fechado2227:
-;TCC_5.c,1197 :: 		}                                                 //end mot_fechado2()
+;TCC_5.c,1207 :: 		}                                             //end if x_mot2==10
+L_mot_fechado2233:
+;TCC_5.c,1209 :: 		}                                                 //end mot_fechado2()
 L_end_mot_fechado2:
 	RETURN      0
 ; end of _mot_fechado2
 
 _mot_fechado3:
 
-;TCC_5.c,1203 :: 		void mot_fechado3()
-;TCC_5.c,1205 :: 		if(x_mot3<10)                                   //se x_mot3 for menor que 10
+;TCC_5.c,1215 :: 		void mot_fechado3()
+;TCC_5.c,1217 :: 		if(x_mot3<10)                                   //se x_mot3 for menor que 10
 	MOVLW       0
 	SUBWF       _x_mot3+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__mot_fechado3428
+	GOTO        L__mot_fechado3435
 	MOVLW       10
 	SUBWF       _x_mot3+0, 0 
-L__mot_fechado3428:
+L__mot_fechado3435:
 	BTFSC       STATUS+0, 0 
-	GOTO        L_mot_fechado3228
-;TCC_5.c,1207 :: 		SM3=0;                                        //  ||
+	GOTO        L_mot_fechado3234
+;TCC_5.c,1219 :: 		SM3=0;                                        //  ||
 	BCF         PORTA+0, 5 
-;TCC_5.c,1208 :: 		delay_us(18500);                              //  ||
+;TCC_5.c,1220 :: 		delay_us(18500);                              //  ||
 	MOVLW       49
 	MOVWF       R12, 0
 	MOVLW       11
 	MOVWF       R13, 0
-L_mot_fechado3229:
+L_mot_fechado3235:
 	DECFSZ      R13, 1, 1
-	BRA         L_mot_fechado3229
+	BRA         L_mot_fechado3235
 	DECFSZ      R12, 1, 1
-	BRA         L_mot_fechado3229
+	BRA         L_mot_fechado3235
 	NOP
 	NOP
-;TCC_5.c,1209 :: 		SM3=1;                                        //  ||
+;TCC_5.c,1221 :: 		SM3=1;                                        //  ||
 	BSF         PORTA+0, 5 
-;TCC_5.c,1210 :: 		delay_us(1500);                               //  \/
+;TCC_5.c,1222 :: 		delay_us(1500);                               //  \/
 	MOVLW       4
 	MOVWF       R12, 0
 	MOVLW       228
 	MOVWF       R13, 0
-L_mot_fechado3230:
+L_mot_fechado3236:
 	DECFSZ      R13, 1, 1
-	BRA         L_mot_fechado3230
+	BRA         L_mot_fechado3236
 	DECFSZ      R12, 1, 1
-	BRA         L_mot_fechado3230
+	BRA         L_mot_fechado3236
 	NOP
-;TCC_5.c,1211 :: 		SM3=0;                                        //leva o motor 3 para a posição inicial
+;TCC_5.c,1223 :: 		SM3=0;                                        //leva o motor 3 para a posição inicial
 	BCF         PORTA+0, 5 
-;TCC_5.c,1212 :: 		x_mot3++;                                     //incrementa x_mot3
+;TCC_5.c,1224 :: 		x_mot3++;                                     //incrementa x_mot3
 	INFSNZ      _x_mot3+0, 1 
 	INCF        _x_mot3+1, 1 
-;TCC_5.c,1214 :: 		}                                               //end if x_mot2<10
-L_mot_fechado3228:
-;TCC_5.c,1216 :: 		if(x_mot3==10)                                  //se x_mot3 for 10
+;TCC_5.c,1226 :: 		}                                               //end if x_mot2<10
+L_mot_fechado3234:
+;TCC_5.c,1228 :: 		if(x_mot3==10)                                  //se x_mot3 for 10
 	MOVLW       0
 	XORWF       _x_mot3+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__mot_fechado3429
+	GOTO        L__mot_fechado3436
 	MOVLW       10
 	XORWF       _x_mot3+0, 0 
-L__mot_fechado3429:
+L__mot_fechado3436:
 	BTFSS       STATUS+0, 2 
-	GOTO        L_mot_fechado3231
-;TCC_5.c,1218 :: 		close_bit3 = 0x00;                           //limpa o bit de fechamento
+	GOTO        L_mot_fechado3237
+;TCC_5.c,1230 :: 		close_bit3 = 0x00;                           //limpa o bit de fechamento
 	BCF         _close_bit3+0, BitPos(_close_bit3+0) 
-;TCC_5.c,1220 :: 		}                                             //end if x_mot3==10
-L_mot_fechado3231:
-;TCC_5.c,1222 :: 		}                                                 //end mot_fechado3()
+;TCC_5.c,1232 :: 		}                                             //end if x_mot3==10
+L_mot_fechado3237:
+;TCC_5.c,1234 :: 		}                                                 //end mot_fechado3()
 L_end_mot_fechado3:
 	RETURN      0
 ; end of _mot_fechado3
 
 _read_motbits:
 
-;TCC_5.c,1229 :: 		void read_motbits()
-;TCC_5.c,1231 :: 		if(!open_bit && !close_bit) atv_mot = 0x00;    //se os bits de abertura e fechamento do motor 1 forem 0,
+;TCC_5.c,1241 :: 		void read_motbits()
+;TCC_5.c,1243 :: 		if(!open_bit && !close_bit) atv_mot = 0x00;    //se os bits de abertura e fechamento do motor 1 forem 0,
 	BTFSC       _open_bit+0, BitPos(_open_bit+0) 
-	GOTO        L_read_motbits234
+	GOTO        L_read_motbits240
 	BTFSC       _close_bit+0, BitPos(_close_bit+0) 
-	GOTO        L_read_motbits234
-L__read_motbits293:
+	GOTO        L_read_motbits240
+L__read_motbits300:
 	BCF         _atv_mot+0, BitPos(_atv_mot+0) 
-L_read_motbits234:
-;TCC_5.c,1234 :: 		if(open_bit && !close_bit)                     //se o bit de abertura for 1 e o de fechamento for 0...
-	BTFSS       _open_bit+0, BitPos(_open_bit+0) 
-	GOTO        L_read_motbits237
-	BTFSC       _close_bit+0, BitPos(_close_bit+0) 
-	GOTO        L_read_motbits237
-L__read_motbits292:
-;TCC_5.c,1236 :: 		mot_aberto();                                 //executa a abertura do motor 1
-	CALL        _mot_aberto+0, 0
-;TCC_5.c,1238 :: 		}                                              //end if open_bit && !close_bit
-L_read_motbits237:
-;TCC_5.c,1240 :: 		if(!open_bit && close_bit)                     //se o bit de abertura for 0 e o de fechamento for 1...
-	BTFSC       _open_bit+0, BitPos(_open_bit+0) 
-	GOTO        L_read_motbits240
-	BTFSS       _close_bit+0, BitPos(_close_bit+0) 
-	GOTO        L_read_motbits240
-L__read_motbits291:
-;TCC_5.c,1242 :: 		mot_fechado();                                //executa o fechamento do motor 1
-	CALL        _mot_fechado+0, 0
-;TCC_5.c,1244 :: 		}                                              //end if !open_bit && close_bit
 L_read_motbits240:
-;TCC_5.c,1247 :: 		if(!open_bit2 && !close_bit2) atv_mot2 = 0x00; //se os bits de abertura e fechamento do motor 2 forem 0,
-	BTFSC       _open_bit2+0, BitPos(_open_bit2+0) 
+;TCC_5.c,1246 :: 		if(open_bit && !close_bit)                     //se o bit de abertura for 1 e o de fechamento for 0...
+	BTFSS       _open_bit+0, BitPos(_open_bit+0) 
 	GOTO        L_read_motbits243
-	BTFSC       _close_bit2+0, BitPos(_close_bit2+0) 
+	BTFSC       _close_bit+0, BitPos(_close_bit+0) 
 	GOTO        L_read_motbits243
-L__read_motbits290:
-	BCF         _atv_mot2+0, BitPos(_atv_mot2+0) 
+L__read_motbits299:
+;TCC_5.c,1248 :: 		mot_aberto();                                 //executa a abertura do motor 1
+	CALL        _mot_aberto+0, 0
+;TCC_5.c,1250 :: 		}                                              //end if open_bit && !close_bit
 L_read_motbits243:
-;TCC_5.c,1250 :: 		if(open_bit2 && !close_bit2)                   //se o bit de abertura for 1 e o de fechamento for 0...
-	BTFSS       _open_bit2+0, BitPos(_open_bit2+0) 
+;TCC_5.c,1252 :: 		if(!open_bit && close_bit)                     //se o bit de abertura for 0 e o de fechamento for 1...
+	BTFSC       _open_bit+0, BitPos(_open_bit+0) 
 	GOTO        L_read_motbits246
-	BTFSC       _close_bit2+0, BitPos(_close_bit2+0) 
+	BTFSS       _close_bit+0, BitPos(_close_bit+0) 
 	GOTO        L_read_motbits246
-L__read_motbits289:
-;TCC_5.c,1252 :: 		mot_aberto2();                                //executa a abertura do motor 2
-	CALL        _mot_aberto2+0, 0
-;TCC_5.c,1254 :: 		}                                              //end if open_bit2 && !close_bit2
+L__read_motbits298:
+;TCC_5.c,1254 :: 		mot_fechado();                                //executa o fechamento do motor 1
+	CALL        _mot_fechado+0, 0
+;TCC_5.c,1256 :: 		}                                              //end if !open_bit && close_bit
 L_read_motbits246:
-;TCC_5.c,1256 :: 		if(!open_bit2 && close_bit2)                   //se o bit de abertura for 0 e o de fechamento for 1...
+;TCC_5.c,1259 :: 		if(!open_bit2 && !close_bit2) atv_mot2 = 0x00; //se os bits de abertura e fechamento do motor 2 forem 0,
 	BTFSC       _open_bit2+0, BitPos(_open_bit2+0) 
 	GOTO        L_read_motbits249
-	BTFSS       _close_bit2+0, BitPos(_close_bit2+0) 
+	BTFSC       _close_bit2+0, BitPos(_close_bit2+0) 
 	GOTO        L_read_motbits249
-L__read_motbits288:
-;TCC_5.c,1258 :: 		mot_fechado2();                               //executa o fechamento do motor 2
-	CALL        _mot_fechado2+0, 0
-;TCC_5.c,1260 :: 		}                                              //end if !open_bit2 && close_bit2
+L__read_motbits297:
+	BCF         _atv_mot2+0, BitPos(_atv_mot2+0) 
 L_read_motbits249:
-;TCC_5.c,1263 :: 		if(!open_bit3 && !close_bit3) atv_mot3 = 0x00; //se os bits de abertura e fechamento do motor 3 forem 0,
-	BTFSC       _open_bit3+0, BitPos(_open_bit3+0) 
+;TCC_5.c,1262 :: 		if(open_bit2 && !close_bit2)                   //se o bit de abertura for 1 e o de fechamento for 0...
+	BTFSS       _open_bit2+0, BitPos(_open_bit2+0) 
 	GOTO        L_read_motbits252
-	BTFSC       _close_bit3+0, BitPos(_close_bit3+0) 
+	BTFSC       _close_bit2+0, BitPos(_close_bit2+0) 
 	GOTO        L_read_motbits252
-L__read_motbits287:
-	BCF         _atv_mot3+0, BitPos(_atv_mot3+0) 
+L__read_motbits296:
+;TCC_5.c,1264 :: 		mot_aberto2();                                //executa a abertura do motor 2
+	CALL        _mot_aberto2+0, 0
+;TCC_5.c,1266 :: 		}                                              //end if open_bit2 && !close_bit2
 L_read_motbits252:
-;TCC_5.c,1266 :: 		if(open_bit3 && !close_bit3)                   //se o bit de abertura for 1 e o de fechamento for 0...
-	BTFSS       _open_bit3+0, BitPos(_open_bit3+0) 
+;TCC_5.c,1268 :: 		if(!open_bit2 && close_bit2)                   //se o bit de abertura for 0 e o de fechamento for 1...
+	BTFSC       _open_bit2+0, BitPos(_open_bit2+0) 
 	GOTO        L_read_motbits255
-	BTFSC       _close_bit3+0, BitPos(_close_bit3+0) 
+	BTFSS       _close_bit2+0, BitPos(_close_bit2+0) 
 	GOTO        L_read_motbits255
-L__read_motbits286:
-;TCC_5.c,1268 :: 		mot_aberto3();                                //executa a abertura do motor 3
-	CALL        _mot_aberto3+0, 0
-;TCC_5.c,1270 :: 		}                                              //end if open_bit3 && !close_bit3
+L__read_motbits295:
+;TCC_5.c,1270 :: 		mot_fechado2();                               //executa o fechamento do motor 2
+	CALL        _mot_fechado2+0, 0
+;TCC_5.c,1272 :: 		}                                              //end if !open_bit2 && close_bit2
 L_read_motbits255:
-;TCC_5.c,1272 :: 		if(!open_bit3 && close_bit3)                   //se o bit de abertura for 0 e o de fechamento for 1...
+;TCC_5.c,1275 :: 		if(!open_bit3 && !close_bit3) atv_mot3 = 0x00; //se os bits de abertura e fechamento do motor 3 forem 0,
 	BTFSC       _open_bit3+0, BitPos(_open_bit3+0) 
 	GOTO        L_read_motbits258
-	BTFSS       _close_bit3+0, BitPos(_close_bit3+0) 
+	BTFSC       _close_bit3+0, BitPos(_close_bit3+0) 
 	GOTO        L_read_motbits258
-L__read_motbits285:
-;TCC_5.c,1274 :: 		mot_fechado3();                               //executa o fechamento do motor 3
-	CALL        _mot_fechado3+0, 0
-;TCC_5.c,1276 :: 		}                                              //end if !open_bit3 && close_bit3
+L__read_motbits294:
+	BCF         _atv_mot3+0, BitPos(_atv_mot3+0) 
 L_read_motbits258:
-;TCC_5.c,1278 :: 		}                                                 //end read_motbits()
+;TCC_5.c,1278 :: 		if(open_bit3 && !close_bit3)                   //se o bit de abertura for 1 e o de fechamento for 0...
+	BTFSS       _open_bit3+0, BitPos(_open_bit3+0) 
+	GOTO        L_read_motbits261
+	BTFSC       _close_bit3+0, BitPos(_close_bit3+0) 
+	GOTO        L_read_motbits261
+L__read_motbits293:
+;TCC_5.c,1280 :: 		mot_aberto3();                                //executa a abertura do motor 3
+	CALL        _mot_aberto3+0, 0
+;TCC_5.c,1282 :: 		}                                              //end if open_bit3 && !close_bit3
+L_read_motbits261:
+;TCC_5.c,1284 :: 		if(!open_bit3 && close_bit3)                   //se o bit de abertura for 0 e o de fechamento for 1...
+	BTFSC       _open_bit3+0, BitPos(_open_bit3+0) 
+	GOTO        L_read_motbits264
+	BTFSS       _close_bit3+0, BitPos(_close_bit3+0) 
+	GOTO        L_read_motbits264
+L__read_motbits292:
+;TCC_5.c,1286 :: 		mot_fechado3();                               //executa o fechamento do motor 3
+	CALL        _mot_fechado3+0, 0
+;TCC_5.c,1288 :: 		}                                              //end if !open_bit3 && close_bit3
+L_read_motbits264:
+;TCC_5.c,1290 :: 		}                                                 //end read_motbits()
 L_end_read_motbits:
 	RETURN      0
 ; end of _read_motbits
