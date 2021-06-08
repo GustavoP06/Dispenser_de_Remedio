@@ -1,7 +1,5 @@
 #line 1 "C:/Users/guga_/Documents/GitHub/Dispenser_de_Remedio/Código/TCC_5.c"
-
-
-
+#line 19 "C:/Users/guga_/Documents/GitHub/Dispenser_de_Remedio/Código/TCC_5.c"
 sbit LED at PORTA.b0;
 sbit SOM at PORTA.b2;
 sbit LED2 at PORTA.b3;

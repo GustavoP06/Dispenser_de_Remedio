@@ -1,3 +1,18 @@
+/*=================================================================================
+    Software Dispenser de Remédios
+    TCC - Técnico em Mecatrônica
+    
+    Autor: Gustavo dos Santos Pereira
+    
+    Compilador: MikroC PRO for PIC
+    PIC: 18F4550     8MHz
+    
+    -----------------------------------------------------------------
+    Blibiotecas do MikroC usadas:
+    EEPROM;
+    Lcd;
+    -----------------------------------------------------------------
+=================================================================================*/
 
 
 //SAÍDAS COMUNS
