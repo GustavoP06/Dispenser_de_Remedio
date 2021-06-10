@@ -44,6 +44,7 @@ abdovf_bit
 abre_mot
 abre_mot2
 abre_mot3
+abre_mot4
 access
 ackdt
 ackdt_bit
@@ -120,6 +121,7 @@ an4_bit
 atv_mot
 atv_mot2
 atv_mot3
+atv_mot4
 b0
 b1
 b1_flag
@@ -248,6 +250,7 @@ clkcfg1_bit
 close_bit
 close_bit2
 close_bit3
+close_bit4
 cm0
 cm0_bit
 cm1
@@ -262,6 +265,10 @@ cmif_bit
 cmip
 cmip_bit
 comfrem
+comp
+comp2
+comp3
+comp4
 compare_double
 crc16ee
 crc16ee_bit
@@ -479,6 +486,7 @@ fast_incr
 fecha_mot
 fecha_mot2
 fecha_mot3
+fecha_mot4
 ferr
 ferr_bit
 fixsign32
@@ -728,6 +736,7 @@ led
 led2
 led3
 led4
+led5
 ler_bot
 ligar
 longint2double
@@ -764,9 +773,11 @@ main
 mot_aberto
 mot_aberto2
 mot_aberto3
+mot_aberto4
 mot_fechado
 mot_fechado2
 mot_fechado3
+mot_fechado4
 mul_16x16_s
 mul_16x16_u
 mul_32x32_fp
@@ -776,6 +787,7 @@ mul_8x8_s
 mult
 mult2
 mult3
+mult4
 n
 n_bit
 not_a
@@ -812,6 +824,7 @@ num
 num_un
 num2
 num3
+num4
 oerr
 oerr_bit
 oespp
@@ -819,6 +832,7 @@ oespp_bit
 open_bit
 open_bit2
 open_bit3
+open_bit4
 option
 osc2
 osc2_bit
@@ -948,6 +962,10 @@ pssbd0
 pssbd0_bit
 pssbd1
 pssbd1_bit
+qtd_comp
+qtd_comp2
+qtd_comp3
+qtd_comp4
 r
 r_bit
 r_not_w
@@ -1119,6 +1137,7 @@ setjmp
 sm
 sm2
 sm3
+sm4
 smp
 smp_bit
 sofie
@@ -1295,16 +1314,20 @@ temp_led
 temp_led2
 temp_led3
 temp_led4
+temp_led5
 temp_ligado
 temp_ligado2
 temp_ligado3
+temp_ligado4
 temp_num
 temp_som
 temp2
 temp3
+temp4
 timebase
 timebase2
 timebase3
+timebase4
 tmr0h
 tmr0ie
 tmr0ie_bit
@@ -1354,6 +1377,7 @@ toca_som
 toque
 toque2
 toque3
+toque4
 tosh
 tosl
 tosu
@@ -1500,6 +1524,7 @@ uir
 un
 un2
 un3
+un4
 uoemon
 uoemon_bit
 upuen
@@ -1561,5 +1586,6 @@ wue_bit
 x_mot
 x_mot2
 x_mot3
+x_mot4
 z
 z_bit

@@ -21,11 +21,13 @@ sbit SOM  at PORTA.b2;
 sbit LED2 at PORTA.b3;
 sbit LED3 at PORTB.b0;
 sbit LED4 at PORTB.b1;
+sbit LED5 at PORTB.b3;
 
 //BITS SERVO MOTOR
 sbit SM  at PORTA.b1;
 sbit SM2 at PORTA.b4;
 sbit SM3 at PORTA.b5;
+sbit SM4 at PORTB.b2;
 
 //BITS DO LCD
 sbit LCD_RS at PORTD.b2;
@@ -61,19 +63,24 @@ void piscaLED();                          //controla os LEDs do circuito
 void timebase();                          //contagem do dispenser n°1
 void timebase2();                         //contagem do dispenser n°2
 void timebase3();                         //contagem do dispenser n°3
+void timebase4();                         //contagem do dispenser n°4
 void toca_som();                          //controla o buzzer
 void abre_mot();                          //define os bits de controle do motor n°1 para abertura
 void abre_mot2();                         //define os bits de controle do motor n°2 para abertura
 void abre_mot3();                         //define os bits de controle do motor n°3 para abertura
+void abre_mot4();                         //define os bits de controle do motor n°4 para abertura
 void fecha_mot();                         //define os bits de controle do motor n°1 para fechamento
 void fecha_mot2();                        //define os bits de controle do motor n°2 para fechamento
 void fecha_mot3();                        //define os bits de controle do motor n°3 para fechamento
+void fecha_mot4();                        //define os bits de controle do motor n°4 para fechamento
 void mot_aberto();                        //abre o motor n°1
 void mot_aberto2();                       //abre o motor n°2
 void mot_aberto3();                       //abre o motor n°3
+void mot_aberto4();                       //abre o motor n°4
 void mot_fechado();                       //fecha o motor n°1
 void mot_fechado2();                      //fecha o motor n°2
 void mot_fechado3();                      //fecha o motor n°3
+void mot_fechado4();                      //fecha o motor n°4
 void read_motbits();                      //ler os bits dos motores
 void fast_incr();                         //incrementar num rápidamente
 
@@ -83,48 +90,67 @@ void fast_incr();                         //incrementar num rápidamente
 unsigned temp2        = 0x00,             //variável de interrupção do dispenser n°2
          temp         = 0x00,             //variável de interrupção do dispenser n°1
          temp3        = 0x00,             //variável de interrupção do dispenser n°3
+         temp4        = 0x00,             //variável de interrupção do dispenser n°4
          temp_ligado  = 0x00,             //variável de contagem ligada do dispenser n°1
          temp_ligado2 = 0x00,             //variável de contagem ligada do dispenser n°2
          temp_ligado3 = 0x00,             //variável de contagem ligada do dispenser n°3
+         temp_ligado4 = 0x00,             //variável de contagem ligada do dispenser n°4
          temp_led     = 0x00,             //variável de temporização do LED 1 (indicação do dispenser n°1)
          temp_led2    = 0x00,             //variável de temporização do LED 2 (indicação on/off do dispositivo)
          temp_led3    = 0x00,             //variável de temporização do LED 3 (indicação do dispenser n°2)
          temp_led4    = 0x00,             //variável de temporização do LED 4 (indicação do dispenser n°3)
+         temp_led5    = 0x00,             //variável de temporização do LED 5 (indicação do dispenser n°4)
          temp_som     = 0x00,             //variável de temporização do SOM
          temp_disp    = 0x00,             //variável de temporização do display
          x_mot        = 0x00,             //variável de controle de vezes de repetição da função do motor n°1
          x_mot2       = 0x00,             //variável de controle de vezes de repetição da função do motor n°2
          x_mot3       = 0x00,             //variável de controle de vezes de repetição da função do motor n°3
+         x_mot4       = 0x00,             //variável de controle de vezes de repetição da função do motor n°4
          prog         = 0x00,             //variável de controle do modo de programação
          num,      // = EEPROM_Read(0x01)   número programado do dispenser n°1
          num2,     // = EEPROM_Read(0x02)   número programado do dispenser n°2
          num3,     // = EEPROM_Read(0x05)   número programado do dispenser n°3
+         num4,     // = EEPROM_Read(0x07)   número programado do dispenser n°4
          mult         = 0x00,             //variável de comparação com o temp_ligado (dispenser n°1)
          mult2        = 0x00,             //variável de comparação com o temp_ligado2 (dispenser n°2)
          mult3        = 0x00,             //variável de comparação com o temp_ligado3 (dispenser n°3)
+         mult4        = 0x00,             //variável de comparação com o temp_ligado4 (dispenser n°4)
          vezes        = 0x00,             //variável de vezes que o SOM toca
          option       = 0x00,             //variável que define qual dispenser está selecionado
          temp_inc     = 0x00,             //variável de temporização do botão para incremento rápido
-         temp_num     = 0x00;             //variável de temporização do numero para incremento rápido
+         temp_num     = 0x00,             //variável de temporização do numero para incremento rápido
+         qtd_comp,   //= EEPROM_Read(0x09)   variável para quantidade de comprimidos à despejar do dispenser n°1
+         qtd_comp2,  //= EEPROM_read(0x0A)   variável para quantidade de comprimidos à despejar do dispenser n°2
+         qtd_comp3,  //= EEPROM_Read(0x0B)   variável para quantidade de comprimidos à despejar do dispenser n°3
+         qtd_comp4,  //= EEPROM_Read(0x0C)   variável para quantidade de comprimidos à despejar do dispenser n°4
+         comp         = 0x00,             //controle de vezes que o motor 1 despejará
+         comp2        = 0x00,             //controle de vezes que o motor 2 despejará
+         comp3        = 0x00,             //controle de vezes que o motor 3 despejará
+         comp4        = 0x00;             //controle de vezes que o motor 4 despejará
 
 bit      ligar,                           //bit de ligar/desligar a contagem
          un,       // = EEPROM_Read(0x03)   bit que define a unidade (dia/hora) do dispenser n°1
          un2,      // = EEPROM_Read(0x04)   bit que define a unidade (dia/hora) do dispenser n°2
          un3,      // = EEPROM_Read(0x06)   bit que define a unidade (dia/hora) do dispenser n°3
+         un4,      // = EEPROM_Read(0x08)   bit que define a unidade (dia/hora) do dispenser n°4
          display,                         //bit high que configura o display
          display2,                        //bit low que configura o display
          toque,                           //bit que liga o alarme do dispenser n°1
          toque2,                          //bit que liga o alarme do dispenser n°2
          toque3,                          //bit que liga o alarme do dispenser n°3
+         toque4,                          //bit que liga o alarme do dispenser n°4
          open_bit,                        //bit de controle de abertura do motor n°1
          open_bit2,                       //bit de controle de abertura do motor n°2
          open_bit3,                       //bit de controle de abertura do motor n°3
+         open_bit4,                       //bit de controle de abertura do motor n°4
          close_bit,                       //bit de controle de fechamento do motor n°1
          close_bit2,                      //bit de controle de fechamento do motor n°2
          close_bit3,                      //bit de controle de fechamento do motor n°3
+         close_bit4,                      //bit de controle de fechamento do motor n°4
          atv_mot,                         //bit de ativação do motor n°1
          atv_mot2,                        //bit de ativação do motor n°2
          atv_mot3,                        //bit de ativação do motor n°3
+         atv_mot4,                        //bit de ativação do motor n°4
          b1_flag,                         //flag do botão 1
          b2_flag,                         //flag do botão 2
          b3_flag,                         //flag do botão 3
@@ -151,6 +177,7 @@ void interrupt()                          //interrupção
       temp_led2++;                        //incrementa temp_led2
       temp_led3++;                        //incrementa temp_led3
       temp_led4++;                        //incrementa temp_led4
+      temp_led5++;                        //incrementa temp_led5
       temp_disp++;                        //incrementa temp_disp
       temp_som++;                         //incrementa temp_som
       temp_inc++;                         //incrementa temp_inc
@@ -165,6 +192,7 @@ void interrupt()                          //interrupção
       temp++;                              //incrementa temp
       temp2++;                             //incrementa temp2
       temp3++;                             //incrementa temp3
+      temp4++;                             //incrementa temp4
 
      }                                     //end if TMR0IF
 
@@ -173,7 +201,8 @@ void interrupt()                          //interrupção
      piscaLED();                           //executa piscaLED
      timebase();                           //executa timebase
      timebase2();                          //executa timebase2
-     timebase3();
+     timebase3();                          //executa timebase3
+     timebase4();                          //executa timebase4
 
 
 }                                          //end interrupt()
@@ -216,23 +245,28 @@ void main (void)
         b4_flag       =   0x00;                   //     |
         b5_flag       =   0x00;                   //     |
         display       =   0x00;                   //     |
-        fast_inc      =   0x00;                    //     |
+        fast_inc      =   0x00;                   //     |
         toque         =   0x00;                   //     |
         toque2        =   0x00;                   //     |
         toque3        =   0x00;                   //     |
+        toque4        =   0x00;                   //     |
         open_bit      =   0x00;                   //     |
         open_bit2     =   0x00;                   //     |
         open_bit3     =   0x00;                   //     |
+        open_bit4     =   0x00;                   //     |
         close_bit     =   0x00;                   //     |
         close_bit2    =   0x00;                   //     |
         close_bit3    =   0x00;                   //     |
+        close_bit4    =   0x00;                   //     |
         atv_mot       =   0x00;                   //     |
         atv_mot2      =   0x00;                   //     |
-        atv_mot3      =   0x00;                   //    \ /
+        atv_mot3      =   0x00;                   //     |
+        atv_mot4      =   0x00;                   //    \ /
                                                   //     V
         SM            =   0x00;                   //zerando todos os bits
         SM2           =   0x00;
         SM3           =   0x00;
+        SM4           =   0x00;
 
         num           =   EEPROM_Read(0x01);      //lê os dados da EEPROM para variável num
         un            =   EEPROM_Read(0x03);      //lê os dados da EEPROM para variável un
@@ -240,6 +274,17 @@ void main (void)
         un2           =   EEPROM_Read(0x04);      //lê os dados da EEPROM para variável un2
         num3          =   EEPROM_Read(0x05);      //lê os dados da EEPROM para variável num3
         un3           =   EEPROM_Read(0x06);      //lê os dados da EEPROM para variável un3
+        num4          =   EEPROM_Read(0x07);      //lê os dados da EEPROM para variável num4
+        un4           =   EEPROM_Read(0x08);      //lê os dados da EEPROM para variável un4
+        qtd_comp      =   EEPROM_Read(0x09);      //lê os dados da EEPROM para variavel qtd_comp
+        qtd_comp2     =   EEPROM_Read(0x0A);      //lê os dados da EEPROM para variavel qtd_comp2
+        qtd_comp3     =   EEPROM_Read(0x0B);      //lê os dados da EEPROM para variavel qtd_comp3
+        qtd_comp4     =   EEPROM_Read(0x0C);      //lê os dados da EEPROM para variavel qtd_comp4
+        
+        if(qtd_comp==0xFF)qtd_comp=0x01;
+        if(qtd_comp2==0xFF)qtd_comp2=0x01;
+        if(qtd_comp3==0xFF)qtd_comp3=0x01;
+        if(qtd_comp4==0xFF)qtd_comp4=0x01;
 
         TRISA = 0x00;                             //seta todos os bits do TRISA como saída
         TRISC = 0x3F;                             //seta os bits 0,1,2,3,5 como entrada
@@ -273,7 +318,7 @@ void ler_bot()
    if(!ligar)                                     //se bit ligar = 0
    {
     prog++;                                       //incrementa prog, muda a programação
-    if(prog==3)                                   //se prog = 3
+    if(prog==4)                                   //se prog = 3
     {
      prog=0x00;                                   //zera a variável prog
      EEPROM_Write(0x01,num);                      //grava num na EEPROM
@@ -287,6 +332,18 @@ void ler_bot()
      EEPROM_Write(0x05,num3);                     //grava num3 na EEPROM
      delay_ms(10);                                //espera 10 micro segundos
      EEPROM_Write(0x06,un3);                      //grava un3 na EEPROM
+     delay_ms(10);                                //espera 10 micro segundos
+     EEPROM_Write(0x07,num4);                     //grava num4 na EEPROM
+     delay_ms(10);                                //espera 10 micro segundos
+     EEPROM_Write(0x08,un4);                      //grava un4 na EEPROM
+     delay_ms(10);                                //espera 10 micro segundos
+     EEPROM_Write(0x09,qtd_comp);                 //grava qtd_comp na EEPROM
+     delay_ms(10);                                //espera 10 micro segundos
+     EEPROM_Write(0x0A,qtd_comp2);                //grava qtd_comp2 na EEPROM
+     delay_ms(10);                                //espera 10 micro segundos
+     EEPROM_Write(0x0B,qtd_comp3);                //grava qtd_comp3 na EEPROM
+     delay_ms(10);                                //espera 10 micro segundos
+     EEPROM_Write(0x0C,qtd_comp4);                //grava qtd_comp4 na EEPROM
      delay_ms(10);                                //espera 10 micro segundos
      display=0x01;                                //bit display em 1
     
@@ -321,6 +378,12 @@ void ler_bot()
       un = ~un;                                   //inverte un
     }                                             //end if prog==2
     
+    if (prog==3)                                  //programação de quantidade de remédio
+    {
+     qtd_comp++;                                  //incrementa qtd_comp
+    }
+
+    if(qtd_comp>4) qtd_comp = 0x01;               //se quantidade de comprimidos passar de 4, retorna para 1
     if(num>24) num=0x00;                          //se o numero passar de 24, retorna para 0
     
    }                                              //end if option==0
@@ -335,8 +398,13 @@ void ler_bot()
     {
       un2 = ~un2;                                 //inverte un2
     }
+    if (prog==3)                                  //programação de quantidade de remédio
+    {
+     qtd_comp2++;                                 //incrementa qtd_comp2
+    }
     
-    if(num2>24) num2=0x00;                          //se o numero passar de 24, retorna para 0
+    if(qtd_comp2>4) qtd_comp2 = 0x01;             //se quantidade de comprimidos passar de 4, retorna para 1
+    if(num2>24) num2=0x00;                        //se o numero passar de 24, retorna para 0
 
    }                                              //end if option==1
    
@@ -350,10 +418,40 @@ void ler_bot()
     {
       un3 = ~un3;                                 //inverte un3
     }
-    
-    if(num3>24) num3=0x00;                          //se o numero passar de 24, retorna para 0
+    if (prog==3)                                  //programação de quantidade de remédio
+    {
+     qtd_comp3++;                                 //incrementa qtd_comp3
+    }
+
+    if(qtd_comp3>4) qtd_comp3 = 0x01;             //se quantidade de comprimidos passar de 4, retorna para 1
+    if(num3>24) num3=0x00;                        //se o numero passar de 24, retorna para 0
     
    }                                              //end if option==2
+   
+   if(option==3)                                  //dispenser n°4
+   {
+    if(prog==1)                                   //programação do numero
+    {
+     num4++;                                      //incrementa num4
+    }
+    if (prog==2)                                  //programação de unidade(hora/dia)
+    {
+      un4 = ~un4;                                 //inverte un4
+    }
+    if (prog==3)                                  //programação de quantidade de remédio
+    {
+     qtd_comp4++;                                 //incrementa qtd_comp4
+    }
+
+    if(qtd_comp4>4) qtd_comp4 = 0x01;             //se quantidade de comprimidos passar de 4, retorna para 1
+    if(num4>24) num4=0x00;                        //se o numero passar de 24, retorna para 0
+
+   }                                              //end if option==3
+   
+   comp  = qtd_comp;
+   comp2 = qtd_comp2;
+   comp3 = qtd_comp3;
+   comp4 = qtd_comp4;                             //igualando as variaveis para despejar o numero certo de comprimidos
    
   }                                               //end if BOTAO2 e b2_flag
 
@@ -375,7 +473,12 @@ void ler_bot()
     {
      un = ~un;                                    //inverte un
     }
-    
+    if (prog==3)                                  //programação de quantidade de remédio
+    {
+     qtd_comp--;                                  //decrementa qtd_comp3
+    }
+
+    if(qtd_comp<1) qtd_comp = 0x04;               //se quantidade de comprimidos passar de 1, retorna para 4
     if(num>24) num=24;                            //se o numero for maior que 24, vai para 24
    }                                              //end if option==0
    
@@ -390,7 +493,12 @@ void ler_bot()
     {
      un2 = ~un2;                                  //inverte un2
     }
-    
+    if (prog==3)                                  //programação de quantidade de remédio
+    {
+     qtd_comp2--;                                 //decrementa qtd_comp2
+    }
+
+    if(qtd_comp2<1) qtd_comp2 = 0x04;             //se quantidade de comprimidos passar de 1, retorna para 4
     if(num2>24) num2=24;                          //se o numero for maior que 24, vai para 24
     
    }                                              //end if option==1
@@ -406,10 +514,42 @@ void ler_bot()
     {
      un3 = ~un3;                                  //inverte un3
     }
-    
+    if (prog==3)                                  //programação de quantidade de remédio
+    {
+     qtd_comp3--;                                 //decrementa qtd_comp3
+    }
+
+    if(qtd_comp3<1) qtd_comp3 = 0x04;             //se quantidade de comprimidos passar de 1, retorna para 4
     if(num3>24) num3=24;                          //se o numero for maior que 24, vai para 24
     
    }                                              //end if option==2
+   
+   if(option==3)                                  //dispenser n°4
+   {
+    if(prog==1)                                   //programação do número
+    {
+     num4--;                                      //decrementa num4
+
+    }
+    if (prog==2)                                  //programação de unidade(hora/dia)
+    {
+     un4 = ~un4;                                  //inverte un4
+    }
+    if (prog==3)                                  //programação de quantidade de remédio
+    {
+     qtd_comp4--;                                 //decrementa qtd_comp4
+    }
+
+    if(qtd_comp4<1) qtd_comp4 = 0x04;             //se quantidade de comprimidos passar de 1, retorna para 4
+
+    if(num4>24) num4=24;                          //se o numero for maior que 24, vai para 24
+
+   }                                              //end if option==3
+   
+   comp  = qtd_comp;
+   comp2 = qtd_comp2;
+   comp3 = qtd_comp3;
+   comp4 = qtd_comp4;                             //igualando as variaveis para despejar o numero certo de comprimidos
    
   }                                               //end if botão3 e b3_flag
 
@@ -420,23 +560,28 @@ void ler_bot()
   {
     LCD_Cmd(_LCD_CLEAR);                          //limpa LCD
     b4_flag    =  0x00;                           //limpa flag do botão4
-   if(num!=0 || num2!=0 || num3)                  //se num, num2 ou num3 for diferente 0
+   if(num!=0 || num2!=0 || num3!=0 || num4!=0)    //se num, num2, num3 ou num4 for diferente 0
    {
     if(prog==0)                                   //se prog = 0
     {
-     if(!ligar)                                   //se bit de ligar = 0 (desligado)
+     if(!toque && !toque2 && !toque3 && !toque4)  //se nenhum contador tiver finalizado...
      {
-      temp =0x00;                                 //zera temp
-      temp2=0x00;                                 //zera temp2
-      temp3=0x00;                                 //zera temp3
+      if(!ligar)                                  //se bit de ligar = 0 (desligado)
+      {
+       temp =0x00;                                //zera temp
+       temp2=0x00;                                //zera temp2
+       temp3=0x00;                                //zera temp3
+       temp4=0x00;                                //zera temp4
       
-     }                                            //end if !ligar
+      }                                           //end if !ligar
      ligar = ~ligar;                              //inverte ligar
      if(!ligar) display2 = 0x01;                  //se ligar for 0, bit display2 = 1
      
+     }                                            //end if !toque && !toque2 && !toque3 && !toque4
+     
     }                                             //end if prog==0
     
-   }                                              //end if num!=0 || num2!=0
+   }                                              //end if num!=0 || num2!=0 ||num3!=0 || num4!=0
    
   }                                               //end if BOTAO4 && b4_flag
 
@@ -466,6 +611,15 @@ void ler_bot()
   {
    mult3 = num3 * 5;                              //mult3 é num3 * 86400 (dia)
   }
+  
+  if(!un4)                                        //se un4 = 0
+  {
+   mult4 = num4 * 1;                              //mult4 é num4 * 3600 (hora)
+  }
+  if(un4)                                         //se un4 = 1
+  {
+   mult4 = num4 * 5;                              //mult4 é num4 * 86400 (dia)
+  }
 
   //___b5___                                        botao para trocar de contador
   if(!BOTAO5) b5_flag = 0x01;                     //se botão5 for pressionado, flag do botão5 = 1
@@ -477,20 +631,22 @@ void ler_bot()
    if(prog != 0)                                  //se prog for diferente de 0
    {
     option++;                                     //incrementa option
-    if(option == 3) option=0x00;                  //se option for 3, option = 0
+    if(option == 4) option=0x00;                  //se option for 4, option = 0
    }
    
-    if(toque || toque2 || toque3)                 //se algum comando do SOM estiver ativado...
-    {
+    if(toque || toque2 || toque3 || toque4)       //se algum comando do SOM estiver ativado...
+    {                                             //(desligar despertador)
     if(toque)temp_ligado=0x00;                    //se for o toque 1, zera o contador 1
     if(toque2)temp_ligado2=0x00;                  //se for o toque 2, zera o contador 2
     if(toque3)temp_ligado3=0x00;                  //se for o toque 3, zera o contador 3
+    if(toque4)temp_ligado4=0x00;                  //se for o toque 4, zera o contador 4
      toque =0x00;
      toque2=0x00;
-     toque3=0x00;                                 //zera todos os bits de SOM
+     toque3=0x00;
+     toque4=0x00;                                 //zera todos os bits de SOM
      SOM=0x00;
      
-    }                                             //end if toque || toque2 || toque3
+    }                                             //end if toque || toque2 || toque3 || toque4
     
   }                                               //end if BOTAO5 && b5_flag
 
@@ -536,14 +692,7 @@ void fast_incr()
 
   }                                               //end if option==1 && prog=1
   
-  if(num >24) num =0x00;                          //se o numero passar de 24, retorna para 0
-  if(num2>24) num2=0x00;                          //se o numero passar de 24, retorna para 0
-  if(num3>24) num3=0x00;                          //se o numero passar de 24, retorna para 0
-  
- }                                                //end if fast_inc
- 
- 
- if(option==2 && prog==1)                         //se dispenser n°3 selecionado e programção de número
+   if(option==2 && prog==1)                       //se dispenser n°3 selecionado e programção de número
   {
    if(temp_num>5)temp_num=0x00;                   //se temp_num maior que 5, zera temp_num
    if(temp_num==5)                                //conta 500ms...
@@ -554,6 +703,28 @@ void fast_incr()
    }                                              //end if temp_num==5
 
   }                                               //end if option==2 && prog=1
+  
+   if(option==3 && prog==1)                       //se dispenser n°4 selecionado e programção de número
+  {
+   if(temp_num>5)temp_num=0x00;                   //se temp_num maior que 5, zera temp_num
+   if(temp_num==5)                                //conta 500ms...
+   {
+    temp_num=0x00;                                //zera temp_num
+    num4 += 2;                                    //acrescenta 2 em num4
+
+   }                                              //end if temp_num==5
+
+  }                                               //end if option==3 && prog=1
+  
+  if(num >24) num =0x00;                          //se o numero passar de 24, retorna para 0
+  if(num2>24) num2=0x00;                          //se o numero passar de 24, retorna para 0
+  if(num3>24) num3=0x00;                          //se o numero passar de 24, retorna para 0
+  if(num4>24) num4=0x00;                          //se o numero passar de 24, retorna para 0
+  
+ }                                                //end if fast_inc
+ 
+ 
+
  
 }                                                 //end void fast_incr()
 
@@ -593,32 +764,45 @@ void disp()
   {
    LCD_Out(1,1,"PROGRAME NUMERO:");               //exibe "PROGRAME NUMERO:
    num_un();                                      //executa num_un
-   if(option==0) LCD_Chr(2,14,'1');               //se option for 0, exibe "1"
-   if(option==1) LCD_Chr(2,14,'2');               //se option for 1, exibe "2"
-   if(option==2) LCD_Chr(2,14,'3');              //se option for 2, exibe "3"
+   if(option==0) LCD_Chr(2,1,'1');               //se option for 0, exibe "1"
+   if(option==1) LCD_Chr(2,1,'2');               //se option for 1, exibe "2"
+   if(option==2) LCD_Chr(2,1,'3');               //se option for 2, exibe "3"
+   if(option==3) LCD_Chr(2,1,'4');               //se option for 2, exibe "4"
   }
 
   if(prog==2)                                     //se prog for 2
   {
    LCD_Out(1,1,"PROGRAME Un.:");                  //exibe "PROGRAME Un.:"
    num_un();                                      //executa num_un
-   if(option==0) LCD_Chr(2,14,'1');               //se option for 0, exibe "1"
-   if(option==1) LCD_Chr(2,14,'2');               //se option for 1, exibe "2"
-   if(option==2) LCD_Chr(2,14,'3');              //se option for 2, exibe "3"
+   if(option==0) LCD_Chr(2,1,'1');               //se option for 0, exibe "1"
+   if(option==1) LCD_Chr(2,1,'2');               //se option for 1, exibe "2"
+   if(option==2) LCD_Chr(2,1,'3');               //se option for 2, exibe "3"
+   if(option==3) LCD_Chr(2,1,'4');               //se option for 2, exibe "4"
+  }
+  
+  if(prog==3)                                     //programação de quantidade de comprimidos
+  {
+   LCD_Out(1,1,"Qtd. COMPRIMIDOS");               //exibe "Qtd. COMPRIMIDOS"
+   num_un();                                      //executa num_un
+   if(option==0) LCD_Chr(2,1,'1');               //se option for 0, exibe "1"
+   if(option==1) LCD_Chr(2,1,'2');               //se option for 1, exibe "2"
+   if(option==2) LCD_Chr(2,1,'3');               //se option for 2, exibe "3"
+   if(option==3) LCD_Chr(2,1,'4');               //se option for 2, exibe "4"
   }
 
   if(ligar)                                       //se ligar for 1 (ligado)
   {
-   LCD_Out(1,1,"CONTANDO:   DISP");               //exibe "CONTANDO:   DISP";
+   LCD_Out(1,1,"DISP  TEMPO  Qtd");               //exibe "CONTANDO:   DISP";
    if(temp_disp>20) temp_disp=0x00;               //se temp_disp for maior que 20, zera temp_disp
    if(temp_disp == 20)                            //se temp_disp for 20 (2 segundos)
    {
     temp_disp=0x00;                               //zera temp_disp
     option++;                                     //incrementa option
-    if(option == 3) option=0x00;                  //se option for 3, option = 0
-    if(option==0) LCD_Chr(2,14,'1');              //se option for 0, exibe "1"
-    if(option==1) LCD_Chr(2,14,'2');              //se option for 1, exibe "2"
-    if(option==2) LCD_Chr(2,14,'3');              //se option for 2, exibe "3"
+    if(option == 4) option=0x00;                  //se option for 3, option = 0
+    if(option==0) LCD_Chr(2,1,'1');              //se option for 0, exibe "1"
+    if(option==1) LCD_Chr(2,1,'2');              //se option for 1, exibe "2"
+    if(option==2) LCD_Chr(2,1,'3');              //se option for 2, exibe "3"
+    if(option==3) LCD_Chr(2,1,'4');              //se option for 2, exibe "4"
    }
    num_un();                                      //executa num_un
   }
@@ -631,18 +815,19 @@ void disp()
 //==================================================================================
 void num_un()
 {
- char dig2,dig1;                                  //cria variáveis dígito 2 e dígito 1
+ char dig2,dig1,digcomp;                          //cria variáveis dígito 2 e dígito 1
+
  if(option==0)                                    //se option for 0 (dispenser n° 1 selecionado)
  {
   dig2 = num/10;                                  //dígito 2 é igual a num dividido por 10
   dig1 = num%10;                                  //digito 1 é igual a sobra da divisão de num por 10
 
-  LCD_Chr(2,2,dig2+0x30);                         //soma digito 2 com 30 hexa para exibição no display
+  LCD_Chr(2,7,dig2+0x30);                         //soma digito 2 com 30 hexa para exibição no display
   LCD_Chr_Cp (dig1+0x30);                         //soma digito 1 com 30 hexa para exibição no display
 
-  if(!un) LCD_Out(2,5,hora);                      //se un for zero, exibe "hora"
+  if(!un) LCD_Out(2,10,hora);                      //se un for zero, exibe "hora"
 
-  if(un) LCD_Out(2,5,dia);                        //se un for um, exibe "dia"
+  if(un) LCD_Out(2,10,dia);                        //se un for um, exibe "dia"
   
  }                                                //end if option==0
  
@@ -652,28 +837,68 @@ void num_un()
   dig2 = num2/10;                                 //digito 2 é igual a num2 dividido por 10
   dig1 = num2%10;                                 //digito 1 é igual a sobra da divisão de num2 por 10
 
-  LCD_Chr(2,2,dig2+0x30);                         //soma digito 2 com 30 hexa para exibição no display
+  LCD_Chr(2,7,dig2+0x30);                         //soma digito 2 com 30 hexa para exibição no display
   LCD_Chr_Cp (dig1+0x30);                         //soma digito 1 com 30 hexa para exibição no display
 
-  if(!un2) LCD_Out(2,5,hora);                     //se un2 for zero, exibe "hora"
+  if(!un2) LCD_Out(2,10,hora);                     //se un2 for zero, exibe "hora"
 
-  if(un2) LCD_Out(2,5,dia);                       //se un2 for um, exibe "dia"
+  if(un2) LCD_Out(2,10,dia);                       //se un2 for um, exibe "dia"
   
  }                                                //end if option==1
  
- if(option==2)                                    //se option for 1 (dispenser n°2 selecionado)
+ if(option==2)                                    //se option for 2 (dispenser n°3 selecionado)
  {
   dig2 = num3/10;                                 //digito 2 é igual a num3 dividido por 10
   dig1 = num3%10;                                 //digito 1 é igual a sobra da divisão de num3 por 10
 
-  LCD_Chr(2,2,dig2+0x30);                         //soma digito 2 com 30 hexa para exibição no display
+  LCD_Chr(2,7,dig2+0x30);                         //soma digito 2 com 30 hexa para exibição no display
   LCD_Chr_Cp (dig1+0x30);                         //soma digito 1 com 30 hexa para exibição no display
 
-  if(!un3) LCD_Out(2,5,hora);                     //se un3 for zero, exibe "hora"
+  if(!un3) LCD_Out(2,10,hora);                     //se un3 for zero, exibe "hora"
 
-  if(un3) LCD_Out(2,5,dia);                       //se un3 for um, exibe "dia"
+  if(un3) LCD_Out(2,10,dia);                       //se un3 for um, exibe "dia"
 
  }                                                //end if option==2
+ 
+ if(option==3)                                    //se option for 3 (dispenser n°4 selecionado)
+ {
+  dig2 = num4/10;                                 //digito 2 é igual a num4 dividido por 10
+  dig1 = num4%10;                                 //digito 1 é igual a sobra da divisão de num4 por 10
+
+  LCD_Chr(2,7,dig2+0x30);                         //soma digito 2 com 30 hexa para exibição no display
+  LCD_Chr_Cp (dig1+0x30);                         //soma digito 1 com 30 hexa para exibição no display
+
+  if(!un4) LCD_Out(2,10,hora);                     //se u4 for zero, exibe "hora"
+
+  if(un4) LCD_Out(2,10,dia);                       //se un4 for um, exibe "dia"
+
+ }                                                //end if option==3
+ 
+
+  if(option==0)                                   //se dispenser n°1 selecionado
+  {
+   digcomp = qtd_comp;                            //digito é igual a quantidade de compimidos a ser despejado
+   LCD_Chr(2,15,digcomp+0x30);                    //soma digito 1 com 30 hexa para exibição no display
+  }
+  
+  if(option==1)                                   //se dispenser n°2 selecionado
+  {
+   digcomp = qtd_comp2;                           //digito é igual a quantidade de compimidos a ser despejado
+   LCD_Chr(2,15,digcomp+0x30);                    //soma digito 1 com 30 hexa para exibição no display
+  }
+  
+  if(option==2)                                   //se dispenser n°3 selecionado
+  {
+   digcomp = qtd_comp3;                           //digito é igual a quantidade de compimidos a ser despejado
+   LCD_Chr(2,15,digcomp+0x30);                    //soma digito 1 com 30 hexa para exibição no display
+  }
+  
+  if(option==3)                                   //se dispenser n°4 selecionado
+  {
+   digcomp = qtd_comp4;                           //digito é igual a quantidade de compimidos a ser despejado
+   LCD_Chr(2,15,digcomp+0x30);                    //soma digito 1 com 30 hexa para exibição no display
+  }
+
  
 }                                                 //end num_un()
 
@@ -802,6 +1027,44 @@ void piscaLED()
 
  }                                                //end else
  
+ 
+ if(ligar && !toque4 && num4!=0)                  //se ligar for 1, toque4 for 0 e num4 diferente de 0...
+ {                                                //ou seja, se o dispenser n°4 for ligado...
+  if(temp_led5>=10)                               //conta 1 segundo
+  {
+   temp_led5 = 0x00;                              //zera temp_led5
+   LED5 = ~LED5;                                  //inverte estado do LED de indicação do dispenser n°4
+
+  }                                               //end if temp_led5>=10
+
+ }                                                //end if ligar && !toque4 && num4!=0
+
+ else                                             //senão...
+ {
+  if(ligar && toque4)                             //se ligar e toque4 for 1
+  {                                               //ou seja, o contador do dispenser n°4 acabou
+   if(temp_led5>=2)                               //conta 200 milisegundos
+   {
+    temp_led5=0x00;                               //zera temp_led5
+    LED5 = ~LED5;                                 //inverte estado do LED de indicação do dispenser n°4
+
+   }                                              //end if temp_led5>=2
+
+  }                                               //end if ligar && toque4
+
+ else
+  {
+   if(prog>0 && option==3)                        //se estiver em programação e dispenser n°4 selecionado
+   {
+    LED5 = 0x01;                                  //LED do dispenser n°4 aceso
+   }                                              //end if prog>0 && option==3
+
+  else LED5 = 0x00;                               //senão, LED do dispenser n°4 desligado
+
+  }                                               //end else
+
+ }                                                //end else
+ 
 }                                                 //end piscaLED()
 
 
@@ -828,6 +1091,7 @@ void timebase()
    {                                              //o contador atingiu o tempo programado...
     toque = 0x01;                                 //liga o bit toque
     atv_mot = 0x01;                               //liga o bit de ativação do motor
+    comp = qtd_comp;
     abre_mot();                                   //define os bits de controle do motor para abri-lo
     
    }                                              //end if temp_ligado==mult
@@ -871,6 +1135,7 @@ void timebase2()
    {                                              //acabou o tempo do contador do dispenser n°2...
     toque2 = 0x01;                                //liga o bit toque2
     atv_mot2 = 0x01;                              //liga o bit de aativação do motor 2
+    comp2 = qtd_comp2;
     abre_mot2();                                  //define os bits de controle do motor 2 para abrir
     
    }                                              //end if temp_ligado2==mult2
@@ -916,6 +1181,7 @@ void timebase3()
    {                                              //acabou o tempo do contador do dispenser n°3...
     toque3 = 0x01;                                //liga o bit toque3
     atv_mot3 = 0x01;                              //liga o bit de aativação do motor 3
+    comp3 = qtd_comp3;
     abre_mot3();                                  //define os bits de controle do motor 3 para abrir
 
    }                                              //end if temp_ligado3==mult3
@@ -938,11 +1204,57 @@ void timebase3()
 
 
 //================================================================================
+//                     FUNÇÃO DE EXECUÇÃO DO CONTADOR
+//                             -DISPENSER N°4-
+//================================================================================
+void timebase4()
+{
+  if(!ligar)                                      //se ligar for 0
+  {                                               //contadores desligados...
+   temp_ligado4 = 0x00;                           //zera temp_ligado4
+  }
+
+  if(ligar && num4!=0)                            //se ligar for 1 e num4 diferente de 0
+  {                                               //contador do dispenser n°4 ligado
+   if(temp4==10)                                  //conta 1 segundo
+   {
+    temp4 = 0x00;                                 //zera temp4
+    temp_ligado4++;                               //incrementa temp_ligado4 a cada 1 segundo
+
+   }                                              //end if temp3==10
+
+   if(temp_ligado4==mult4)                        //compara igualdade entre temp_ligado4 e mult4
+   {                                              //acabou o tempo do contador do dispenser n°4...
+    toque4 = 0x01;                                //liga o bit toque4
+    atv_mot4 = 0x01;                              //liga o bit de ativação do motor 4
+    comp4 = qtd_comp4;
+    abre_mot4();                                  //define os bits de controle do motor 4 para abrir
+
+   }                                              //end if temp_ligado4==mult4
+
+   if(atv_mot4)                                   //se ativação do motor 4 ligada...
+   {
+    read_motbits();                               //executa a leitura dos bits de controle dos motores
+
+   }                                              //end if atv_mot4
+
+   else                                           //senão...
+   {
+    alarme();                                     //aciona o alarme
+
+   }                                              //end else
+
+  }                                               //end if ligar && num4!=0
+
+}                                                 //end timebase4()
+
+
+//================================================================================
 //                      FUNÇÃO DE EXECUÇÃO DO ALARME
 //================================================================================
 void alarme()
 {
- if(toque || toque2 || toque3)                    //se toque, toque2 ou toque3 for 1
+ if(toque || toque2 || toque3 || toque4)          //se toque, toque2, toque3 ou toque4 for 1
  {                                                //algum dos contadores acabaram...
    if(vezes <200)                                 //se vezes for menor que 200 (toca por 1 minuto)
    {                                              //(vezes que o SOM tocará)
@@ -965,19 +1277,26 @@ void alarme()
      
     }                                             //end if toque2
     
-    if(toque3)                                    //se toque2 for 1
+    if(toque3)                                    //se toque3 for 1
     {
      toque3=0x00;                                 //limpa o bit toque3
      temp_ligado3=0x00;                           //zera temp_ligado3 para recomeçar a contagem
 
     }                                             //end if toque3
     
+    if(toque4)                                    //se toque4 for 1
+    {
+     toque4=0x00;                                 //limpa o bit toque4
+     temp_ligado4=0x00;                           //zera temp_ligado4 para recomeçar a contagem
+
+    }                                             //end if toque4
+    
      vezes=0x00;                                  //zera vezes
      SOM = 0x00;                                  //desliga o som
      
    }                                              //end else
    
- }                                                //end if toque || toque2 || toque3
+ }                                                //end if toque || toque2 || toque3 || toque4
  
 }                                                 //end alarme()
 
@@ -1046,11 +1365,27 @@ void abre_mot3()
 
 
 //================================================================================
+//                          FUNÇÃO DE CONFIGURAÇÃO DOS
+//                    BITS DE CONTROLE DO MOTOR 4 PARA ABRIR
+//================================================================================
+void abre_mot4()
+{
+ open_bit4  = 0x01;                               //seta bit de abertura
+ close_bit4 = 0x00;                               //limpa bit de fechamento
+ x_mot4     = 0x00;                               //zera x_mot
+
+}                                                 //end abre_mot4()
+
+
+//================================================================================
 //                       FUNÇÃO DE ABERTURA DO MOTOR 1
 //================================================================================
 void mot_aberto()
 {
- if(x_mot<10)                                     //se x_mot for menor que 10...
+ if(comp!=0)                                      //se a quantidade de comprimidos a serem despejados
+ {                                                //for diferente de 0...
+ 
+ if(x_mot<20)                                     //se x_mot for menor que 10...
   {
     SM=0;                                         //  ||
     delay_us(18000);                              //  ||
@@ -1061,11 +1396,18 @@ void mot_aberto()
     
   }                                               //end if x_mot<10
   
-  if(x_mot == 10)                                 //se x_mot for 10...
+  if(x_mot == 20)                                 //se x_mot for 10...
    {
     fecha_mot();                                  //executa a configuração dos bits de controle do motor 1 para fechar
     
    }                                              //end if x_mot==10
+ 
+ }                                                //end if comp!=0
+ else                                             //senão...
+ {
+  open_bit = 0x00;                                //limpa bit de abertura
+  close_bit= 0x00;                                //limpa bit de fechamento
+ }
 
 }                                                 //end mot_aberto()
 
@@ -1075,7 +1417,9 @@ void mot_aberto()
 //================================================================================
 void mot_aberto2()
 {
- if(x_mot2<10)                                    //se x_mot2 for menor que 10...
+ if(comp2!=0)                                      //se a quantidade de comprimidos a serem despejados
+ {                                                //for diferente de 0...
+ if(x_mot2<20)                                    //se x_mot2 for menor que 10...
   {
     SM2=0;                                        //  ||
     delay_us(18000);                              //  ||
@@ -1086,11 +1430,17 @@ void mot_aberto2()
     
   }                                               //end if x_mot2<10
   
-  if(x_mot2 == 10)                                //se x_mot2 for 10...
+  if(x_mot2 == 20)                                //se x_mot2 for 10...
    {
     fecha_mot2();                                 //executa a configuração dos bits de controle do motor 2 para fechar
     
    }                                              //end if x_mot2==10
+ }                                                //end if comp!=0
+ else                                             //senão...
+ {
+  open_bit2 = 0x00;                                //limpa bit de abertura
+  close_bit2= 0x00;                                //limpa bit de fechamento
+ }
    
 }                                                 //end mot_aberto2()
 
@@ -1100,7 +1450,9 @@ void mot_aberto2()
 //================================================================================
 void mot_aberto3()
 {
- if(x_mot3<10)                                    //se x_mot3 for menor que 10...
+ if(comp3!=0)                                     //se a quantidade de comprimidos a serem despejados
+ {                                                //for diferente de 0...
+ if(x_mot3<20)                                    //se x_mot3 for menor que 10...
   {
     SM3=0;                                        //  ||
     delay_us(18000);                              //  ||
@@ -1111,13 +1463,52 @@ void mot_aberto3()
 
   }                                               //end if x_mot3<10
 
-  if(x_mot3 == 10)                                //se x_mot3 for 10...
+  if(x_mot3 == 20)                                //se x_mot3 for 10...
    {
     fecha_mot3();                                 //executa a configuração dos bits de controle do motor 3 para fechar
 
    }                                              //end if x_mot3==10
+ }                                                //end if comp!=0
+ else                                             //senão...
+ {
+  open_bit3 = 0x00;                               //limpa bit de abertura
+  close_bit3= 0x00;                               //limpa bit de fechamento
+ }
 
 }                                                 //end mot_aberto3()
+
+
+//================================================================================
+//                       FUNÇÃO DE ABERTURA DO MOTOR 4
+//================================================================================
+void mot_aberto4()
+{
+ if(comp4!=0)                                      //se a quantidade de comprimidos a serem despejados
+ {                                                //for diferente de 0...
+ if(x_mot4<20)                                    //se x_mot4 for menor que 10...
+  {
+    SM4=0;                                        //  ||
+    delay_us(18000);                              //  ||
+    SM4=1;                                        //  ||
+    delay_us(2000);                               //  \/
+    SM4=0;                                        // liga motor 1 no sentido horário
+    x_mot4 ++;                                    //incrementa x_mot4
+
+  }                                               //end if x_mot4<10
+
+  if(x_mot4 == 20)                                //se x_mot4 for 10...
+   {
+    fecha_mot4();                                 //executa a configuração dos bits de controle do motor 4 para fechar
+
+   }                                              //end if x_mot4==10
+ }                                                //end if comp!=0
+ else                                             //senão...
+ {
+  open_bit4 = 0x00;                                //limpa bit de abertura
+  close_bit4= 0x00;                                //limpa bit de fechamento
+ }
+
+}                                                 //end mot_aberto4()
 
 
 //================================================================================
@@ -1160,11 +1551,26 @@ void fecha_mot3()
 
 
 //================================================================================
+//                          FUNÇÃO DE CONFIGURAÇÃO DOS
+//                    BITS DE CONTROLE DO MOTOR 4 PARA FECHAR
+//================================================================================
+void fecha_mot4()
+{
+ open_bit4  = 0x00;                               //limpa o bit de abertura
+ close_bit4 = 0x01;                               //seta o bit de fechamento
+ x_mot4     = 0x00;                               //zera x_mot4
+
+}                                                 //end fecha_mot4()
+
+
+//================================================================================
 //                       FUNÇÃO DE FECHAMENTO DO MOTOR 1
 //================================================================================
 void mot_fechado()
 {
- if(x_mot<10)                                     //se x_mot for menor que 10
+ if(comp!=0)                                      //se a quantidade de comprimidos à despejar
+ {                                                //for diferente de 0
+ if(x_mot<20)                                     //se x_mot for menor que 10
   {
     SM=0;                                         //  ||
     delay_us(18500);                              //  ||
@@ -1175,11 +1581,14 @@ void mot_fechado()
     
   }                                               //end if x_mot<10
   
-  if(x_mot==10)                                   //se x_mot for 10
+  if(x_mot==20)                                   //se x_mot for 10
     {
-     close_bit = 0x00;                            //limpa o bit de fechamento
+     abre_mot();                                  //define os bit de controle do motor para abrir
+     comp--;                                      //decrementa comp
      
     }                                             //end if x_mot==10
+ 
+ }                                                //end if comp!=0
 
 }                                                 //end mot_fechado
 
@@ -1189,8 +1598,10 @@ void mot_fechado()
 //================================================================================
 void mot_fechado2()
 {
-  if(x_mot2<10)                                   //se x_mot2 for menor que 10
-  {
+ if(comp2!=0)                                      //se a quantidade de comprimidos à despejar
+ {                                                //for diferente de 0
+  if(x_mot2<20)                                   //se x_mot2 for menor que 10
+   {
     SM2=0;                                        //  ||
     delay_us(18500);                              //  ||
     SM2=1;                                        //  ||
@@ -1198,13 +1609,16 @@ void mot_fechado2()
     SM2=0;                                        //leva o motor 2 para a posição inicial
     x_mot2++;                                     //incrementa x_mot2
     
-  }                                               //end if x_mot2<10
+   }                                               //end if x_mot2<10
   
-  if(x_mot2==10)                                  //se x_mot2 for 10
+  if(x_mot2==20)                                  //se x_mot2 for 10
     {
-     close_bit2 = 0x00;                           //limpa o bit de fechamento
+     abre_mot2();                                 //define os bit de controle do motor para abrir
+     comp2--;                                     //decrementa comp2
      
     }                                             //end if x_mot2==10
+    
+  }                                               //end if comp!=0
     
 }                                                 //end mot_fechado2()
 
@@ -1214,7 +1628,9 @@ void mot_fechado2()
 //================================================================================
 void mot_fechado3()
 {
-  if(x_mot3<10)                                   //se x_mot3 for menor que 10
+ if(comp3!=0)                                      //se a quantidade de comprimidos à despejar
+ {                                                //for diferente de 0
+  if(x_mot3<20)                                   //se x_mot3 for menor que 10
   {
     SM3=0;                                        //  ||
     delay_us(18500);                              //  ||
@@ -1225,13 +1641,46 @@ void mot_fechado3()
 
   }                                               //end if x_mot2<10
 
-  if(x_mot3==10)                                  //se x_mot3 for 10
+  if(x_mot3==20)                                  //se x_mot3 for 10
     {
-     close_bit3 = 0x00;                           //limpa o bit de fechamento
+     abre_mot3();                                 //define os bit de controle do motor para abrir
+     comp3--;                                     //decrementa comp3
 
     }                                             //end if x_mot3==10
+   
+ }                                                //end if comp3!=0
 
 }                                                 //end mot_fechado3()
+
+
+//================================================================================
+//                       FUNÇÃO DE FECHAMENTO DO MOTOR 4
+//================================================================================
+void mot_fechado4()
+{
+ if(comp4!=0)                                      //se a quantidade de comprimidos à despejar
+ {                                                //for diferente de 0
+  if(x_mot4<20)                                   //se x_mot4 for menor que 10
+   {
+    SM4=0;                                        //  ||
+    delay_us(18500);                              //  ||
+    SM4=1;                                        //  ||
+    delay_us(1500);                               //  \/
+    SM4=0;                                        //leva o motor 4 para a posição inicial
+    x_mot4++;                                     //incrementa x_mot4
+
+   }                                               //end if x_mot4<10
+
+  if(x_mot4==20)                                  //se x_mot4 for 10
+    {
+     abre_mot4();                                 //define os bit de controle do motor para abrir
+     comp4--;                                     //decrementa comp4
+
+    }                                             //end if x_mot4==10
+    
+  }                                                //end if comp4!=0
+
+}                                                 //end mot_fechado4()
 
 
 //================================================================================
@@ -1286,5 +1735,21 @@ void read_motbits()
     mot_fechado3();                               //executa o fechamento do motor 3
 
    }                                              //end if !open_bit3 && close_bit3
+   
+   
+   if(!open_bit4 && !close_bit4) atv_mot4 = 0x00; //se os bits de abertura e fechamento do motor 4 forem 0,
+                                                  //desliga a ativação do motor 4
+
+   if(open_bit4 && !close_bit4)                   //se o bit de abertura for 1 e o de fechamento for 0...
+   {
+    mot_aberto4();                                //executa a abertura do motor 4
+
+   }                                              //end if open_bit4 && !close_bit4
+
+   if(!open_bit4 && close_bit4)                   //se o bit de abertura for 0 e o de fechamento for 1...
+   {
+    mot_fechado4();                               //executa o fechamento do motor 4
+
+   }                                              //end if !open_bit4 && close_bit4
    
 }                                                 //end read_motbits()

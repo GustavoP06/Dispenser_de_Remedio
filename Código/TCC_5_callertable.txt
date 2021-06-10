@@ -62,12 +62,19 @@ interrupt
 			mot_aberto
 				fecha_mot
 			mot_fechado
+				abre_mot
 			mot_aberto2
 				fecha_mot2
 			mot_fechado2
+				abre_mot2
 			mot_aberto3
 				fecha_mot3
 			mot_fechado3
+				abre_mot3
+			mot_aberto4
+				fecha_mot4
+			mot_fechado4
+				abre_mot4
 		alarme
 			toca_som
 	timebase2
@@ -76,12 +83,19 @@ interrupt
 			mot_aberto
 				fecha_mot
 			mot_fechado
+				abre_mot
 			mot_aberto2
 				fecha_mot2
 			mot_fechado2
+				abre_mot2
 			mot_aberto3
 				fecha_mot3
 			mot_fechado3
+				abre_mot3
+			mot_aberto4
+				fecha_mot4
+			mot_fechado4
+				abre_mot4
 		alarme
 			toca_som
 	timebase3
@@ -90,11 +104,39 @@ interrupt
 			mot_aberto
 				fecha_mot
 			mot_fechado
+				abre_mot
 			mot_aberto2
 				fecha_mot2
 			mot_fechado2
+				abre_mot2
 			mot_aberto3
 				fecha_mot3
 			mot_fechado3
+				abre_mot3
+			mot_aberto4
+				fecha_mot4
+			mot_fechado4
+				abre_mot4
+		alarme
+			toca_som
+	timebase4
+		abre_mot4
+		read_motbits
+			mot_aberto
+				fecha_mot
+			mot_fechado
+				abre_mot
+			mot_aberto2
+				fecha_mot2
+			mot_fechado2
+				abre_mot2
+			mot_aberto3
+				fecha_mot3
+			mot_fechado3
+				abre_mot3
+			mot_aberto4
+				fecha_mot4
+			mot_fechado4
+				abre_mot4
 		alarme
 			toca_som
