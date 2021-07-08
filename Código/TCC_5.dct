@@ -148,6 +148,7 @@ bf
 bf_bit
 bgst
 bgst_bit
+block_cmd
 bor
 bor_bit
 botao1
@@ -728,10 +729,12 @@ lcd_d7_direction
 lcd_en
 lcd_en_direction
 lcd_init
+lcd_led
 lcd_out
 lcd_out_cp
 lcd_rs
 lcd_rs_direction
+lcdluz
 led
 led2
 led3
@@ -742,6 +745,7 @@ ligar
 longint2double
 longjmp
 longword2double
+luz_lcd
 lvdcon
 lvden
 lvden_bit
@@ -1310,6 +1314,7 @@ tblptru
 temp
 temp_disp
 temp_inc
+temp_lcd
 temp_led
 temp_led2
 temp_led3

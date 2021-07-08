@@ -1,16 +1,17 @@
 #line 1 "C:/Users/guga_/Documents/GitHub/Dispenser_de_Remedio/Código/TCC_5.c"
-#line 19 "C:/Users/guga_/Documents/GitHub/Dispenser_de_Remedio/Código/TCC_5.c"
-sbit LED at PORTA.b0;
-sbit SOM at PORTA.b2;
-sbit LED2 at PORTA.b3;
-sbit LED3 at PORTB.b0;
-sbit LED4 at PORTB.b1;
-sbit LED5 at PORTB.b3;
+#line 21 "C:/Users/guga_/Documents/GitHub/Dispenser_de_Remedio/Código/TCC_5.c"
+sbit LED at PORTA.b3;
+sbit LED2 at PORTA.b0;
+sbit LED3 at PORTA.b1;
+sbit LED4 at PORTA.b2;
+sbit LED5 at PORTA.b4;
+sbit SOM at PORTB .b4;
 
 
-sbit SM at PORTA.b1;
-sbit SM2 at PORTA.b4;
-sbit SM3 at PORTA.b5;
+
+sbit SM at PORTB.b0;
+sbit SM2 at PORTB.b1;
+sbit SM3 at PORTB.b3;
 sbit SM4 at PORTB.b2;
 
 
@@ -21,6 +22,8 @@ sbit LCD_D6 at PORTD.b6;
 sbit LCD_D5 at PORTD.b5;
 sbit LCD_D4 at PORTD.b4;
 
+sbit LCD_LED at PORTC.b2;
+
 
 sbit LCD_RS_Direction at TRISD2_bit;
 sbit LCD_EN_Direction at TRISD3_bit;
@@ -30,11 +33,12 @@ sbit LCD_D5_Direction at TRISD5_bit;
 sbit LCD_D4_Direction at TRISD4_bit;
 
 
+
 sbit BOTAO1 at PORTC.b0;
 sbit BOTAO2 at PORTC.b1;
-sbit BOTAO3 at PORTC.b2;
-sbit BOTAO4 at PORTC.b4;
-sbit BOTAO5 at PORTC.b5;
+sbit BOTAO3 at PORTA.b5;
+sbit BOTAO4 at PORTC.b6;
+sbit BOTAO5 at PORTC.b7;
 
 
 
@@ -67,6 +71,7 @@ void mot_fechado3();
 void mot_fechado4();
 void read_motbits();
 void fast_incr();
+void luz_lcd();
 
 
 
@@ -103,6 +108,7 @@ unsigned temp2 = 0x00,
  option = 0x00,
  temp_inc = 0x00,
  temp_num = 0x00,
+ temp_lcd = 0x00,
  qtd_comp,
  qtd_comp2,
  qtd_comp3,
@@ -140,6 +146,8 @@ bit ligar,
  b3_flag,
  b4_flag,
  b5_flag,
+ lcdluz,
+ block_cmd;
  fast_inc;
 
 
@@ -152,11 +160,17 @@ char dia[] = "dia",
 
 void interrupt()
 {
- if(TMR1IF_bit)
+
+ if(TMR0IF_bit)
  {
- TMR1IF_bit = 0x00;
- TMR1H = 0x3C;
- TMR1L = 0xB0;
+ TMR0IF_bit = 0x00;
+ TMR0H = 0xED;
+ TMR0L = 0xB1;
+ temp++;
+ temp2++;
+ temp3++;
+ temp4++;
+
  temp_led++;
  temp_led2++;
  temp_led3++;
@@ -165,18 +179,8 @@ void interrupt()
  temp_disp++;
  temp_som++;
  temp_inc++;
+ temp_lcd++;
  temp_num++;
- }
-
- if(TMR0IF_bit)
- {
- TMR0IF_bit = 0x00;
- TMR0H = 0x3C;
- TMR0L = 0xB0;
- temp++;
- temp2++;
- temp3++;
- temp4++;
 
  }
 
@@ -203,10 +207,8 @@ void main (void)
  ADCON1 = 0x0F;
  CMCON = 0x07;
 
- TMR0H = 0x3C;
- TMR0L = 0xB0;
- TMR1H = 0x3C;
- TMR1L = 0xB0;
+ TMR0H = 0xED;
+ TMR0L = 0xB1;
 
 
  INTCON.GIE = 0x01;
@@ -214,15 +216,15 @@ void main (void)
  INTCON.TMR0IE = 0x01;
 
  TMR0IF_bit = 0x00;
- TMR1IF_bit = 0x00;
 
 
  INTCON2.RBPU = 0x01;
- T0CON = 0x81;
- T1CON = 0xA1;
+ T0CON = 0x87;
+
 
 
  ligar = 0x00;
+ block_cmd = 0x00;
  b1_flag = 0x00;
  b2_flag = 0x00;
  b3_flag = 0x00;
@@ -252,6 +254,9 @@ void main (void)
  SM3 = 0x00;
  SM4 = 0x00;
 
+ LED2 = 0x00;
+ LCD_LED = 0x01;
+
  num = EEPROM_Read(0x01);
  un = EEPROM_Read(0x03);
  num2 = EEPROM_Read(0x02);
@@ -270,13 +275,14 @@ void main (void)
  if(qtd_comp3==0xFF)qtd_comp3=0x01;
  if(qtd_comp4==0xFF)qtd_comp4=0x01;
 
- TRISA = 0x00;
- TRISC = 0x3F;
+ TRISA = 0x20;
+ TRISC = 0xC3;
  TRISB = 0x00;
 
  LCD_Init();
  LCD_Cmd(_LCD_CLEAR);
  LCD_Cmd(_LCD_CURSOR_OFF);
+
 
  while(1)
  {
@@ -299,6 +305,7 @@ void ler_bot()
  {
  LCD_Cmd(_LCD_CLEAR);
  b1_flag = 0x00;
+ LCD_LED = 0x01;
  if(!ligar)
  {
  prog++;
@@ -351,6 +358,7 @@ void ler_bot()
  LCD_Cmd(_LCD_CLEAR);
  b2_flag = 0x00;
  fast_inc = 0x00;
+ LCD_LED = 0x01;
  if(option==0)
  {
  if(prog==1)
@@ -446,6 +454,7 @@ void ler_bot()
  {
  LCD_Cmd(_LCD_CLEAR);
  b3_flag = 0x00;
+ LCD_LED = 0x01;
  if(option==0)
  {
  if(prog==1)
@@ -606,16 +615,24 @@ void ler_bot()
  }
 
 
- if(!BOTAO5) b5_flag = 0x01;
+ if(!BOTAO5)
+ {
+ b5_flag = 0x01;
+ luz_lcd();
+
+ }
 
  if(BOTAO5 && b5_flag)
  {
  LCD_Cmd(_LCD_CLEAR);
  b5_flag = 0x00;
+ if(!block_cmd)
+ {
  if(prog != 0)
  {
  option++;
  if(option == 4) option=0x00;
+ }
  }
 
  if(toque || toque2 || toque3 || toque4)
@@ -632,6 +649,9 @@ void ler_bot()
 
  }
 
+
+ block_cmd = 0x00;
+ temp_lcd = 0x00;
  }
 
 }
@@ -716,14 +736,35 @@ void fast_incr()
 
 
 
+void luz_lcd()
+{
+ if(temp_lcd > 15) temp_lcd = 0x00;
+ if(temp_lcd == 15)
+ {
+ LCD_LED = ~LCD_LED;
+ temp_lcd = 0x00;
+ block_cmd = 0x01;
+
+ }
+
+}
+
+
+
+
 void disp()
 {
  if(!ligar && prog==0)
  {
+ if(SM) SM = 0x00;
+ if(SM2)SM2 = 0x00;
+ if(SM3)SM3 = 0x00;
+ if(SM4)SM4 = 0x00;
  if(!display && !display2)
  {
  LCD_Out(1,1,"  DISPENSER DE  ");
  LCD_Out(2,1,"    REMEDIOS    ");
+
  }
  else
  {

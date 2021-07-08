@@ -5,7 +5,9 @@
     Autor: Gustavo dos Santos Pereira
     
     Compilador: MikroC PRO for PIC
-    PIC: 18F4550     8MHz
+    PIC: 18F4550     48MHz
+    
+    Placa ustart PIC18F4550
     
     -----------------------------------------------------------------
     Blibiotecas do MikroC usadas:
@@ -16,17 +18,18 @@
 
 
 //SAÍDAS COMUNS
-sbit LED  at PORTA.b0;
-sbit SOM  at PORTA.b2;
-sbit LED2 at PORTA.b3;
-sbit LED3 at PORTB.b0;
-sbit LED4 at PORTB.b1;
-sbit LED5 at PORTB.b3;
+sbit LED  at PORTA.b3;
+sbit LED2 at PORTA.b0;
+sbit LED3 at PORTA.b1;
+sbit LED4 at PORTA.b2;
+sbit LED5 at PORTA.b4;
+sbit SOM  at PORTB .b4;
+
 
 //BITS SERVO MOTOR
-sbit SM  at PORTA.b1;
-sbit SM2 at PORTA.b4;
-sbit SM3 at PORTA.b5;
+sbit SM  at PORTB.b0;
+sbit SM2 at PORTB.b1;
+sbit SM3 at PORTB.b3;
 sbit SM4 at PORTB.b2;
 
 //BITS DO LCD
@@ -37,6 +40,8 @@ sbit LCD_D6 at PORTD.b6;
 sbit LCD_D5 at PORTD.b5;
 sbit LCD_D4 at PORTD.b4;
 
+sbit LCD_LED at PORTC.b2;
+
 //PINOS DO TRIS LCD
 sbit LCD_RS_Direction at TRISD2_bit;
 sbit LCD_EN_Direction at TRISD3_bit;
@@ -45,12 +50,13 @@ sbit LCD_D6_Direction at TRISD6_bit;
 sbit LCD_D5_Direction at TRISD5_bit;
 sbit LCD_D4_Direction at TRISD4_bit;
 
+
 //ENTRADAS DOS BOTOES
 sbit BOTAO1 at PORTC.b0;
 sbit BOTAO2 at PORTC.b1;
-sbit BOTAO3 at PORTC.b2;
-sbit BOTAO4 at PORTC.b4;
-sbit BOTAO5 at PORTC.b5;
+sbit BOTAO3 at PORTA.b5;
+sbit BOTAO4 at PORTC.b6;
+sbit BOTAO5 at PORTC.b7;
 
 //---------------------------
 //----------Funções----------
@@ -83,6 +89,7 @@ void mot_fechado3();                      //fecha o motor n°3
 void mot_fechado4();                      //fecha o motor n°4
 void read_motbits();                      //ler os bits dos motores
 void fast_incr();                         //incrementar num rápidamente
+void luz_lcd();                           //controlar a claridade do LCD
 
 //--------------------------
 //-------Variáveis----------
@@ -119,6 +126,7 @@ unsigned temp2        = 0x00,             //variável de interrupção do dispenser
          option       = 0x00,             //variável que define qual dispenser está selecionado
          temp_inc     = 0x00,             //variável de temporização do botão para incremento rápido
          temp_num     = 0x00,             //variável de temporização do numero para incremento rápido
+         temp_lcd     = 0x00,
          qtd_comp,   //= EEPROM_Read(0x09)   variável para quantidade de comprimidos à despejar do dispenser n°1
          qtd_comp2,  //= EEPROM_read(0x0A)   variável para quantidade de comprimidos à despejar do dispenser n°2
          qtd_comp3,  //= EEPROM_Read(0x0B)   variável para quantidade de comprimidos à despejar do dispenser n°3
@@ -156,6 +164,8 @@ bit      ligar,                           //bit de ligar/desligar a contagem
          b3_flag,                         //flag do botão 3
          b4_flag,                         //flag do botão 4
          b5_flag,                         //flag do botão 5
+         lcdluz,                          //bit de luz do LCD
+         block_cmd;                       //bit para bloqueio de funções
          fast_inc;                        //bit de ativação do incremento rápido
 
 
@@ -168,11 +178,17 @@ char     dia[]        = "dia",            //variável de exibição "dia"
 //================================================================================
 void interrupt()                          //interrupção
 {
-     if(TMR1IF_bit)                       //overflow em 100ms
+
+     if(TMR0IF_bit)                        //overflow em 100ms overflow
      {
-      TMR1IF_bit  =  0x00;                //zera flag do timer1
-      TMR1H       =  0x3C;
-      TMR1L       =  0xB0;                //seta timer1 em 15536
+      TMR0IF_bit =  0x00;                  //zera flag do timer0
+      TMR0H      =  0xED;
+      TMR0L      =  0xB1;                  //seta timer0 em 60849
+      temp++;                              //incrementa temp
+      temp2++;                             //incrementa temp2
+      temp3++;                             //incrementa temp3
+      temp4++;                             //incrementa temp4
+      
       temp_led++;                         //incrementa temp_led
       temp_led2++;                        //incrementa temp_led2
       temp_led3++;                        //incrementa temp_led3
@@ -181,19 +197,9 @@ void interrupt()                          //interrupção
       temp_disp++;                        //incrementa temp_disp
       temp_som++;                         //incrementa temp_som
       temp_inc++;                         //incrementa temp_inc
+      temp_lcd++;                         //incrementa temp_lcd
       temp_num++;                         //icrementa temp_num
-     }
-
-     if(TMR0IF_bit)                        //overflow em 100ms overflow
-     {
-      TMR0IF_bit =  0x00;                  //zera flag do timer0
-      TMR0H      =  0x3C;
-      TMR0L      =  0xB0;                  //seta timer0 em 15536
-      temp++;                              //incrementa temp
-      temp2++;                             //incrementa temp2
-      temp3++;                             //incrementa temp3
-      temp4++;                             //incrementa temp4
-
+      
      }                                     //end if TMR0IF
 
 
@@ -219,10 +225,8 @@ void main (void)
         ADCON1        =   0x0F;                   //Define os pinos como digital
         CMCON         =   0x07;                   //Desativa os comparadores
 
-        TMR0H         =   0x3C;
-        TMR0L         =   0xB0;                   //Inicia timer0 em 15536
-        TMR1H         =   0x3C;
-        TMR1L         =   0xB0;                   //Inicia TMR1 em 15536
+        TMR0H         =   0xED;
+        TMR0L         =   0xB1;                   //Inicia timer0 em 60849
 
 
         INTCON.GIE    =   0x01;                   //Ativa interrupção global
@@ -230,15 +234,15 @@ void main (void)
         INTCON.TMR0IE =   0x01;                   //Ativa interrupção por overflow
 
         TMR0IF_bit    =   0x00;                   //zera a flag do timer0
-        TMR1IF_bit    =   0x00;                   //zera a flag do timer1
 
 
         INTCON2.RBPU  =   0x01;                   //Desliga os resistores de pull-ups do portB
-        T0CON         =   0x81;                   //TMR0 16 bits, prescaler 1:4
-        T1CON         =   0xA1;                   //TMR1 16 bits, prescaler 1:4
+        T0CON         =   0x87;                   //TMR0 16 bits, prescaler 1:256
+
 
 
         ligar         =   0x00;                   //     |
+        block_cmd     =   0x00;                   //     |
         b1_flag       =   0x00;                   //     |
         b2_flag       =   0x00;                   //     |
         b3_flag       =   0x00;                   //     |
@@ -267,6 +271,9 @@ void main (void)
         SM2           =   0x00;
         SM3           =   0x00;
         SM4           =   0x00;
+        
+        LED2          =   0x00;
+        LCD_LED       =   0x01;
 
         num           =   EEPROM_Read(0x01);      //lê os dados da EEPROM para variável num
         un            =   EEPROM_Read(0x03);      //lê os dados da EEPROM para variável un
@@ -286,13 +293,14 @@ void main (void)
         if(qtd_comp3==0xFF)qtd_comp3=0x01;
         if(qtd_comp4==0xFF)qtd_comp4=0x01;
 
-        TRISA = 0x00;                             //seta todos os bits do TRISA como saída
-        TRISC = 0x3F;                             //seta os bits 0,1,2,3,5 como entrada
+        TRISA = 0x20;                             //seta todos os bits do TRISA como saída
+        TRISC = 0xC3;                             //seta os bits 0,1,2,6,7 como entrada
         TRISB = 0x00;                             //seta todos os bits do TRISB como saída
 
         LCD_Init();                               //inicia o LCD
         LCD_Cmd(_LCD_CLEAR);                      //limpa o LCD
         LCD_Cmd(_LCD_CURSOR_OFF);                 //desliga cursor do LCD
+        
 
  while(1)                                         //loop infinito
  {
@@ -315,6 +323,7 @@ void ler_bot()
   {
    LCD_Cmd(_LCD_CLEAR);                           //limpa o LCD
    b1_flag = 0x00;                                //lmpa a flag do botão1
+   LCD_LED = 0x01;                                //liga o LED do LCD
    if(!ligar)                                     //se bit ligar = 0
    {
     prog++;                                       //incrementa prog, muda a programação
@@ -367,6 +376,7 @@ void ler_bot()
     LCD_Cmd(_LCD_CLEAR);                          //limpa LCD
     b2_flag    =  0x00;                           //limpa flag do botão
     fast_inc   =  0x00;                           //limpa bit de incremento rápido
+    LCD_LED = 0x01;                               //liga o LED do LCD
    if(option==0)                                  //dispenser n°1
    {
     if(prog==1)                                   //programação de numero
@@ -462,6 +472,7 @@ void ler_bot()
   {
    LCD_Cmd(_LCD_CLEAR);                           //limpa LCD
    b3_flag     =  0x00;                           //limpa flag do botão3
+   LCD_LED = 0x01;                                //liga o LED do LCD
    if(option==0)                                  //dispenser n°1
    {
     if(prog==1)                                   //programação do numero
@@ -622,32 +633,43 @@ void ler_bot()
   }
 
   //___b5___                                        botao para trocar de contador
-  if(!BOTAO5) b5_flag = 0x01;                     //se botão5 for pressionado, flag do botão5 = 1
-  
+  if(!BOTAO5) 
+  {
+   b5_flag = 0x01;                                //se botão5 for pressionado, flag do botão5 = 1
+   luz_lcd();                                     //executa a função de controle da luminosidade do display
+
+  }                                               //end if !BOTAO5
+
   if(BOTAO5 && b5_flag)                           //se botão5 for solto e flag do botão5 for 1
   {
    LCD_Cmd(_LCD_CLEAR);                           //limpa LCD
    b5_flag = 0x00;                                //limpa flag do botão5
-   if(prog != 0)                                  //se prog for diferente de 0
+   if(!block_cmd)                                 //se bloqueio desativado
    {
-    option++;                                     //incrementa option
-    if(option == 4) option=0x00;                  //se option for 4, option = 0
-   }
+    if(prog != 0)                                 //se prog for diferente de 0
+    {
+     option++;                                    //incrementa option
+     if(option == 4) option=0x00;                 //se option for 4, option = 0
+    }
+   }                                              //end if !block_cmd
    
-    if(toque || toque2 || toque3 || toque4)       //se algum comando do SOM estiver ativado...
-    {                                             //(desligar despertador)
-    if(toque)temp_ligado=0x00;                    //se for o toque 1, zera o contador 1
-    if(toque2)temp_ligado2=0x00;                  //se for o toque 2, zera o contador 2
-    if(toque3)temp_ligado3=0x00;                  //se for o toque 3, zera o contador 3
-    if(toque4)temp_ligado4=0x00;                  //se for o toque 4, zera o contador 4
-     toque =0x00;
-     toque2=0x00;
-     toque3=0x00;
-     toque4=0x00;                                 //zera todos os bits de SOM
-     SOM=0x00;
-     
-    }                                             //end if toque || toque2 || toque3 || toque4
+     if(toque || toque2 || toque3 || toque4)      //se algum comando do SOM estiver ativado...
+     {                                            //(desligar despertador)
+     if(toque)temp_ligado=0x00;                   //se for o toque 1, zera o contador 1
+     if(toque2)temp_ligado2=0x00;                 //se for o toque 2, zera o contador 2
+     if(toque3)temp_ligado3=0x00;                 //se for o toque 3, zera o contador 3
+     if(toque4)temp_ligado4=0x00;                 //se for o toque 4, zera o contador 4
+      toque =0x00;
+      toque2=0x00;
+      toque3=0x00;
+      toque4=0x00;                                //zera todos os bits de SOM
+      SOM=0x00;
+
+     }                                            //end if toque || toque2 || toque3 || toque4
     
+
+   block_cmd = 0x00;                              //desativa o bloqueio
+   temp_lcd = 0x00;                               //zera o temp_lcd
   }                                               //end if BOTAO5 && b5_flag
 
 }                                                 //end ler_bot()
@@ -728,6 +750,22 @@ void fast_incr()
  
 }                                                 //end void fast_incr()
 
+//================================================================================
+//                        FUNÇÃO DE CONTROLE DA LUMINOSIDADE
+//                                  DO DISPLAY LCD
+//================================================================================
+void luz_lcd()
+{
+ if(temp_lcd > 15)  temp_lcd = 0x00;
+ if(temp_lcd == 15)                               //se o botão for segurado por ~= 1500ms
+ {
+  LCD_LED  = ~LCD_LED;                            //inverte a saída do LED do LCD
+  temp_lcd = 0x00;                                //zera o temp_lcd
+  block_cmd = 0x01;                               //bloqueia a ação do botão
+  
+ }                                                //end if temp_lcd
+
+}                                                 //end void luz_lcd
 
 //================================================================================
 //                      FUNÇÃO DE EXIBIÇÃO DO DISPLAY
@@ -736,10 +774,15 @@ void disp()
 {
   if(!ligar && prog==0)                           //se ligar for 0 e prog for 0
   {
+   if(SM) SM   = 0x00;
+   if(SM2)SM2  = 0x00;
+   if(SM3)SM3  = 0x00;
+   if(SM4)SM4  = 0x00;
    if(!display && !display2)                      //se os bits diplay e display2 forem 0
    {
      LCD_Out(1,1,"  DISPENSER DE  ");             //exibe "DISPENSER DE"
      LCD_Out(2,1,"    REMEDIOS    ");             //      "  REMEDIOS  "
+
     }
    else                                           //senão
    {

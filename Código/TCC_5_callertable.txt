@@ -16,6 +16,7 @@ main
 		EEPROM_Write
 		fast_incr
 		Mul_16X16_U
+		luz_lcd
 	disp
 		Lcd_Out
 			Lcd_Cmd
