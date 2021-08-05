@@ -7,6 +7,7 @@ Esse é um projeto de TCC onde foi idealizado um dispenser de remédios automát
 O público alvo desse dispositivo é de uma faixa etária mais elevada, cuja a medicação é de extrema importância mais constante durante o dia, porém, com uma pesquisa, eu e meu grupo vimos que muitos de faixa etária menor também podem fazer extremo bom uso do equipamento.
 Para o controle do dispositivo foi usado um microcontrolador PIC18F4550 e o código foi desenvolvido em linguagem "c".
 
+
 ## Circuito Dispenser 💊
 Aqui esta toda a parte do circuito elétrico do dispenser de remedio.
 ![Circuito](https://github.com/Metheus97/Dispenser_de_Remedio/blob/main/Circuito/circuito_dispenser.png)
