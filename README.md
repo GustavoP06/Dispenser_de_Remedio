@@ -9,5 +9,5 @@ Para o controle do dispositivo foi usado um microcontrolador PIC18F4550 e o cód
 
 
 ## Circuito Dispenser 💊
-Aqui esta toda a parte do circuito elétrico do dispenser de remedio.
+Aqui esta toda a parte do circuito eletrônico do dispenser de remedio.
 ![Circuito](https://github.com/Metheus97/Dispenser_de_Remedio/blob/main/Circuito/circuito_dispenser.png)
