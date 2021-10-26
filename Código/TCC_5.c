@@ -23,7 +23,7 @@ sbit LED2 at PORTA.b0;
 sbit LED3 at PORTA.b1;
 sbit LED4 at PORTA.b2;
 sbit LED5 at PORTA.b4;
-sbit SOM  at PORTB .b4;
+sbit SOM  at PORTB.b4;
 
 
 //BITS SERVO MOTOR
@@ -89,7 +89,7 @@ void mot_fechado3();                      //fecha o motor n°3
 void mot_fechado4();                      //fecha o motor n°4
 void read_motbits();                      //ler os bits dos motores
 void fast_incr();                         //incrementar num rápidamente
-void luz_lcd();                           //controlar a claridade do LCD
+void luz_lcd();                           //controlar a luz do LCD
 
 //--------------------------
 //-------Variáveis----------
@@ -198,7 +198,7 @@ void interrupt()                          //interrupção
       temp_som++;                         //incrementa temp_som
       temp_inc++;                         //incrementa temp_inc
       temp_lcd++;                         //incrementa temp_lcd
-      temp_num++;                         //icrementa temp_num
+      temp_num++;                         //incrementa temp_num
       
      }                                     //end if TMR0IF
 
@@ -236,7 +236,7 @@ void main (void)
         TMR0IF_bit    =   0x00;                   //zera a flag do timer0
 
 
-        INTCON2.RBPU  =   0x01;                   //Desliga os resistores de pull-ups do portB
+        INTCON2.RBPU  =   0x01;                   //Desliga os resistores de pull-up do portB
         T0CON         =   0x87;                   //TMR0 16 bits, prescaler 1:256
 
 
@@ -288,7 +288,7 @@ void main (void)
         qtd_comp3     =   EEPROM_Read(0x0B);      //lê os dados da EEPROM para variavel qtd_comp3
         qtd_comp4     =   EEPROM_Read(0x0C);      //lê os dados da EEPROM para variavel qtd_comp4
         
-        if(qtd_comp==0xFF)qtd_comp=0x01;
+        if(qtd_comp==0xFF) qtd_comp =0x01;
         if(qtd_comp2==0xFF)qtd_comp2=0x01;
         if(qtd_comp3==0xFF)qtd_comp3=0x01;
         if(qtd_comp4==0xFF)qtd_comp4=0x01;
@@ -331,29 +331,29 @@ void ler_bot()
     {
      prog=0x00;                                   //zera a variável prog
      EEPROM_Write(0x01,num);                      //grava num na EEPROM
-     delay_ms(10);                                //espera 10 micro segundos
+     delay_ms(10);                                //espera 10 mili segundos
      EEPROM_Write(0x03,un);                       //grava un na EEPROM
-     delay_ms(10);                                //espera 10 micro segundos
+     delay_ms(10);                                //espera 10 mili segundos
      EEPROM_Write(0x02,num2);                     //grava num2 na EEPROM
-     delay_ms(10);                                //espera 10 micro segundos
+     delay_ms(10);                                //espera 10 mili segundos
      EEPROM_Write(0x04,un2);                      //grava un2 na EEPROM
-     delay_ms(10);                                //espera 10 micro segundos
+     delay_ms(10);                                //espera 10 mili segundos
      EEPROM_Write(0x05,num3);                     //grava num3 na EEPROM
-     delay_ms(10);                                //espera 10 micro segundos
+     delay_ms(10);                                //espera 10 mili segundos
      EEPROM_Write(0x06,un3);                      //grava un3 na EEPROM
-     delay_ms(10);                                //espera 10 micro segundos
+     delay_ms(10);                                //espera 10 mili segundos
      EEPROM_Write(0x07,num4);                     //grava num4 na EEPROM
-     delay_ms(10);                                //espera 10 micro segundos
+     delay_ms(10);                                //espera 10 mili segundos
      EEPROM_Write(0x08,un4);                      //grava un4 na EEPROM
-     delay_ms(10);                                //espera 10 micro segundos
+     delay_ms(10);                                //espera 10 mili segundos
      EEPROM_Write(0x09,qtd_comp);                 //grava qtd_comp na EEPROM
-     delay_ms(10);                                //espera 10 micro segundos
+     delay_ms(10);                                //espera 10 mili segundos
      EEPROM_Write(0x0A,qtd_comp2);                //grava qtd_comp2 na EEPROM
-     delay_ms(10);                                //espera 10 micro segundos
+     delay_ms(10);                                //espera 10 mili segundos
      EEPROM_Write(0x0B,qtd_comp3);                //grava qtd_comp3 na EEPROM
-     delay_ms(10);                                //espera 10 micro segundos
+     delay_ms(10);                                //espera 10 mili segundos
      EEPROM_Write(0x0C,qtd_comp4);                //grava qtd_comp4 na EEPROM
-     delay_ms(10);                                //espera 10 micro segundos
+     delay_ms(10);                                //espera 10 mili segundos
      display=0x01;                                //bit display em 1
     
     }                                             //end if prog = 3
