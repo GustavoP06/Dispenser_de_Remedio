@@ -52,7 +52,7 @@ _interrupt:
 ;TCC_5.c,200 :: 		temp_lcd++;                         //incrementa temp_lcd
 	INFSNZ      _temp_lcd+0, 1 
 	INCF        _temp_lcd+1, 1 
-;TCC_5.c,201 :: 		temp_num++;                         //icrementa temp_num
+;TCC_5.c,201 :: 		temp_num++;                         //incrementa temp_num
 	INFSNZ      _temp_num+0, 1 
 	INCF        _temp_num+1, 1 
 ;TCC_5.c,203 :: 		}                                     //end if TMR0IF
@@ -96,7 +96,7 @@ _main:
 	BSF         INTCON+0, 5 
 ;TCC_5.c,236 :: 		TMR0IF_bit    =   0x00;                   //zera a flag do timer0
 	BCF         TMR0IF_bit+0, BitPos(TMR0IF_bit+0) 
-;TCC_5.c,239 :: 		INTCON2.RBPU  =   0x01;                   //Desliga os resistores de pull-ups do portB
+;TCC_5.c,239 :: 		INTCON2.RBPU  =   0x01;                   //Desliga os resistores de pull-up do portB
 	BSF         INTCON2+0, 7 
 ;TCC_5.c,240 :: 		T0CON         =   0x87;                   //TMR0 16 bits, prescaler 1:256
 	MOVLW       135
@@ -272,7 +272,7 @@ L__main439:
 	MOVWF       _qtd_comp4+0 
 	MOVLW       0
 	MOVWF       _qtd_comp4+1 
-;TCC_5.c,291 :: 		if(qtd_comp==0xFF)qtd_comp=0x01;
+;TCC_5.c,291 :: 		if(qtd_comp==0xFF) qtd_comp =0x01;
 	MOVLW       0
 	XORWF       _qtd_comp+1, 0 
 	BTFSS       STATUS+0, 2 
@@ -410,7 +410,7 @@ L__ler_bot445:
 	MOVF        _num+0, 0 
 	MOVWF       FARG_EEPROM_Write_data_+0 
 	CALL        _EEPROM_Write+0, 0
-;TCC_5.c,334 :: 		delay_ms(10);                                //espera 10 micro segundos
+;TCC_5.c,334 :: 		delay_ms(10);                                //espera 10 mili segundos
 	MOVLW       156
 	MOVWF       R12, 0
 	MOVLW       215
@@ -428,7 +428,7 @@ L_ler_bot13:
 	MOVLW       1
 	MOVWF       FARG_EEPROM_Write_data_+0 
 	CALL        _EEPROM_Write+0, 0
-;TCC_5.c,336 :: 		delay_ms(10);                                //espera 10 micro segundos
+;TCC_5.c,336 :: 		delay_ms(10);                                //espera 10 mili segundos
 	MOVLW       156
 	MOVWF       R12, 0
 	MOVLW       215
@@ -444,7 +444,7 @@ L_ler_bot14:
 	MOVF        _num2+0, 0 
 	MOVWF       FARG_EEPROM_Write_data_+0 
 	CALL        _EEPROM_Write+0, 0
-;TCC_5.c,338 :: 		delay_ms(10);                                //espera 10 micro segundos
+;TCC_5.c,338 :: 		delay_ms(10);                                //espera 10 mili segundos
 	MOVLW       156
 	MOVWF       R12, 0
 	MOVLW       215
@@ -462,7 +462,7 @@ L_ler_bot15:
 	MOVLW       1
 	MOVWF       FARG_EEPROM_Write_data_+0 
 	CALL        _EEPROM_Write+0, 0
-;TCC_5.c,340 :: 		delay_ms(10);                                //espera 10 micro segundos
+;TCC_5.c,340 :: 		delay_ms(10);                                //espera 10 mili segundos
 	MOVLW       156
 	MOVWF       R12, 0
 	MOVLW       215
@@ -478,7 +478,7 @@ L_ler_bot16:
 	MOVF        _num3+0, 0 
 	MOVWF       FARG_EEPROM_Write_data_+0 
 	CALL        _EEPROM_Write+0, 0
-;TCC_5.c,342 :: 		delay_ms(10);                                //espera 10 micro segundos
+;TCC_5.c,342 :: 		delay_ms(10);                                //espera 10 mili segundos
 	MOVLW       156
 	MOVWF       R12, 0
 	MOVLW       215
@@ -496,7 +496,7 @@ L_ler_bot17:
 	MOVLW       1
 	MOVWF       FARG_EEPROM_Write_data_+0 
 	CALL        _EEPROM_Write+0, 0
-;TCC_5.c,344 :: 		delay_ms(10);                                //espera 10 micro segundos
+;TCC_5.c,344 :: 		delay_ms(10);                                //espera 10 mili segundos
 	MOVLW       156
 	MOVWF       R12, 0
 	MOVLW       215
@@ -512,7 +512,7 @@ L_ler_bot18:
 	MOVF        _num4+0, 0 
 	MOVWF       FARG_EEPROM_Write_data_+0 
 	CALL        _EEPROM_Write+0, 0
-;TCC_5.c,346 :: 		delay_ms(10);                                //espera 10 micro segundos
+;TCC_5.c,346 :: 		delay_ms(10);                                //espera 10 mili segundos
 	MOVLW       156
 	MOVWF       R12, 0
 	MOVLW       215
@@ -530,7 +530,7 @@ L_ler_bot19:
 	MOVLW       1
 	MOVWF       FARG_EEPROM_Write_data_+0 
 	CALL        _EEPROM_Write+0, 0
-;TCC_5.c,348 :: 		delay_ms(10);                                //espera 10 micro segundos
+;TCC_5.c,348 :: 		delay_ms(10);                                //espera 10 mili segundos
 	MOVLW       156
 	MOVWF       R12, 0
 	MOVLW       215
@@ -546,7 +546,7 @@ L_ler_bot20:
 	MOVF        _qtd_comp+0, 0 
 	MOVWF       FARG_EEPROM_Write_data_+0 
 	CALL        _EEPROM_Write+0, 0
-;TCC_5.c,350 :: 		delay_ms(10);                                //espera 10 micro segundos
+;TCC_5.c,350 :: 		delay_ms(10);                                //espera 10 mili segundos
 	MOVLW       156
 	MOVWF       R12, 0
 	MOVLW       215
@@ -562,7 +562,7 @@ L_ler_bot21:
 	MOVF        _qtd_comp2+0, 0 
 	MOVWF       FARG_EEPROM_Write_data_+0 
 	CALL        _EEPROM_Write+0, 0
-;TCC_5.c,352 :: 		delay_ms(10);                                //espera 10 micro segundos
+;TCC_5.c,352 :: 		delay_ms(10);                                //espera 10 mili segundos
 	MOVLW       156
 	MOVWF       R12, 0
 	MOVLW       215
@@ -578,7 +578,7 @@ L_ler_bot22:
 	MOVF        _qtd_comp3+0, 0 
 	MOVWF       FARG_EEPROM_Write_data_+0 
 	CALL        _EEPROM_Write+0, 0
-;TCC_5.c,354 :: 		delay_ms(10);                                //espera 10 micro segundos
+;TCC_5.c,354 :: 		delay_ms(10);                                //espera 10 mili segundos
 	MOVLW       156
 	MOVWF       R12, 0
 	MOVLW       215
@@ -594,7 +594,7 @@ L_ler_bot23:
 	MOVF        _qtd_comp4+0, 0 
 	MOVWF       FARG_EEPROM_Write_data_+0 
 	CALL        _EEPROM_Write+0, 0
-;TCC_5.c,356 :: 		delay_ms(10);                                //espera 10 micro segundos
+;TCC_5.c,356 :: 		delay_ms(10);                                //espera 10 mili segundos
 	MOVLW       156
 	MOVWF       R12, 0
 	MOVLW       215
@@ -4107,40 +4107,36 @@ L__mot_aberto608:
 L__mot_aberto609:
 	BTFSC       STATUS+0, 0 
 	GOTO        L_mot_aberto305
-;TCC_5.c,1433 :: 		SM=0;                                         //  ||
-	BCF         PORTB+0, 0 
-;TCC_5.c,1434 :: 		delay_us(18000);                              //  ||
-	MOVLW       2
-	MOVWF       R11, 0
-	MOVLW       25
+;TCC_5.c,1433 :: 		SM=1;                                         //  ||
+	BSF         PORTB+0, 0 
+;TCC_5.c,1434 :: 		delay_us(500);                                //  ||
+	MOVLW       8
 	MOVWF       R12, 0
-	MOVLW       129
+	MOVLW       201
 	MOVWF       R13, 0
 L_mot_aberto306:
 	DECFSZ      R13, 1, 1
 	BRA         L_mot_aberto306
 	DECFSZ      R12, 1, 1
 	BRA         L_mot_aberto306
-	DECFSZ      R11, 1, 1
-	BRA         L_mot_aberto306
 	NOP
 	NOP
-;TCC_5.c,1435 :: 		SM=1;                                         //  ||
-	BSF         PORTB+0, 0 
-;TCC_5.c,1436 :: 		delay_us(2000);                               //  \/
-	MOVLW       32
+;TCC_5.c,1435 :: 		SM=0;                                         //  ||
+	BCF         PORTB+0, 0 
+;TCC_5.c,1436 :: 		delay_us(20000);                              //  \/
+	MOVLW       2
+	MOVWF       R11, 0
+	MOVLW       56
 	MOVWF       R12, 0
-	MOVLW       41
+	MOVLW       173
 	MOVWF       R13, 0
 L_mot_aberto307:
 	DECFSZ      R13, 1, 1
 	BRA         L_mot_aberto307
 	DECFSZ      R12, 1, 1
 	BRA         L_mot_aberto307
-	NOP
-	NOP
-;TCC_5.c,1437 :: 		SM=0;                                         // liga motor 1 no sentido horário
-	BCF         PORTB+0, 0 
+	DECFSZ      R11, 1, 1
+	BRA         L_mot_aberto307
 ;TCC_5.c,1438 :: 		x_mot ++;                                     //incrementa x_mot
 	INFSNZ      _x_mot+0, 1 
 	INCF        _x_mot+1, 1 
@@ -4197,40 +4193,36 @@ L__mot_aberto2612:
 L__mot_aberto2613:
 	BTFSC       STATUS+0, 0 
 	GOTO        L_mot_aberto2311
-;TCC_5.c,1467 :: 		SM2=0;                                        //  ||
-	BCF         PORTB+0, 1 
-;TCC_5.c,1468 :: 		delay_us(18000);                              //  ||
-	MOVLW       2
-	MOVWF       R11, 0
-	MOVLW       25
+;TCC_5.c,1467 :: 		SM2=1;                                        //  ||
+	BSF         PORTB+0, 1 
+;TCC_5.c,1468 :: 		delay_us(500);                                //  ||
+	MOVLW       8
 	MOVWF       R12, 0
-	MOVLW       129
+	MOVLW       201
 	MOVWF       R13, 0
 L_mot_aberto2312:
 	DECFSZ      R13, 1, 1
 	BRA         L_mot_aberto2312
 	DECFSZ      R12, 1, 1
 	BRA         L_mot_aberto2312
-	DECFSZ      R11, 1, 1
-	BRA         L_mot_aberto2312
 	NOP
 	NOP
-;TCC_5.c,1469 :: 		SM2=1;                                        //  ||
-	BSF         PORTB+0, 1 
-;TCC_5.c,1470 :: 		delay_us(2000);                               //  \/
-	MOVLW       32
+;TCC_5.c,1469 :: 		SM2=0;                                        //  ||
+	BCF         PORTB+0, 1 
+;TCC_5.c,1470 :: 		delay_us(20000);                              //  \/
+	MOVLW       2
+	MOVWF       R11, 0
+	MOVLW       56
 	MOVWF       R12, 0
-	MOVLW       41
+	MOVLW       173
 	MOVWF       R13, 0
 L_mot_aberto2313:
 	DECFSZ      R13, 1, 1
 	BRA         L_mot_aberto2313
 	DECFSZ      R12, 1, 1
 	BRA         L_mot_aberto2313
-	NOP
-	NOP
-;TCC_5.c,1471 :: 		SM2=0;                                        //liga motor 2 no sentido horário
-	BCF         PORTB+0, 1 
+	DECFSZ      R11, 1, 1
+	BRA         L_mot_aberto2313
 ;TCC_5.c,1472 :: 		x_mot2 ++;                                    //incrementa x_mot2
 	INFSNZ      _x_mot2+0, 1 
 	INCF        _x_mot2+1, 1 
@@ -4287,40 +4279,36 @@ L__mot_aberto3616:
 L__mot_aberto3617:
 	BTFSC       STATUS+0, 0 
 	GOTO        L_mot_aberto3317
-;TCC_5.c,1500 :: 		SM3=0;                                        //  ||
-	BCF         PORTB+0, 3 
-;TCC_5.c,1501 :: 		delay_us(18000);                              //  ||
-	MOVLW       2
-	MOVWF       R11, 0
-	MOVLW       25
+;TCC_5.c,1500 :: 		SM3=1;                                        //  ||
+	BSF         PORTB+0, 3 
+;TCC_5.c,1501 :: 		delay_us(500);                                //  ||
+	MOVLW       8
 	MOVWF       R12, 0
-	MOVLW       129
+	MOVLW       201
 	MOVWF       R13, 0
 L_mot_aberto3318:
 	DECFSZ      R13, 1, 1
 	BRA         L_mot_aberto3318
 	DECFSZ      R12, 1, 1
 	BRA         L_mot_aberto3318
-	DECFSZ      R11, 1, 1
-	BRA         L_mot_aberto3318
 	NOP
 	NOP
-;TCC_5.c,1502 :: 		SM3=1;                                        //  ||
-	BSF         PORTB+0, 3 
-;TCC_5.c,1503 :: 		delay_us(2000);                               //  \/
-	MOVLW       32
+;TCC_5.c,1502 :: 		SM3=0;                                        //  ||
+	BCF         PORTB+0, 3 
+;TCC_5.c,1503 :: 		delay_us(20000);                              //  \/
+	MOVLW       2
+	MOVWF       R11, 0
+	MOVLW       56
 	MOVWF       R12, 0
-	MOVLW       41
+	MOVLW       173
 	MOVWF       R13, 0
 L_mot_aberto3319:
 	DECFSZ      R13, 1, 1
 	BRA         L_mot_aberto3319
 	DECFSZ      R12, 1, 1
 	BRA         L_mot_aberto3319
-	NOP
-	NOP
-;TCC_5.c,1504 :: 		SM3=0;                                        // liga motor 1 no sentido horário
-	BCF         PORTB+0, 3 
+	DECFSZ      R11, 1, 1
+	BRA         L_mot_aberto3319
 ;TCC_5.c,1505 :: 		x_mot3 ++;                                    //incrementa x_mot3
 	INFSNZ      _x_mot3+0, 1 
 	INCF        _x_mot3+1, 1 
@@ -4377,40 +4365,36 @@ L__mot_aberto4620:
 L__mot_aberto4621:
 	BTFSC       STATUS+0, 0 
 	GOTO        L_mot_aberto4323
-;TCC_5.c,1533 :: 		SM4=0;                                        //  ||
-	BCF         PORTB+0, 2 
-;TCC_5.c,1534 :: 		delay_us(18000);                              //  ||
-	MOVLW       2
-	MOVWF       R11, 0
-	MOVLW       25
+;TCC_5.c,1533 :: 		SM4=1;                                        //  ||
+	BSF         PORTB+0, 2 
+;TCC_5.c,1534 :: 		delay_us(500);                                //  ||
+	MOVLW       8
 	MOVWF       R12, 0
-	MOVLW       129
+	MOVLW       201
 	MOVWF       R13, 0
 L_mot_aberto4324:
 	DECFSZ      R13, 1, 1
 	BRA         L_mot_aberto4324
 	DECFSZ      R12, 1, 1
 	BRA         L_mot_aberto4324
-	DECFSZ      R11, 1, 1
-	BRA         L_mot_aberto4324
 	NOP
 	NOP
-;TCC_5.c,1535 :: 		SM4=1;                                        //  ||
-	BSF         PORTB+0, 2 
-;TCC_5.c,1536 :: 		delay_us(2000);                               //  \/
-	MOVLW       32
+;TCC_5.c,1535 :: 		SM4=0;                                        //  ||
+	BCF         PORTB+0, 2 
+;TCC_5.c,1536 :: 		delay_us(20000);                              //  \/
+	MOVLW       2
+	MOVWF       R11, 0
+	MOVLW       56
 	MOVWF       R12, 0
-	MOVLW       41
+	MOVLW       173
 	MOVWF       R13, 0
 L_mot_aberto4325:
 	DECFSZ      R13, 1, 1
 	BRA         L_mot_aberto4325
 	DECFSZ      R12, 1, 1
 	BRA         L_mot_aberto4325
-	NOP
-	NOP
-;TCC_5.c,1537 :: 		SM4=0;                                        // liga motor 1 no sentido horário
-	BCF         PORTB+0, 2 
+	DECFSZ      R11, 1, 1
+	BRA         L_mot_aberto4325
 ;TCC_5.c,1538 :: 		x_mot4 ++;                                    //incrementa x_mot4
 	INFSNZ      _x_mot4+0, 1 
 	INCF        _x_mot4+1, 1 
@@ -4527,37 +4511,34 @@ L__mot_fechado628:
 L__mot_fechado629:
 	BTFSC       STATUS+0, 0 
 	GOTO        L_mot_fechado329
-;TCC_5.c,1618 :: 		SM=0;                                         //  ||
-	BCF         PORTB+0, 0 
-;TCC_5.c,1619 :: 		delay_us(18500);                              //  ||
-	MOVLW       2
-	MOVWF       R11, 0
-	MOVLW       33
+;TCC_5.c,1618 :: 		SM=1;                                         //  ||
+	BSF         PORTB+0, 0 
+;TCC_5.c,1619 :: 		delay_us(2500);                               //  ||
+	MOVLW       39
 	MOVWF       R12, 0
-	MOVLW       76
+	MOVLW       245
 	MOVWF       R13, 0
 L_mot_fechado330:
 	DECFSZ      R13, 1, 1
 	BRA         L_mot_fechado330
 	DECFSZ      R12, 1, 1
 	BRA         L_mot_fechado330
-	DECFSZ      R11, 1, 1
-	BRA         L_mot_fechado330
-	NOP
-;TCC_5.c,1620 :: 		SM=1;                                         //  ||
-	BSF         PORTB+0, 0 
-;TCC_5.c,1621 :: 		delay_us(1500);                               //  \/
-	MOVLW       24
+;TCC_5.c,1620 :: 		SM=0;                                         //  ||
+	BCF         PORTB+0, 0 
+;TCC_5.c,1621 :: 		delay_us(20000);                              //  \/
+	MOVLW       2
+	MOVWF       R11, 0
+	MOVLW       56
 	MOVWF       R12, 0
-	MOVLW       95
+	MOVLW       173
 	MOVWF       R13, 0
 L_mot_fechado331:
 	DECFSZ      R13, 1, 1
 	BRA         L_mot_fechado331
 	DECFSZ      R12, 1, 1
 	BRA         L_mot_fechado331
-;TCC_5.c,1622 :: 		SM=0;                                         //leva o motor para a posição inicial
-	BCF         PORTB+0, 0 
+	DECFSZ      R11, 1, 1
+	BRA         L_mot_fechado331
 ;TCC_5.c,1623 :: 		x_mot++;                                      //incrementa x_mot
 	INFSNZ      _x_mot+0, 1 
 	INCF        _x_mot+1, 1 
@@ -4612,37 +4593,34 @@ L__mot_fechado2632:
 L__mot_fechado2633:
 	BTFSC       STATUS+0, 0 
 	GOTO        L_mot_fechado2334
-;TCC_5.c,1648 :: 		SM2=0;                                        //  ||
-	BCF         PORTB+0, 1 
-;TCC_5.c,1649 :: 		delay_us(18500);                              //  ||
-	MOVLW       2
-	MOVWF       R11, 0
-	MOVLW       33
+;TCC_5.c,1648 :: 		SM2=1;                                        //  ||
+	BSF         PORTB+0, 1 
+;TCC_5.c,1649 :: 		delay_us(2500);                               //  ||
+	MOVLW       39
 	MOVWF       R12, 0
-	MOVLW       76
+	MOVLW       245
 	MOVWF       R13, 0
 L_mot_fechado2335:
 	DECFSZ      R13, 1, 1
 	BRA         L_mot_fechado2335
 	DECFSZ      R12, 1, 1
 	BRA         L_mot_fechado2335
-	DECFSZ      R11, 1, 1
-	BRA         L_mot_fechado2335
-	NOP
-;TCC_5.c,1650 :: 		SM2=1;                                        //  ||
-	BSF         PORTB+0, 1 
-;TCC_5.c,1651 :: 		delay_us(1500);                               //  \/
-	MOVLW       24
+;TCC_5.c,1650 :: 		SM2=0;                                        //  ||
+	BCF         PORTB+0, 1 
+;TCC_5.c,1651 :: 		delay_us(20000);                              //  \/
+	MOVLW       2
+	MOVWF       R11, 0
+	MOVLW       56
 	MOVWF       R12, 0
-	MOVLW       95
+	MOVLW       173
 	MOVWF       R13, 0
 L_mot_fechado2336:
 	DECFSZ      R13, 1, 1
 	BRA         L_mot_fechado2336
 	DECFSZ      R12, 1, 1
 	BRA         L_mot_fechado2336
-;TCC_5.c,1652 :: 		SM2=0;                                        //leva o motor 2 para a posição inicial
-	BCF         PORTB+0, 1 
+	DECFSZ      R11, 1, 1
+	BRA         L_mot_fechado2336
 ;TCC_5.c,1653 :: 		x_mot2++;                                     //incrementa x_mot2
 	INFSNZ      _x_mot2+0, 1 
 	INCF        _x_mot2+1, 1 
@@ -4697,37 +4675,34 @@ L__mot_fechado3636:
 L__mot_fechado3637:
 	BTFSC       STATUS+0, 0 
 	GOTO        L_mot_fechado3339
-;TCC_5.c,1678 :: 		SM3=0;                                        //  ||
-	BCF         PORTB+0, 3 
-;TCC_5.c,1679 :: 		delay_us(18500);                              //  ||
-	MOVLW       2
-	MOVWF       R11, 0
-	MOVLW       33
+;TCC_5.c,1678 :: 		SM3=1;                                         //  ||
+	BSF         PORTB+0, 3 
+;TCC_5.c,1679 :: 		delay_us(2500);                                //  ||
+	MOVLW       39
 	MOVWF       R12, 0
-	MOVLW       76
+	MOVLW       245
 	MOVWF       R13, 0
 L_mot_fechado3340:
 	DECFSZ      R13, 1, 1
 	BRA         L_mot_fechado3340
 	DECFSZ      R12, 1, 1
 	BRA         L_mot_fechado3340
-	DECFSZ      R11, 1, 1
-	BRA         L_mot_fechado3340
-	NOP
-;TCC_5.c,1680 :: 		SM3=1;                                        //  ||
-	BSF         PORTB+0, 3 
-;TCC_5.c,1681 :: 		delay_us(1500);                               //  \/
-	MOVLW       24
+;TCC_5.c,1680 :: 		SM3=0;                                         //  ||
+	BCF         PORTB+0, 3 
+;TCC_5.c,1681 :: 		delay_us(20000);                               //  \/
+	MOVLW       2
+	MOVWF       R11, 0
+	MOVLW       56
 	MOVWF       R12, 0
-	MOVLW       95
+	MOVLW       173
 	MOVWF       R13, 0
 L_mot_fechado3341:
 	DECFSZ      R13, 1, 1
 	BRA         L_mot_fechado3341
 	DECFSZ      R12, 1, 1
 	BRA         L_mot_fechado3341
-;TCC_5.c,1682 :: 		SM3=0;                                        //leva o motor 3 para a posição inicial
-	BCF         PORTB+0, 3 
+	DECFSZ      R11, 1, 1
+	BRA         L_mot_fechado3341
 ;TCC_5.c,1683 :: 		x_mot3++;                                     //incrementa x_mot3
 	INFSNZ      _x_mot3+0, 1 
 	INCF        _x_mot3+1, 1 
@@ -4782,37 +4757,34 @@ L__mot_fechado4640:
 L__mot_fechado4641:
 	BTFSC       STATUS+0, 0 
 	GOTO        L_mot_fechado4344
-;TCC_5.c,1708 :: 		SM4=0;                                        //  ||
-	BCF         PORTB+0, 2 
-;TCC_5.c,1709 :: 		delay_us(18500);                              //  ||
-	MOVLW       2
-	MOVWF       R11, 0
-	MOVLW       33
+;TCC_5.c,1708 :: 		SM4=1;                                        //  ||
+	BSF         PORTB+0, 2 
+;TCC_5.c,1709 :: 		delay_us(2500);                               //  ||
+	MOVLW       39
 	MOVWF       R12, 0
-	MOVLW       76
+	MOVLW       245
 	MOVWF       R13, 0
 L_mot_fechado4345:
 	DECFSZ      R13, 1, 1
 	BRA         L_mot_fechado4345
 	DECFSZ      R12, 1, 1
 	BRA         L_mot_fechado4345
-	DECFSZ      R11, 1, 1
-	BRA         L_mot_fechado4345
-	NOP
-;TCC_5.c,1710 :: 		SM4=1;                                        //  ||
-	BSF         PORTB+0, 2 
-;TCC_5.c,1711 :: 		delay_us(1500);                               //  \/
-	MOVLW       24
+;TCC_5.c,1710 :: 		SM4=0;                                        //  ||
+	BCF         PORTB+0, 2 
+;TCC_5.c,1711 :: 		delay_us(20000);                              //  \/
+	MOVLW       2
+	MOVWF       R11, 0
+	MOVLW       56
 	MOVWF       R12, 0
-	MOVLW       95
+	MOVLW       173
 	MOVWF       R13, 0
 L_mot_fechado4346:
 	DECFSZ      R13, 1, 1
 	BRA         L_mot_fechado4346
 	DECFSZ      R12, 1, 1
 	BRA         L_mot_fechado4346
-;TCC_5.c,1712 :: 		SM4=0;                                        //leva o motor 4 para a posição inicial
-	BCF         PORTB+0, 2 
+	DECFSZ      R11, 1, 1
+	BRA         L_mot_fechado4346
 ;TCC_5.c,1713 :: 		x_mot4++;                                     //incrementa x_mot4
 	INFSNZ      _x_mot4+0, 1 
 	INCF        _x_mot4+1, 1 

@@ -1430,11 +1430,11 @@ void mot_aberto()
  
  if(x_mot<20)                                     //se x_mot for menor que 10...
   {
-    SM=0;                                         //  ||
-    delay_us(18000);                              //  ||
     SM=1;                                         //  ||
-    delay_us(2000);                               //  \/
-    SM=0;                                         // liga motor 1 no sentido horário
+    delay_us(500);                                //  ||
+    SM=0;                                         //  ||
+    delay_us(20000);                              //  \/
+                                                  // liga motor 1 no sentido horário
     x_mot ++;                                     //incrementa x_mot
     
   }                                               //end if x_mot<10
@@ -1464,11 +1464,11 @@ void mot_aberto2()
  {                                                //for diferente de 0...
  if(x_mot2<20)                                    //se x_mot2 for menor que 10...
   {
-    SM2=0;                                        //  ||
-    delay_us(18000);                              //  ||
     SM2=1;                                        //  ||
-    delay_us(2000);                               //  \/
-    SM2=0;                                        //liga motor 2 no sentido horário
+    delay_us(500);                                //  ||
+    SM2=0;                                        //  ||
+    delay_us(20000);                              //  \/
+                                                  //liga motor 2 no sentido horário
     x_mot2 ++;                                    //incrementa x_mot2
     
   }                                               //end if x_mot2<10
@@ -1497,11 +1497,11 @@ void mot_aberto3()
  {                                                //for diferente de 0...
  if(x_mot3<20)                                    //se x_mot3 for menor que 10...
   {
-    SM3=0;                                        //  ||
-    delay_us(18000);                              //  ||
     SM3=1;                                        //  ||
-    delay_us(2000);                               //  \/
-    SM3=0;                                        // liga motor 1 no sentido horário
+    delay_us(500);                                //  ||
+    SM3=0;                                        //  ||
+    delay_us(20000);                              //  \/
+                                                  // liga motor 1 no sentido horário
     x_mot3 ++;                                    //incrementa x_mot3
 
   }                                               //end if x_mot3<10
@@ -1530,11 +1530,11 @@ void mot_aberto4()
  {                                                //for diferente de 0...
  if(x_mot4<20)                                    //se x_mot4 for menor que 10...
   {
-    SM4=0;                                        //  ||
-    delay_us(18000);                              //  ||
     SM4=1;                                        //  ||
-    delay_us(2000);                               //  \/
-    SM4=0;                                        // liga motor 1 no sentido horário
+    delay_us(500);                                //  ||
+    SM4=0;                                        //  ||
+    delay_us(20000);                              //  \/
+                                                  // liga motor 1 no sentido horário
     x_mot4 ++;                                    //incrementa x_mot4
 
   }                                               //end if x_mot4<10
@@ -1615,11 +1615,11 @@ void mot_fechado()
  {                                                //for diferente de 0
  if(x_mot<20)                                     //se x_mot for menor que 10
   {
-    SM=0;                                         //  ||
-    delay_us(18500);                              //  ||
     SM=1;                                         //  ||
-    delay_us(1500);                               //  \/
-    SM=0;                                         //leva o motor para a posição inicial
+    delay_us(2500);                               //  ||
+    SM=0;                                         //  ||
+    delay_us(20000);                              //  \/
+                                                  //leva o motor para a posição inicial
     x_mot++;                                      //incrementa x_mot
     
   }                                               //end if x_mot<10
@@ -1645,11 +1645,11 @@ void mot_fechado2()
  {                                                //for diferente de 0
   if(x_mot2<20)                                   //se x_mot2 for menor que 10
    {
-    SM2=0;                                        //  ||
-    delay_us(18500);                              //  ||
     SM2=1;                                        //  ||
-    delay_us(1500);                               //  \/
-    SM2=0;                                        //leva o motor 2 para a posição inicial
+    delay_us(2500);                               //  ||
+    SM2=0;                                        //  ||
+    delay_us(20000);                              //  \/
+                                                  //leva o motor 2 para a posição inicial
     x_mot2++;                                     //incrementa x_mot2
     
    }                                               //end if x_mot2<10
@@ -1675,11 +1675,11 @@ void mot_fechado3()
  {                                                //for diferente de 0
   if(x_mot3<20)                                   //se x_mot3 for menor que 10
   {
-    SM3=0;                                        //  ||
-    delay_us(18500);                              //  ||
-    SM3=1;                                        //  ||
-    delay_us(1500);                               //  \/
-    SM3=0;                                        //leva o motor 3 para a posição inicial
+    SM3=1;                                         //  ||
+    delay_us(2500);                                //  ||
+    SM3=0;                                         //  ||
+    delay_us(20000);                               //  \/
+                                                   //leva o motor 3 para a posição inicial
     x_mot3++;                                     //incrementa x_mot3
 
   }                                               //end if x_mot2<10
@@ -1705,11 +1705,11 @@ void mot_fechado4()
  {                                                //for diferente de 0
   if(x_mot4<20)                                   //se x_mot4 for menor que 10
    {
-    SM4=0;                                        //  ||
-    delay_us(18500);                              //  ||
     SM4=1;                                        //  ||
-    delay_us(1500);                               //  \/
-    SM4=0;                                        //leva o motor 4 para a posição inicial
+    delay_us(2500);                               //  ||
+    SM4=0;                                        //  ||
+    delay_us(20000);                              //  \/
+                                                  //leva o motor 4 para a posição inicial
     x_mot4++;                                     //incrementa x_mot4
 
    }                                               //end if x_mot4<10

@@ -5,7 +5,7 @@ sbit LED2 at PORTA.b0;
 sbit LED3 at PORTA.b1;
 sbit LED4 at PORTA.b2;
 sbit LED5 at PORTA.b4;
-sbit SOM at PORTB .b4;
+sbit SOM at PORTB.b4;
 
 
 
@@ -270,7 +270,7 @@ void main (void)
  qtd_comp3 = EEPROM_Read(0x0B);
  qtd_comp4 = EEPROM_Read(0x0C);
 
- if(qtd_comp==0xFF)qtd_comp=0x01;
+ if(qtd_comp==0xFF) qtd_comp =0x01;
  if(qtd_comp2==0xFF)qtd_comp2=0x01;
  if(qtd_comp3==0xFF)qtd_comp3=0x01;
  if(qtd_comp4==0xFF)qtd_comp4=0x01;
@@ -1412,11 +1412,11 @@ void mot_aberto()
 
  if(x_mot<20)
  {
- SM=0;
- delay_us(18000);
  SM=1;
- delay_us(2000);
+ delay_us(500);
  SM=0;
+ delay_us(20000);
+
  x_mot ++;
 
  }
@@ -1446,11 +1446,11 @@ void mot_aberto2()
  {
  if(x_mot2<20)
  {
- SM2=0;
- delay_us(18000);
  SM2=1;
- delay_us(2000);
+ delay_us(500);
  SM2=0;
+ delay_us(20000);
+
  x_mot2 ++;
 
  }
@@ -1479,11 +1479,11 @@ void mot_aberto3()
  {
  if(x_mot3<20)
  {
- SM3=0;
- delay_us(18000);
  SM3=1;
- delay_us(2000);
+ delay_us(500);
  SM3=0;
+ delay_us(20000);
+
  x_mot3 ++;
 
  }
@@ -1512,11 +1512,11 @@ void mot_aberto4()
  {
  if(x_mot4<20)
  {
- SM4=0;
- delay_us(18000);
  SM4=1;
- delay_us(2000);
+ delay_us(500);
  SM4=0;
+ delay_us(20000);
+
  x_mot4 ++;
 
  }
@@ -1597,11 +1597,11 @@ void mot_fechado()
  {
  if(x_mot<20)
  {
- SM=0;
- delay_us(18500);
  SM=1;
- delay_us(1500);
+ delay_us(2500);
  SM=0;
+ delay_us(20000);
+
  x_mot++;
 
  }
@@ -1627,11 +1627,11 @@ void mot_fechado2()
  {
  if(x_mot2<20)
  {
- SM2=0;
- delay_us(18500);
  SM2=1;
- delay_us(1500);
+ delay_us(2500);
  SM2=0;
+ delay_us(20000);
+
  x_mot2++;
 
  }
@@ -1657,11 +1657,11 @@ void mot_fechado3()
  {
  if(x_mot3<20)
  {
- SM3=0;
- delay_us(18500);
  SM3=1;
- delay_us(1500);
+ delay_us(2500);
  SM3=0;
+ delay_us(20000);
+
  x_mot3++;
 
  }
@@ -1687,11 +1687,11 @@ void mot_fechado4()
  {
  if(x_mot4<20)
  {
- SM4=0;
- delay_us(18500);
  SM4=1;
- delay_us(1500);
+ delay_us(2500);
  SM4=0;
+ delay_us(20000);
+
  x_mot4++;
 
  }
